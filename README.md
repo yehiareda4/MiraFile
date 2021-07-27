@@ -1,16 +1,16 @@
 # Preview
 
-![](https://github.com/ajayasija23/FilePicker/blob/master/preview/preview2.jpeg) ![](https://github.com/ajayasija23/FilePicker/blob/master/preview/preview1.jpeg)
-![](https://github.com/ajayasija23/FilePicker/blob/master/preview/preview3.jpeg)
+![](https://github.com/yehiareda4/MiraFilePiker/blob/master/preview/preview2.jpeg) ![](https://github.com/yehiareda4/MiraFilePiker/blob/master/preview/preview1.jpeg)
+![](https://github.com/yehiareda4/MiraFilePiker/blob/master/preview/preview3.jpeg)
 
 
-# FilePicker
-FilePicker is an Android Library that lets you choose any kind of file easyly. It handles the storage permission itself.
+# MiraFilePicker
+MiraFilePicker is an Android Library that lets you choose any kind of file easyly. It handles the storage permission itself.
 
 # Minimum Sdk Version
     Api Level 19 or Above
 # Max Sdk Version
-    Api Level 30
+    Api Level 30 (Compatible With Scope Storage)
 
 # Installation
 
@@ -25,14 +25,19 @@ Add the dependency in your app gradle
 
     dependencies {
            ...
-          implementation 'com.github.ajayasija23:FilePicker:1.0.1' //choose latest version
+           implementation 'com.github.yehiareda4:MiraFilePiker:1.0.0'' //choose latest version
       }
       
 # Usage
 
-### Start FilePickerActivity and pass the MimeType of the target file
-
-    Intent intent=new Intent(this, FilePickerActivity.class);
+### Start MiraFilePicker form activity and pass the MimeType of the target file
+#### KOTLIN
+    Intent intent=new Intent(this, MiraFilePickerActivity.class);
+    intent.putExtra("multiple",true);
+    intent.putExtra("type","*/*");
+    startActivityForResult(intent,REQUEST_CODE);
+#### KOTLIN
+    Intent intent=new Intent(this, MiraFilePickerJavaActivity.class);
     intent.putExtra("multiple",true);
     intent.putExtra("type","*/*");
     startActivityForResult(intent,REQUEST_CODE);
@@ -57,3 +62,26 @@ Add the dependency in your app gradle
         }
     }
 
+### Start MiraFilePicker form Fragment and pass the MimeType of the target file
+ previewRequest =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    if (it.requestCode == REQUEST_CODE && it.resultCode == RESULT_OK && it.data != null){
+                                if (it.data.getData()!=null){
+                                    File file=FileUtils.getFile(this,data.getData())
+                                    selectedFiles.add(file.getName())
+                                }
+                                if (it.data.getClipData()!=null){
+                                    for(int i = 0; i < it.data.getClipData().getItemCount(); i++) {
+                                        Uri uri = it.data.getClipData().getItemAt(i).getUri()
+                                        File file=FileUtils.getFile(this,uri)
+                                        selectedFiles.add(file.getName())
+                                    }
+                                }
+                            }
+                }
+
+### on Action
+        Intent intent=new Intent(this, MiraFilePickerActivity.class)
+        intent.putExtra("multiple",true)
+        intent.putExtra("type","*/*")
+        previewRequest.launch(openFileIntent)

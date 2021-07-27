@@ -1,4 +1,4 @@
-package com.example.filepicker;
+package com.yehia.mira_file_picker;
 
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
@@ -23,18 +23,13 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 
-//import com.ianhanniballake.localstorage.LocalStorageProvider;
-
-/**
- * @version 2009-07-03
- * @author Peli
- * @version 2013-12-11
- * @author paulburke (ipaulpro)
- */
 public class FileUtils {
-    private FileUtils() {} //private constructor to enforce Singleton pattern
+    private FileUtils() {
+    } //private constructor to enforce Singleton pattern
 
-    /** TAG for log messages. */
+    /**
+     * TAG for log messages.
+     */
     static final String TAG = "FileUtils";
     private static final boolean DEBUG = true; // Set to true to enable logging
 
@@ -51,7 +46,7 @@ public class FileUtils {
      *
      * @param uri
      * @return Extension including the dot("."); "" if there is no extension;
-     *         null if uri was null.
+     * null if uri was null.
      */
     public static String getExtension(String uri) {
         if (uri == null) {
@@ -195,9 +190,9 @@ public class FileUtils {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke
@@ -210,9 +205,9 @@ public class FileUtils {
     /**
      * Get the value of the display name for this Uri
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke
@@ -225,10 +220,10 @@ public class FileUtils {
     /**
      * Get the value of the column for this Uri
      *
-     * @param context The context.
-     * @param // The column.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param //            The column.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
@@ -261,17 +256,17 @@ public class FileUtils {
 
     /**
      * Attempt to get the file location from the base path and path if the file exists
+     *
      * @param basePath
      * @param path
      * @return
      */
-    private static File getFileIfExists(String basePath, String path){
+    private static File getFileIfExists(String basePath, String path) {
         File result = null;
         File file = new File(basePath);
-        if(file.exists())
-        {
+        if (file.exists()) {
             file = new File(file, path);
-            if(file.exists()){
+            if (file.exists()) {
                 result = file;
             }
         }
@@ -287,10 +282,10 @@ public class FileUtils {
      * represents a local file.
      *
      * @param context The context.
-     * @param uri The Uri to query.
+     * @param uri     The Uri to query.
+     * @author paulburke
      * @see #isLocal(String)
      * @see #getFile(Context, Uri)
-     * @author paulburke
      */
     public static String getPath(final Context context, final Uri uri) {
 
@@ -313,11 +308,9 @@ public class FileUtils {
             if (isLocalStorageDocument(uri)) {
                 // The path is the id
                 return getDocumentId(uri);
-            }
-
-            else if (isGoogleDriveUri(uri))
+            } else if (isGoogleDriveUri(uri))
                 return getDriveFilePath(uri, context);
-            // ExternalStorageProvider
+                // ExternalStorageProvider
             else if (isExternalStorageDocument(uri)) {
                 final String docId = getDocumentId(uri);
                 final String[] split = docId.split(":");
@@ -329,19 +322,19 @@ public class FileUtils {
 
                 // Handle SD cards
                 File file = getFileIfExists("/storage/extSdCard", split[1]);
-                if(file != null){
+                if (file != null) {
                     return file.getAbsolutePath();
                 }
                 file = getFileIfExists("/storage/sdcard1", split[1]);
-                if(file != null){
+                if (file != null) {
                     return file.getAbsolutePath();
                 }
                 file = getFileIfExists("/storage/usbcard1", split[1]);
-                if(file != null){
+                if (file != null) {
                     return file.getAbsolutePath();
                 }
                 file = getFileIfExists("/storage/sdcard0", split[1]);
-                if(file != null){
+                if (file != null) {
                     return file.getAbsolutePath();
                 }
 
@@ -353,7 +346,7 @@ public class FileUtils {
                 final String id = getDocumentId(uri);
 
                 String rawPrefix = "raw:";
-                if(id.startsWith(rawPrefix)){
+                if (id.startsWith(rawPrefix)) {
                     return id.substring(rawPrefix.length());
                 }
 
@@ -375,13 +368,13 @@ public class FileUtils {
                         } catch (Exception e) {
                         }
                     }
-                }catch(NumberFormatException e){
+                } catch (NumberFormatException e) {
                 }
 
                 String displayName = getDisplayNameColumn(context, uri, null, null);
-                if(displayName != null){
+                if (displayName != null) {
                     File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), displayName);
-                    if(file.exists()){
+                    if (file.exists()) {
                         return file.getAbsolutePath();
                     }
                 }
@@ -403,7 +396,7 @@ public class FileUtils {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -425,11 +418,13 @@ public class FileUtils {
         return null;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT) private static boolean isDocumentUri(Context context, Uri uri){
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private static boolean isDocumentUri(Context context, Uri uri) {
         return DocumentsContract.isDocumentUri(context, uri);
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT) private static String getDocumentId(Uri documentUri){
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private static String getDocumentId(Uri documentUri) {
         return DocumentsContract.getDocumentId(documentUri);
     }
 
@@ -437,9 +432,9 @@ public class FileUtils {
      * Convert Uri into File, if possible.
      *
      * @return file A local file that the Uri was pointing to, or null if the
-     *         Uri is unsupported or pointed to a remote resource.
-     * @see #getPath(Context, Uri)
+     * Uri is unsupported or pointed to a remote resource.
      * @author paulburke
+     * @see #getPath(Context, Uri)
      */
     public static File getFile(Context context, Uri uri) {
         if (uri != null) {
@@ -544,8 +539,7 @@ public class FileUtils {
                                 id,
                                 MediaStore.Video.Thumbnails.MINI_KIND,
                                 null);
-                    }
-                    else if (mimeType.contains(FileUtils.MIME_TYPE_IMAGE)) {
+                    } else if (mimeType.contains(FileUtils.MIME_TYPE_IMAGE)) {
                         bm = MediaStore.Images.Thumbnails.getThumbnail(
                                 resolver,
                                 id,
@@ -598,23 +592,25 @@ public class FileUtils {
      * @return The intent for opening a file with Intent.createChooser()
      * @author paulburke
      */
-    public static Intent createGetContentIntent(String type,boolean multiple) {
+    public static Intent createGetContentIntent(String type, boolean multiple) {
         // Implicitly allow the user to select a particular kind of data
         final Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         // The MIME data type filter
-        if (type!=null){
+        if (type != null) {
             intent.setType(type);
         }
-        if (multiple){
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
+        if (multiple) {
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
         // Only return URIs that can be opened with ContentResolver
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         return intent;
     }
+
     public static boolean isGoogleDriveUri(Uri uri) {
         return "com.google.android.apps.docs.storage".equals(uri.getAuthority()) || "com.google.android.apps.docs.storage.legacy".equals(uri.getAuthority());
     }
+
     private static String getDriveFilePath(Uri uri, Context context) {
         Uri returnUri = uri;
         Cursor returnCursor = context.getContentResolver().query(returnUri, null, null, null, null);

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.yehia.myapplication;
 
 import org.junit.Test;
 

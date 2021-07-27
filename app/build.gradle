@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.myapplication"
+        applicationId "com.mira.mira_file_piker"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1

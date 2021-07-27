@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.filepicker">
+    package="com.yehia.mira_file_picker">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true">
-        <activity android:name=".FilePickerActivity"/>
+
+        <activity android:name="com.yehia.mira_file_picker.MiraFilePickerJavaActivity" />
+        <activity android:name="com.yehia.mira_file_picker.MiraFilePickerActivity" />
+
     </application>
 
 </manifest>

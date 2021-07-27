@@ -1,4 +1,4 @@
-package com.example.filepicker;
+package com.yehia.mira_file_picker;
 
 import org.junit.Test;
 

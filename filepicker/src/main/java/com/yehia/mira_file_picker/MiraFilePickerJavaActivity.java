@@ -1,4 +1,4 @@
-package com.example.filepicker;
+package com.yehia.mira_file_picker;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,13 +13,13 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class FilePickerActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class MiraFilePickerJavaActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
-    private String[] perms = {
+    private final String[] perms = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
-    private String [] cameraPermission={
+    private final String [] cameraPermission={
             Manifest.permission.CAMERA,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -27,10 +27,8 @@ public class FilePickerActivity extends AppCompatActivity implements EasyPermiss
     private static final int RC_READ_WRITE = 001;
     private static final int RC_CAMERA = 002;
     private int REQUEST_CODE;
-    private Intent intent;
     private String type;
     private boolean multiple;
-    private boolean camera;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,11 +36,11 @@ public class FilePickerActivity extends AppCompatActivity implements EasyPermiss
         if (getSupportActionBar()!=null){
             getSupportActionBar().hide();
         }
-        intent=getIntent();
-        REQUEST_CODE=intent.getIntExtra("requestCode",101);
-        type=intent.getStringExtra("type");
-        multiple=intent.getBooleanExtra("multiple",false);
-        camera=intent.getBooleanExtra("camera",false);
+        Intent intent = getIntent();
+        REQUEST_CODE= intent.getIntExtra("requestCode",101);
+        type= intent.getStringExtra("type");
+        multiple= intent.getBooleanExtra("multiple",false);
+        boolean camera = intent.getBooleanExtra("camera", false);
         if (camera){
             checkCameraPermissions();
         }else {
@@ -90,8 +88,6 @@ public class FilePickerActivity extends AppCompatActivity implements EasyPermiss
         Intent chooserIntent= FileUtils.createGetContentIntent(type,multiple);
         startActivityForResult(chooserIntent,REQUEST_CODE);
     }
-
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
