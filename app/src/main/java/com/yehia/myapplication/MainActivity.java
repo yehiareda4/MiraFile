@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.yehia.myapplication.databinding.ActivityMainBinding;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("type", "*/*");
         intent.putExtra("requestCode", REQUEST_CODE);
         startActivityForResult(intent, REQUEST_CODE);
+
     }
 
     @Override
@@ -54,14 +57,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             if (data.getData() != null) {
                 File file = FileUtils.getFile(this, data.getData());
-                selectedFiles.add(file.getName());
-                adapter.notifyDataSetChanged();
+                if (file != null) {
+                    selectedFiles.add(file.getName());
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(this, "", Toast.LENGTH_SHORT);
+                }
             }
             if (data.getClipData() != null) {
                 for (int i = 0; i < data.getClipData().getItemCount(); i++) {
                     Uri uri = data.getClipData().getItemAt(i).getUri();
                     File file = FileUtils.getFile(this, uri);
-                    selectedFiles.add(file.getName());
+                    if (file != null) {
+                        selectedFiles.add(file.getName());
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(this, "", Toast.LENGTH_SHORT);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }

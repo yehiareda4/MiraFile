@@ -17,6 +17,8 @@ import android.provider.OpenableColumns;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import androidx.loader.content.CursorLoader;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileOutputStream;
@@ -174,9 +176,9 @@ public class FileUtils {
      * @return Whether the Uri authority is MediaProvider.
      * @author paulburke
      */
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
+//    public static boolean isMediaDocument(Uri uri) {
+//        return "com.android.providers.media.documents".equals(uri.getAuthority());
+//    }
 
     /**
      * @param uri The Uri to check.
@@ -197,10 +199,10 @@ public class FileUtils {
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke
      */
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
-        return getColumn(context, uri, MediaStore.Files.FileColumns.DATA, selection, selectionArgs);
-    }
+//    public static String getDataColumn(Context context, Uri uri, String selection,
+//                                       String[] selectionArgs) {
+//        return getColumn(context, uri, MediaStore.Files.FileColumns.DATA, selection, selectionArgs);
+//    }
 
     /**
      * Get the value of the display name for this Uri
@@ -438,7 +440,7 @@ public class FileUtils {
      */
     public static File getFile(Context context, Uri uri) {
         if (uri != null) {
-            String path = getPath(context, uri);
+            String path = getRealPathFromUri(context, uri);
             if (path != null && isLocal(path)) {
                 return new File(path);
             }
@@ -649,4 +651,164 @@ public class FileUtils {
         }
         return file.getPath();
     }
+
+    //Complex version processing (suiting for multiple APIs)
+    public static String getRealPathFromUri(Context context, Uri uri) {
+        int sdkVersion = Build.VERSION.SDK_INT;
+        if (sdkVersion < 11) return getRealPathFromUri_BelowApi11(context, uri);
+        if (sdkVersion < 19) return getRealPathFromUri_Api11To18(context, uri);
+        else return getRealPathFromUri_AboveApi19(context, uri);
+    }
+
+    /**
+     * Adapt to api19 and above, get the absolute path of the image according to uri
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private static String getRealPathFromUri_AboveApi19(Context context, Uri uri) {
+        if (DocumentsContract.isDocumentUri(context, uri)) {
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+//                if ("primary".equalsIgnoreCase(type)) {
+                return Environment.getExternalStorageDirectory() + "/" + split[1];
+//                }
+            } else if (isDownloadsDocument(uri)) {
+                final String id = DocumentsContract.getDocumentId(uri);
+                final Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                return getDataColumn(context, contentUri, null, null);
+            } else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+
+                Uri contentUri;
+                if ("image".equals(type)) {
+                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                } else {
+                    contentUri = MediaStore.Files.getContentUri("external");
+                }
+
+//                if ("image".equals(type) || "video".equals(type) || "audio".equals(type)) {
+                    final String selection = "_id=?";
+                    final String[] selectionArgs = new String[]{split[1]};
+                    return getDataColumn(context, contentUri, selection, selectionArgs);
+//                } else {
+//                    ContentResolver cr = context.getContentResolver();
+//
+//                    String[] projection = null;
+//                    String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
+//                            + MediaStore.Files.FileColumns.MEDIA_TYPE_NONE;
+//                    final String[] selectionArgs = new String[]{split[1]};
+//
+//                    String sortOrder = null; // unordered
+//                    Cursor allNonMediaFiles = cr.query(contentUri, projection, selection, selectionArgs, sortOrder);
+//                    return getDataColumn(allNonMediaFiles);
+//                }
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            return getDataColumn(context, uri, null, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+
+    /**
+     * Adapt api11-api18, get the absolute path of the image according to uri
+     */
+    private static String getRealPathFromUri_Api11To18(Context context, Uri uri) {
+        String filePath = null;
+        String[] projection = {MediaStore.Images.Media.DATA};
+        //This has two packages that don't know which one. . . . However, this complex version is generally not used.
+        CursorLoader loader = new CursorLoader(context, uri, projection, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            filePath = cursor.getString(cursor.getColumnIndex(projection[0]));
+            cursor.close();
+        }
+        return filePath;
+    }
+
+    /**
+     * Adapt to api11 (excluding api11), get the absolute path of the image according to uri
+     */
+    private static String getRealPathFromUri_BelowApi11(Context context, Uri uri) {
+        String filePath = null;
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            filePath = cursor.getString(cursor.getColumnIndex(projection[0]));
+            cursor.close();
+        }
+        return filePath;
+    }
+
+    /**
+     * Get the value of the data column for this Uri. This is useful for
+     * MediaStore Uris, and other file-based ContentProviders.
+     *
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
+     * @param selectionArgs (Optional) Selection arguments used in the query.
+     * @return The value of the _data column, which is typically a file path.
+     */
+    public static String getDataColumn(Context context, Uri uri, String selection,
+                                       String[] selectionArgs) {
+        Cursor cursor = null;
+        String column = MediaStore.MediaColumns.DATA;
+        String[] projection = {column};
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+                    null);
+            boolean b = cursor.moveToFirst();
+            if (cursor != null && cursor.moveToFirst()) {
+                int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+    public static String getDataColumn(Cursor cursor) {
+        String column = MediaStore.MediaColumns.DATA;
+        try {
+            boolean b = cursor.moveToFirst();
+            if (cursor != null && cursor.moveToFirst()) {
+                int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is MediaProvider.
+     */
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
 }
+
+
