@@ -25,7 +25,7 @@ Add the dependency in your app gradle
 
     dependencies {
            ...
-           implementation 'com.github.yehiareda4:MiraFilePiker:1.0.0'' //choose latest version
+           implementation 'com.github.yehiareda4:MiraFilePiker:1.0.0' //choose latest version
       }
       
 # Usage
@@ -63,8 +63,7 @@ Add the dependency in your app gradle
     }
 
 ### Start MiraFilePicker form Fragment and pass the MimeType of the target file
- previewRequest =
-                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        val previewRequest =  registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     if (it.requestCode == REQUEST_CODE && it.resultCode == RESULT_OK && it.data != null){
                                 if (it.data.getData()!=null){
                                     File file=FileUtils.getFile(this,data.getData())
@@ -77,11 +76,11 @@ Add the dependency in your app gradle
                                         selectedFiles.add(file.getName())
                                     }
                                 }
-                            }
-                }
+                    }
+        }
 
 ### on Action
-        Intent intent=new Intent(this, MiraFilePickerActivity.class)
+        val intent= Intent(this, MiraFilePickerActivity.class)
         intent.putExtra("multiple",true)
         intent.putExtra("type","*/*")
         previewRequest.launch(openFileIntent)
