@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/yehiareda4/MiraFilePiker.svg)](https://jitpack.io/#yehiareda4/MiraFilePiker)
+
 # Preview
 
 ![](https://github.com/yehiareda4/MiraFilePiker/blob/master/preview/preview2.jpeg) ![](https://github.com/yehiareda4/MiraFilePiker/blob/master/preview/preview1.jpeg)
