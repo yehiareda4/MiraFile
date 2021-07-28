@@ -43,5 +43,5 @@ dependencies {
 
     //easy permission
     implementation 'pub.devrel:easypermissions:3.0.0'
-    implementation 'com.github.Ru95Gasol:File-Picker:1.0'
+//    implementation 'com.github.Ru95Gasol:File-Picker:1.0'
 }

@@ -384,7 +384,7 @@ public class FileUtils {
             }
             // MediaProvider
             else if (isMediaDocument(uri)) {
-                final String docId = getDocumentId(uri);
+                /*final String docId = getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
 
@@ -400,9 +400,9 @@ public class FileUtils {
                 final String selection = "_id=?";
                 final String[] selectionArgs = new String[]{
                         split[1]
-                };
+                };*/
 
-                return getDataColumn(context, contentUri, selection, selectionArgs);
+                return getRealPathFromUri_AboveApi19(context, uri);
             }
         }
         // MediaStore (and general)
@@ -440,7 +440,7 @@ public class FileUtils {
      */
     public static File getFile(Context context, Uri uri) {
         if (uri != null) {
-            String path = getRealPathFromUri(context, uri);
+            String path = getPath(context, uri);
             if (path != null && isLocal(path)) {
                 return new File(path);
             }
@@ -670,9 +670,9 @@ public class FileUtils {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
-//                if ("primary".equalsIgnoreCase(type)) {
-                return Environment.getExternalStorageDirectory() + "/" + split[1];
-//                }
+                if ("primary".equalsIgnoreCase(type)) {
+                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                }
             } else if (isDownloadsDocument(uri)) {
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
@@ -695,22 +695,9 @@ public class FileUtils {
                     contentUri = MediaStore.Files.getContentUri("external");
                 }
 
-//                if ("image".equals(type) || "video".equals(type) || "audio".equals(type)) {
-                    final String selection = "_id=?";
-                    final String[] selectionArgs = new String[]{split[1]};
-                    return getDataColumn(context, contentUri, selection, selectionArgs);
-//                } else {
-//                    ContentResolver cr = context.getContentResolver();
-//
-//                    String[] projection = null;
-//                    String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
-//                            + MediaStore.Files.FileColumns.MEDIA_TYPE_NONE;
-//                    final String[] selectionArgs = new String[]{split[1]};
-//
-//                    String sortOrder = null; // unordered
-//                    Cursor allNonMediaFiles = cr.query(contentUri, projection, selection, selectionArgs, sortOrder);
-//                    return getDataColumn(allNonMediaFiles);
-//                }
+                final String selection = "_id=?";
+                final String[] selectionArgs = new String[]{split[1]};
+                return getDataColumn(context, contentUri, selection, selectionArgs);
             }
         } else if ("content".equalsIgnoreCase(uri.getScheme())) {
             return getDataColumn(context, uri, null, null);
