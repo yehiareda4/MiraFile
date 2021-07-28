@@ -27,7 +27,7 @@ Add the dependency in your app gradle
 
     dependencies {
            ...
-           implementation 'com.github.yehiareda4:MiraFilePiker:1.0.0' //choose latest version
+           implementation 'com.github.yehiareda4:MiraFilePiker:$latest_version' //choose latest version
       }
       
 # Usage
