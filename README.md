@@ -67,19 +67,20 @@ Add the dependency in your app gradle
 ### Start MiraFilePicker form Fragment and pass the MimeType of the target file
         val previewRequest =  registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     if (it.requestCode == REQUEST_CODE && it.resultCode == RESULT_OK && it.data != null){
-                                if (it.data.getData()!=null){
-                                    File file=FileUtils.getFile(this,data.getData())
-                                    selectedFiles.add(file.getName())
+                        if (it.resultCode == RESULT_OK) {
+                            var files: File? = null
+                            if (it.data?.data != null) {
+                                val file: File = FileUtils.getFile(requireContext(), it.data?.data)
+                            }
+                            if (it.data?.clipData != null) {
+                                for (i in 0 until it.data?.clipData?.itemCount!!) {
+                                    val uri: Uri = it.data?.clipData?.getItemAt(i)?.uri!!
+                                    val file: File = FileUtils.getFile(requireContext(), uri)
                                 }
-                                if (it.data.getClipData()!=null){
-                                    for(int i = 0; i < it.data.getClipData().getItemCount(); i++) {
-                                        Uri uri = it.data.getClipData().getItemAt(i).getUri()
-                                        File file=FileUtils.getFile(this,uri)
-                                        selectedFiles.add(file.getName())
-                                    }
-                                }
+                            }
+                        }
                     }
-        }
+                }
 
 ### on Action
         val intent= Intent(this, MiraFilePickerActivity.class)
