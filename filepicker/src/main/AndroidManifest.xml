@@ -12,7 +12,7 @@
     <!--    ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION-->
     <!--    MANAGE_EXTERNAL_STORAGE-->
 
-    <uses-permission android:name="android.permission.CAMERA" />
+<!--    <uses-permission android:name="android.permission.CAMERA" />-->
 
     <application
         android:allowBackup="true"

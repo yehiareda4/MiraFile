@@ -1,5 +1,8 @@
 package com.yehia.myapplication;
 
+import static com.yehia.mira_file_picker.FileUtils.MIME_TYPE_APP;
+import static com.yehia.mira_file_picker.FileUtils.MIME_TYPE_IMAGE;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,10 +48,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         Intent intent = new Intent(this, MiraFilePickerActivity.class);
         intent.putExtra("multiple", true);
-        intent.putExtra("type", "*/*");
+        intent.putExtra("type", MIME_TYPE_IMAGE);
         intent.putExtra("requestCode", REQUEST_CODE);
         startActivityForResult(intent, REQUEST_CODE);
-
     }
 
     @Override
