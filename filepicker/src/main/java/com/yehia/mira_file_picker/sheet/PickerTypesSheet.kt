@@ -20,7 +20,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 
-class TypesSheet(
+class PickerTypesSheet(
     fragment: Fragment,
     private val types: MutableList<String>,
     private val camera: Boolean = false,

@@ -7,22 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.yehia.mira_file_picker.sheet.TypesSheet
-import com.yehia.mira_file_picker.sheet.TypesSheet.Companion.MIME_TYPE_AUDIO
-import com.yehia.mira_file_picker.sheet.TypesSheet.Companion.MIME_TYPE_DOC
-import com.yehia.mira_file_picker.sheet.TypesSheet.Companion.MIME_TYPE_IMAGE
-import com.yehia.mira_file_picker.sheet.TypesSheet.Companion.MIME_TYPE_PDF
-import com.yehia.mira_file_picker.sheet.TypesSheet.Companion.MIME_TYPE_PPT
-import com.yehia.mira_file_picker.sheet.TypesSheet.Companion.MIME_TYPE_RAR
-import com.yehia.mira_file_picker.sheet.TypesSheet.Companion.MIME_TYPE_TEXT
-import com.yehia.mira_file_picker.sheet.TypesSheet.Companion.MIME_TYPE_VIDEO
-import com.yehia.mira_file_picker.sheet.TypesSheet.Companion.MIME_TYPE_XLS
-import com.yehia.mira_file_picker.sheet.TypesSheet.Companion.MIME_TYPE_ZIP
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_AUDIO
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_DOC
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_IMAGE
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_PDF
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_PPT
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_RAR
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_TEXT
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_VIDEO
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_XLS
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_ZIP
 import com.yehia.myapplication.databinding.FragmentTestBinding
 
 class Test2Fragment : Fragment(), View.OnClickListener {
 
-    private lateinit var typesSheet: TypesSheet
+    private lateinit var typesSheet: PickerTypesSheet
     private lateinit var binding: FragmentTestBinding
     private var selectedFiles: MutableList<String>? = null
     private var adapter: ItemAdapter? = null
@@ -62,7 +62,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         types.add(MIME_TYPE_PPT)
         types.add(MIME_TYPE_XLS)
 
-        typesSheet = TypesSheet(
+        typesSheet = PickerTypesSheet(
             this,
             types,
             camera = false,
