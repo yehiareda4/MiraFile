@@ -1,8 +1,5 @@
 package com.yehia.myapplication;
 
-import static com.yehia.mira_file_picker.FileUtils.MIME_TYPE_APP;
-import static com.yehia.mira_file_picker.FileUtils.MIME_TYPE_IMAGE;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,16 +8,13 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.yehia.mira_file_picker.FileUtils;
-import com.yehia.mira_file_picker.MiraFilePickerActivity;
 import com.yehia.myapplication.databinding.ActivityMainBinding;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,21 +30,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        selectedFiles = new ArrayList<>();
-        adapter = new ItemAdapter(selectedFiles, this);
-        binding.rvFiles.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        binding.rvFiles.setAdapter(adapter);
-        binding.ivChooseFile.setOnClickListener(this);
-        binding.tvChooseFile.setOnClickListener(this);
+//        selectedFiles = new ArrayList<>();
+//        adapter = new ItemAdapter(selectedFiles, this);
+//        binding.rvFiles.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//        binding.rvFiles.setAdapter(adapter);
+//        binding.ivChooseFile.setOnClickListener(this);
+//        binding.tvChooseFile.setOnClickListener(this);
+
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.frame, new Test2Fragment());
+//        transaction.addToBackStack(null);
+//        transaction.commit();
     }
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this, MiraFilePickerActivity.class);
-        intent.putExtra("multiple", true);
-        intent.putExtra("type", MIME_TYPE_IMAGE);
-        intent.putExtra("requestCode", REQUEST_CODE);
-        startActivityForResult(intent, REQUEST_CODE);
+//        Intent intent = new Intent(this, MiraFilePickerActivity.class);
+//        intent.putExtra("multiple", true);
+//        intent.putExtra("type", MIME_TYPE_IMAGE);
+//        intent.putExtra("requestCode", REQUEST_CODE);
+//        startActivityForResult(intent, REQUEST_CODE);
+
     }
 
     @Override

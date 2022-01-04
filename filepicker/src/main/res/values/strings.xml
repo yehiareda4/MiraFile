@@ -2,4 +2,15 @@
 <resources>
     <string name="read_write_permissions">This App Requires External Storage Permission</string>
     <string name="camera_permission">Allow this app to take picture from Camera</string>
+    <string name="voice">Audio files</string>
+    <string name="text">Documents</string>
+    <string name="images">Images</string>
+    <string name="video">Video</string>
+    <string name="files">Files</string>
+    <string name="pdf">Pdf files</string>
+    <string name="compress">Compress files</string>
+    <string name="word">Word files</string>
+    <string name="powerPoint">PowerPoint files</string>
+    <string name="excel">Excel files</string>
+    <string name="any_type">Any type</string>
 </resources>

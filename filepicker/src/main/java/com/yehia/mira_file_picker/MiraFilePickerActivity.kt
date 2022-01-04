@@ -39,7 +39,7 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
         if (supportActionBar != null) {
             supportActionBar?.hide()
         }
-        val intent: Intent = getIntent()
+        val intent: Intent = intent
         REQUEST_CODE = intent.getIntExtra("requestCode", 101)
         type = intent.getStringExtra("type")
         multiple = intent.getBooleanExtra("multiple", false)

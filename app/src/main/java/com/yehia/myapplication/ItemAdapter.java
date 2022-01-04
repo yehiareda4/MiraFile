@@ -22,16 +22,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
     }
 
     @NonNull
-    
+
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull  ViewGroup parent, int viewType) {
-        View view=LayoutInflater.from(context)
-                .inflate(R.layout.adapter_item,parent,false);
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.adapter_item, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull  ItemAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ItemAdapter.MyViewHolder holder, int position) {
         holder.textView.setText(data.get(position));
     }
 
@@ -41,10 +41,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-       private TextView textView;
-        public MyViewHolder(@NonNull  View itemView) {
+        private TextView textView;
+
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView=itemView.findViewById(R.id.textView);
+            textView = itemView.findViewById(R.id.textView);
         }
     }
 }

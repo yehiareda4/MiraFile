@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="read_write_permissions">يتطلب هذا التطبيق إذن تخزين خارجي</string>
+    <string name="camera_permission">سماح لهذا التطبيق بالتقاط صورة من الكاميرا</string>
+    <string name="voice">ملفات صوتية</string>
+    <string name="text">وثائق</string>
+    <string name="images">صولا</string>
+    <string name="video">فيديوهات</string>
+    <string name="files">ملفات</string>
+    <string name="pdf">ملفات PDF</string>
+    <string name="compress">ملفات مطغوطه</string>
+    <string name="word">Word ملفات</string>
+    <string name="powerPoint">PowerPoint ملفات</string>
+    <string name="excel">Excel ملفات</string>
+    <string name="any_type">Any type</string>
+</resources>
