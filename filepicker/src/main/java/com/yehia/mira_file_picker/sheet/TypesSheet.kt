@@ -15,7 +15,6 @@ import com.yehia.mira_file_picker.databinding.SheetTypesBinding
 import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.mira_file_picker.sheet.model.Type
 import id.zelory.compressor.Compressor
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -70,6 +69,11 @@ class TypesSheet(
 
     override fun afterCreateView() {
         typesList.clear()
+
+        dialog?.setOnDismissListener {
+
+        }
+
         types.forEach {
             val type = when (it) {
                 MIME_TYPE_AUDIO -> {
@@ -159,7 +163,6 @@ class TypesSheet(
         binding.rvTypes.adapter = adapter
     }
 
-    @DelicateCoroutinesApi
     private fun addFile(file: File) {
 
         val fileData = FileData(
@@ -189,5 +192,4 @@ class TypesSheet(
 
         resultFile(fileData)
     }
-
 }

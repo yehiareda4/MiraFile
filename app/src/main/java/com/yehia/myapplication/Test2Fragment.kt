@@ -1,7 +1,6 @@
 package com.yehia.myapplication
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,31 +27,6 @@ class Test2Fragment : Fragment(), View.OnClickListener {
     private var selectedFiles: MutableList<String>? = null
     private var adapter: ItemAdapter? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val types: MutableList<String> = ArrayList()
-        types.add(MIME_TYPE_AUDIO)
-        types.add(MIME_TYPE_TEXT)
-        types.add(MIME_TYPE_IMAGE)
-        types.add(MIME_TYPE_VIDEO)
-        types.add(MIME_TYPE_PDF)
-        types.add(MIME_TYPE_ZIP)
-        types.add(MIME_TYPE_RAR)
-        types.add(MIME_TYPE_DOC)
-        types.add(MIME_TYPE_PPT)
-        types.add(MIME_TYPE_XLS)
-
-        typesSheet = TypesSheet(
-            this,
-            types,
-            camera = false,
-            multiple = true
-        ) { file ->
-            selectedFiles?.add(file.name)
-            adapter!!.notifyDataSetChanged()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -75,6 +49,28 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         binding.rvFiles.adapter = adapter
         binding.ivChooseFile.setOnClickListener(this)
         binding.tvChooseFile.setOnClickListener(this)
+
+        val types: MutableList<String> = ArrayList()
+        types.add(MIME_TYPE_AUDIO)
+        types.add(MIME_TYPE_TEXT)
+        types.add(MIME_TYPE_IMAGE)
+        types.add(MIME_TYPE_VIDEO)
+        types.add(MIME_TYPE_PDF)
+        types.add(MIME_TYPE_ZIP)
+        types.add(MIME_TYPE_RAR)
+        types.add(MIME_TYPE_DOC)
+        types.add(MIME_TYPE_PPT)
+        types.add(MIME_TYPE_XLS)
+
+        typesSheet = TypesSheet(
+            this,
+            types,
+            camera = false,
+            multiple = true
+        ) { file ->
+            selectedFiles?.add(file.name)
+            adapter!!.notifyDataSetChanged()
+        }
 
         return binding.root
     }
