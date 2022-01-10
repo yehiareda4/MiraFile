@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 class PickerTypesSheet(
-    fragment: Fragment,
+    private val fragment: Fragment,
     private val types: MutableList<String>,
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
@@ -74,93 +74,133 @@ class PickerTypesSheet(
 
         }
 
-        types.forEach {
-            val type = when (it) {
-                MIME_TYPE_AUDIO -> {
-                    Type(it, getString(R.string.voice), "", R.drawable.ic_voice, false, multiple)
-                }
-                MIME_TYPE_TEXT -> {
-                    Type(it, getString(R.string.text), "", R.drawable.ic_text, false, multiple)
-                }
-                MIME_TYPE_IMAGE -> {
-                    Type(
-                        it,
-                        getString(R.string.images),
-                        "",
-                        R.drawable.ic_gallary,
-                        camera,
-                        multiple
-                    )
-                }
-                MIME_TYPE_VIDEO -> {
-                    Type(it, getString(R.string.video), "", R.drawable.ic_video, camera, multiple)
-                }
-                MIME_TYPE_PDF -> {
-                    Type(it, getString(R.string.pdf), "pdf", R.drawable.ic_pdf, false, multiple)
-                }
-                MIME_TYPE_ZIP -> {
-                    Type(
-                        it,
-                        getString(R.string.compress),
-                        "zip",
-                        R.drawable.ic_zip,
-                        false,
-                        multiple
-                    )
-                }
-                MIME_TYPE_RAR -> {
-                    Type(
-                        it,
-                        getString(R.string.compress),
-                        "rar",
-                        R.drawable.ic_rar,
-                        false,
-                        multiple
-                    )
-                }
-                MIME_TYPE_DOC -> {
-                    Type(it, getString(R.string.word), "doc", R.drawable.ic_doc, false, multiple)
-                }
-                MIME_TYPE_PPT -> {
-                    Type(
-                        it,
-                        getString(R.string.powerPoint),
-                        "ppt",
-                        R.drawable.ic_ppt,
-                        false,
-                        multiple
-                    )
-                }
-                MIME_TYPE_XLS -> {
-                    Type(it, getString(R.string.excel), "xls", R.drawable.ic_xls, false, multiple)
-                }
-                else -> {
-                    Type(
-                        it,
-                        getString(R.string.any_type),
-                        "",
-                        R.drawable.ic_any_type,
-                        false,
-                        multiple
-                    )
-                }
+        if (types.size > 1) {
+            types.forEach {
+                val type = createType(it)
+
+                typesList.add(type)
+            }
+            adapter = TypesAdapter(typesList) {
+                type = it
+                val intent = Intent(activity, MiraFilePickerActivity::class.java)
+                intent.putExtra("multiple", type.multiple)
+                intent.putExtra("type", type.key)
+                intent.putExtra("camera", type.camera)
+                previewRequest.launch(intent)
             }
 
-            typesList.add(type)
-        }
-
-        adapter = TypesAdapter(typesList) {
-            type = it
+            val gridLayoutManager = GridLayoutManager(requireContext(), 4)
+            binding.rvTypes.layoutManager = gridLayoutManager
+            binding.rvTypes.adapter = adapter
+        } else {
+            type = createType(types[0])
             val intent = Intent(activity, MiraFilePickerActivity::class.java)
             intent.putExtra("multiple", type.multiple)
             intent.putExtra("type", type.key)
             intent.putExtra("camera", type.camera)
             previewRequest.launch(intent)
         }
+    }
 
-        val gridLayoutManager = GridLayoutManager(requireContext(), 4)
-        binding.rvTypes.layoutManager = gridLayoutManager
-        binding.rvTypes.adapter = adapter
+    private fun createType(it: String): Type {
+        return when (it) {
+            MIME_TYPE_AUDIO -> {
+                Type(
+                    it,
+                    getString(R.string.voice),
+                    "",
+                    R.drawable.ic_voice,
+                    false,
+                    multiple
+                )
+            }
+            MIME_TYPE_TEXT -> {
+                Type(it, getString(R.string.text), "", R.drawable.ic_text, false, multiple)
+            }
+            MIME_TYPE_IMAGE -> {
+                Type(
+                    it,
+                    getString(R.string.images),
+                    "",
+                    R.drawable.ic_gallary,
+                    camera,
+                    multiple
+                )
+            }
+            MIME_TYPE_VIDEO -> {
+                Type(
+                    it,
+                    getString(R.string.video),
+                    "",
+                    R.drawable.ic_video,
+                    camera,
+                    multiple
+                )
+            }
+            MIME_TYPE_PDF -> {
+                Type(it, getString(R.string.pdf), "pdf", R.drawable.ic_pdf, false, multiple)
+            }
+            MIME_TYPE_ZIP -> {
+                Type(
+                    it,
+                    getString(R.string.compress),
+                    "zip",
+                    R.drawable.ic_zip,
+                    false,
+                    multiple
+                )
+            }
+            MIME_TYPE_RAR -> {
+                Type(
+                    it,
+                    getString(R.string.compress),
+                    "rar",
+                    R.drawable.ic_rar,
+                    false,
+                    multiple
+                )
+            }
+            MIME_TYPE_DOC -> {
+                Type(
+                    it,
+                    getString(R.string.word),
+                    "doc",
+                    R.drawable.ic_doc,
+                    false,
+                    multiple
+                )
+            }
+            MIME_TYPE_PPT -> {
+                Type(
+                    it,
+                    getString(R.string.powerPoint),
+                    "ppt",
+                    R.drawable.ic_ppt,
+                    false,
+                    multiple
+                )
+            }
+            MIME_TYPE_XLS -> {
+                Type(
+                    it,
+                    getString(R.string.excel),
+                    "xls",
+                    R.drawable.ic_xls,
+                    false,
+                    multiple
+                )
+            }
+            else -> {
+                Type(
+                    it,
+                    getString(R.string.any_type),
+                    "",
+                    R.drawable.ic_any_type,
+                    false,
+                    multiple
+                )
+            }
+        }
     }
 
     private fun addFile(file: File) {
@@ -171,6 +211,9 @@ class PickerTypesSheet(
         )
         if (file.extension.isNullOrEmpty()) {
             fileData.path += type.extension
+        }
+        if (file.extension.isNullOrEmpty()) {
+            fileData.name += ".${type.extension}"
         }
         if (type.key == MIME_TYPE_IMAGE) {
             GlobalScope.launch {
@@ -189,7 +232,16 @@ class PickerTypesSheet(
             val thumbnail = getThumbnail(requireContext(), file)
             fileData.Thumbnail = thumbnail
         }
+        dialog?.dismiss()
 
         resultFile(fileData)
+    }
+
+    fun show() {
+        if (this.isAdded) {
+            this.dialog!!.show()
+        } else {
+            this.show(fragment.childFragmentManager, "")
+        }
     }
 }

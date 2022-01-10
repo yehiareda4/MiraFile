@@ -77,10 +77,6 @@ class Test2Fragment : Fragment(), View.OnClickListener {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onClick(v: View?) {
-        if (typesSheet.isAdded) {
-            typesSheet.dialog!!.show()
-        } else {
-            typesSheet.show(childFragmentManager, "")
-        }
+       typesSheet.show()
     }
 }

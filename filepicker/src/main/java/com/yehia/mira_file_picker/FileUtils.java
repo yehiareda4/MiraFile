@@ -448,7 +448,7 @@ public class FileUtils {
             if (path != null && isLocal(path)) {
                 return new File(path);
             } else {
-                createCopyAndReturnRealPath(context, uri);
+                return createCopyAndReturnRealPath(context, uri);
             }
         }
         return null;
@@ -803,7 +803,7 @@ public class FileUtils {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
-    public static String createCopyAndReturnRealPath(
+    public static File createCopyAndReturnRealPath(
             @NonNull Context context, @NonNull Uri uri) {
         final ContentResolver contentResolver = context.getContentResolver();
         if (contentResolver == null)
@@ -831,7 +831,7 @@ public class FileUtils {
             return null;
         }
 
-        return file.getAbsolutePath();
+        return file;
     }
 }
 
