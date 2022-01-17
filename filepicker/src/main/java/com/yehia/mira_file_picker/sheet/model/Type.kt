@@ -9,6 +9,5 @@ data class Type(
     val image: Int,
     val camera: Boolean = false,
     val multiple: Boolean = false,
-    val keyMultipart: String,
     val mediaType: String,
 )

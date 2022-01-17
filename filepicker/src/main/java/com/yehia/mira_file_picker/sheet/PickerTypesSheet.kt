@@ -13,7 +13,6 @@ import com.yehia.mira_file_picker.MiraFilePickerActivity
 import com.yehia.mira_file_picker.R
 import com.yehia.mira_file_picker.databinding.SheetTypesBinding
 import com.yehia.mira_file_picker.sheet.model.FileData
-import com.yehia.mira_file_picker.sheet.model.SelectedType
 import com.yehia.mira_file_picker.sheet.model.Type
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +27,7 @@ import java.io.File
 
 class PickerTypesSheet(
     private val fragment: Fragment,
-    private val types: MutableList<SelectedType>,
+    private val types: MutableList<String>,
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
     val resultFile: (FileData) -> Unit
@@ -108,121 +107,110 @@ class PickerTypesSheet(
         }
     }
 
-    private fun createType(it: SelectedType): Type {
-        return when (it.key) {
+    private fun createType(it: String): Type {
+        return when (it) {
             MIME_TYPE_AUDIO -> {
                 Type(
-                    it.key,
+                    it,
                     getString(R.string.voice),
                     "",
                     R.drawable.ic_voice,
                     false,
-                    multiple,
-                    it.keyMultipart, "audio"
+                    multiple, "audio"
                 )
             }
             MIME_TYPE_TEXT -> {
                 Type(
-                    it.key, getString(R.string.text), "", R.drawable.ic_text, false, multiple,
-                    it.keyMultipart, "text"
+                    it, getString(R.string.text), "", R.drawable.ic_text, false, multiple, "text"
                 )
             }
             MIME_TYPE_IMAGE -> {
                 Type(
-                    it.key,
+                    it,
                     getString(R.string.images),
                     "",
                     R.drawable.ic_gallary,
                     camera,
-                    multiple,
-                    it.keyMultipart, "image"
+                    multiple, "image"
                 )
             }
             MIME_TYPE_VIDEO -> {
                 Type(
-                    it.key,
+                    it,
                     getString(R.string.video),
                     "",
                     R.drawable.ic_video,
                     camera,
-                    multiple,
-                    it.keyMultipart, "video"
+                    multiple, "video"
                 )
             }
             MIME_TYPE_PDF -> {
                 Type(
-                    it.key, getString(R.string.pdf), "pdf", R.drawable.ic_pdf, false, multiple,
-                    it.keyMultipart, "pdf"
+                    it, getString(R.string.pdf), "pdf", R.drawable.ic_pdf, false, multiple, "pdf"
                 )
             }
             MIME_TYPE_ZIP -> {
                 Type(
-                    it.key,
+                    it,
                     getString(R.string.compress),
                     "zip",
                     R.drawable.ic_zip,
                     false,
-                    multiple,
-                    it.keyMultipart, "zip"
+                    multiple, "zip"
                 )
             }
             MIME_TYPE_RAR -> {
                 Type(
-                    it.key,
+                    it,
                     getString(R.string.compress),
                     "rar",
                     R.drawable.ic_rar,
                     false,
                     multiple,
-                    it.keyMultipart,
                     "rar"
                 )
             }
             MIME_TYPE_DOC -> {
                 Type(
-                    it.key,
+                    it,
                     getString(R.string.word),
                     "doc",
                     R.drawable.ic_doc,
                     false,
                     multiple,
-                    it.keyMultipart,
                     "doc"
                 )
             }
             MIME_TYPE_PPT -> {
                 Type(
-                    it.key,
+                    it,
                     getString(R.string.powerPoint),
                     "ppt",
                     R.drawable.ic_ppt,
                     false,
                     multiple,
-                    it.keyMultipart,
                     "ppt",
                 )
             }
             MIME_TYPE_XLS -> {
                 Type(
-                    it.key,
+                    it,
                     getString(R.string.excel),
                     "xls",
                     R.drawable.ic_xls,
                     false,
                     multiple,
-                    it.keyMultipart,
                     "xls",
                 )
             }
             else -> {
                 Type(
-                    it.key,
+                    it,
                     getString(R.string.any_type),
                     "",
                     R.drawable.ic_any_type,
                     false,
-                    multiple,
-                    it.keyMultipart, ""
+                    multiple, ""
                 )
             }
         }
