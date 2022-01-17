@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
 import okhttp3.RequestBody
@@ -42,7 +43,9 @@ class PickerTypesSheet(
         const val MIME_TYPE_ZIP = "application/zip"
         const val MIME_TYPE_RAR = "application/rar"
         const val MIME_TYPE_DOC = "application/doc"
+        const val MIME_TYPE_DOCX = "application/docx"
         const val MIME_TYPE_PPT = "application/ppt"
+        const val MIME_TYPE_PPTX = "application/pptx"
         const val MIME_TYPE_XLS = "application/xls"
     }
 
@@ -146,7 +149,13 @@ class PickerTypesSheet(
             }
             MIME_TYPE_PDF -> {
                 Type(
-                    it, getString(R.string.pdf), "pdf", R.drawable.ic_pdf, false, multiple, "pdf"
+                    it,
+                    getString(R.string.pdf),
+                    "pdf",
+                    R.drawable.ic_pdf,
+                    false,
+                    multiple,
+                    "application"
                 )
             }
             MIME_TYPE_ZIP -> {
@@ -156,7 +165,7 @@ class PickerTypesSheet(
                     "zip",
                     R.drawable.ic_zip,
                     false,
-                    multiple, "zip"
+                    multiple, "application"
                 )
             }
             MIME_TYPE_RAR -> {
@@ -167,7 +176,7 @@ class PickerTypesSheet(
                     R.drawable.ic_rar,
                     false,
                     multiple,
-                    "rar"
+                    "application"
                 )
             }
             MIME_TYPE_DOC -> {
@@ -178,7 +187,18 @@ class PickerTypesSheet(
                     R.drawable.ic_doc,
                     false,
                     multiple,
-                    "doc"
+                    "application"
+                )
+            }
+            MIME_TYPE_DOCX -> {
+                Type(
+                    it,
+                    getString(R.string.word),
+                    "docx",
+                    R.drawable.ic_doc,
+                    false,
+                    multiple,
+                    "application"
                 )
             }
             MIME_TYPE_PPT -> {
@@ -189,7 +209,18 @@ class PickerTypesSheet(
                     R.drawable.ic_ppt,
                     false,
                     multiple,
-                    "ppt",
+                    "application",
+                )
+            }
+            MIME_TYPE_PPTX -> {
+                Type(
+                    it,
+                    getString(R.string.powerPoint),
+                    "pptx",
+                    R.drawable.ic_ppt,
+                    false,
+                    multiple,
+                    "application",
                 )
             }
             MIME_TYPE_XLS -> {
@@ -200,7 +231,7 @@ class PickerTypesSheet(
                     R.drawable.ic_xls,
                     false,
                     multiple,
-                    "xls",
+                    "application",
                 )
             }
             else -> {
@@ -210,7 +241,7 @@ class PickerTypesSheet(
                     "",
                     R.drawable.ic_any_type,
                     false,
-                    multiple, ""
+                    multiple, "application"
                 )
             }
         }
@@ -222,7 +253,7 @@ class PickerTypesSheet(
             file.path, file.extension, type.mediaType
         )
         if (file.extension.isEmpty()) {
-            fileData.path += type.extension
+            fileData.path += ".${type.extension}"
         }
         if (file.extension.isEmpty()) {
             fileData.name += ".${type.extension}"
@@ -251,7 +282,16 @@ class PickerTypesSheet(
 
     fun show() {
         if (this.isAdded) {
-            this.dialog!!.show()
+            if (types.size == 1) {
+                type = createType(types[0])
+                val intent = Intent(activity, MiraFilePickerActivity::class.java)
+                intent.putExtra("multiple", type.multiple)
+                intent.putExtra("type", type.key)
+                intent.putExtra("camera", type.camera)
+                previewRequest.launch(intent)
+            } else {
+                this.dialog!!.show()
+            }
         } else {
             this.show(fragment.childFragmentManager, "")
         }
@@ -262,11 +302,13 @@ class PickerTypesSheet(
         key: String,
         contentType: MediaType?
     ): MultipartBody.Part? {
+        "image/*".toMediaTypeOrNull()
         return if (path != null) {
             val file = File(path)
             val requestBody: RequestBody = file.asRequestBody(contentType)
             val body: MultipartBody.Part =
                 createFormData(key, file.name, requestBody)
+
             body
         } else {
             null
