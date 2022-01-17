@@ -13,16 +13,22 @@ import com.yehia.mira_file_picker.MiraFilePickerActivity
 import com.yehia.mira_file_picker.R
 import com.yehia.mira_file_picker.databinding.SheetTypesBinding
 import com.yehia.mira_file_picker.sheet.model.FileData
+import com.yehia.mira_file_picker.sheet.model.SelectedType
 import com.yehia.mira_file_picker.sheet.model.Type
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.Companion.createFormData
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 class PickerTypesSheet(
     private val fragment: Fragment,
-    private val types: MutableList<String>,
+    private val types: MutableList<SelectedType>,
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
     val resultFile: (FileData) -> Unit
@@ -102,117 +108,135 @@ class PickerTypesSheet(
         }
     }
 
-    private fun createType(it: String): Type {
-        return when (it) {
+    private fun createType(it: SelectedType): Type {
+        return when (it.key) {
             MIME_TYPE_AUDIO -> {
                 Type(
-                    it,
+                    it.key,
                     getString(R.string.voice),
                     "",
                     R.drawable.ic_voice,
                     false,
-                    multiple
+                    multiple,
+                    it.keyMultipart, "audio"
                 )
             }
             MIME_TYPE_TEXT -> {
-                Type(it, getString(R.string.text), "", R.drawable.ic_text, false, multiple)
+                Type(
+                    it.key, getString(R.string.text), "", R.drawable.ic_text, false, multiple,
+                    it.keyMultipart, "text"
+                )
             }
             MIME_TYPE_IMAGE -> {
                 Type(
-                    it,
+                    it.key,
                     getString(R.string.images),
                     "",
                     R.drawable.ic_gallary,
                     camera,
-                    multiple
+                    multiple,
+                    it.keyMultipart, "image"
                 )
             }
             MIME_TYPE_VIDEO -> {
                 Type(
-                    it,
+                    it.key,
                     getString(R.string.video),
                     "",
                     R.drawable.ic_video,
                     camera,
-                    multiple
+                    multiple,
+                    it.keyMultipart, "video"
                 )
             }
             MIME_TYPE_PDF -> {
-                Type(it, getString(R.string.pdf), "pdf", R.drawable.ic_pdf, false, multiple)
+                Type(
+                    it.key, getString(R.string.pdf), "pdf", R.drawable.ic_pdf, false, multiple,
+                    it.keyMultipart, "pdf"
+                )
             }
             MIME_TYPE_ZIP -> {
                 Type(
-                    it,
+                    it.key,
                     getString(R.string.compress),
                     "zip",
                     R.drawable.ic_zip,
                     false,
-                    multiple
+                    multiple,
+                    it.keyMultipart, "zip"
                 )
             }
             MIME_TYPE_RAR -> {
                 Type(
-                    it,
+                    it.key,
                     getString(R.string.compress),
                     "rar",
                     R.drawable.ic_rar,
                     false,
-                    multiple
+                    multiple,
+                    it.keyMultipart,
+                    "rar"
                 )
             }
             MIME_TYPE_DOC -> {
                 Type(
-                    it,
+                    it.key,
                     getString(R.string.word),
                     "doc",
                     R.drawable.ic_doc,
                     false,
-                    multiple
+                    multiple,
+                    it.keyMultipart,
+                    "doc"
                 )
             }
             MIME_TYPE_PPT -> {
                 Type(
-                    it,
+                    it.key,
                     getString(R.string.powerPoint),
                     "ppt",
                     R.drawable.ic_ppt,
                     false,
-                    multiple
+                    multiple,
+                    it.keyMultipart,
+                    "ppt",
                 )
             }
             MIME_TYPE_XLS -> {
                 Type(
-                    it,
+                    it.key,
                     getString(R.string.excel),
                     "xls",
                     R.drawable.ic_xls,
                     false,
-                    multiple
+                    multiple,
+                    it.keyMultipart,
+                    "xls",
                 )
             }
             else -> {
                 Type(
-                    it,
+                    it.key,
                     getString(R.string.any_type),
                     "",
                     R.drawable.ic_any_type,
                     false,
-                    multiple
+                    multiple,
+                    it.keyMultipart, ""
                 )
             }
         }
     }
 
     private fun addFile(file: File) {
-
         val fileData = FileData(
             file, file.name, FileUtils.getReadableFileSize(file.length().toInt()),
-            file.path, file.extension
+            file.path, file.extension, type.mediaType
         )
-        if (file.extension.isNullOrEmpty()) {
+        if (file.extension.isEmpty()) {
             fileData.path += type.extension
         }
-        if (file.extension.isNullOrEmpty()) {
+        if (file.extension.isEmpty()) {
             fileData.name += ".${type.extension}"
         }
         if (type.key == MIME_TYPE_IMAGE) {
@@ -224,7 +248,7 @@ class PickerTypesSheet(
                 fileData.compressSize =
                     FileUtils.getReadableFileSize(compressedFile.length().toInt())
                 fileData.compressPath = compressedFile.path
-                if (file.extension.isNullOrEmpty()) {
+                if (file.extension.isEmpty()) {
                     fileData.compressPath += type.extension
                 }
             }
@@ -242,6 +266,22 @@ class PickerTypesSheet(
             this.dialog!!.show()
         } else {
             this.show(fragment.childFragmentManager, "")
+        }
+    }
+
+    fun convertFileToMultipart(
+        path: String?,
+        key: String,
+        contentType: MediaType?
+    ): MultipartBody.Part? {
+        return if (path != null) {
+            val file = File(path)
+            val requestBody: RequestBody = file.asRequestBody(contentType)
+            val body: MultipartBody.Part =
+                createFormData(key, file.name, requestBody)
+            body
+        } else {
+            null
         }
     }
 }

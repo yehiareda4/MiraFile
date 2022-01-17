@@ -18,6 +18,7 @@ import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_TEX
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_VIDEO
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_XLS
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_ZIP
+import com.yehia.mira_file_picker.sheet.model.SelectedType
 import com.yehia.myapplication.databinding.FragmentTestBinding
 
 class Test2Fragment : Fragment(), View.OnClickListener {
@@ -50,17 +51,17 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         binding.ivChooseFile.setOnClickListener(this)
         binding.tvChooseFile.setOnClickListener(this)
 
-        val types: MutableList<String> = ArrayList()
-        types.add(MIME_TYPE_AUDIO)
-        types.add(MIME_TYPE_TEXT)
-        types.add(MIME_TYPE_IMAGE)
-        types.add(MIME_TYPE_VIDEO)
-        types.add(MIME_TYPE_PDF)
-        types.add(MIME_TYPE_ZIP)
-        types.add(MIME_TYPE_RAR)
-        types.add(MIME_TYPE_DOC)
-        types.add(MIME_TYPE_PPT)
-        types.add(MIME_TYPE_XLS)
+        val types: MutableList<SelectedType> = ArrayList()
+        types.add(SelectedType(MIME_TYPE_AUDIO,""))
+        types.add(SelectedType(MIME_TYPE_TEXT,""))
+        types.add(SelectedType(MIME_TYPE_IMAGE,""))
+        types.add(SelectedType(MIME_TYPE_VIDEO,""))
+        types.add(SelectedType(MIME_TYPE_PDF,""))
+        types.add(SelectedType(MIME_TYPE_ZIP,""))
+        types.add(SelectedType(MIME_TYPE_RAR,""))
+        types.add(SelectedType(MIME_TYPE_DOC,""))
+        types.add(SelectedType(MIME_TYPE_PPT,""))
+        types.add(SelectedType(MIME_TYPE_XLS,""))
 
         typesSheet = PickerTypesSheet(
             this,

@@ -10,15 +10,22 @@ data class FileData(
     val size: String,
     var path: String,
     var extension: String,
+    val mediaType: String,
     var Thumbnail: Bitmap?,
     var compressFile: File?,
     var compressName: String?,
     var compressSize: String?,
     var compressPath: String?,
 ) : Serializable {
-    constructor(file: File, name: String, size: String, path: String, extension: String) :
-            this(
-                file, name, size, path, extension, null, null,
-                "", "", ""
-            )
+    constructor(
+        file: File,
+        name: String,
+        size: String,
+        path: String,
+        extension: String,
+        mediaType: String,
+    ) : this(
+        file, name, size, path, extension, mediaType, null, null,
+        "", "", ""
+    )
 }
