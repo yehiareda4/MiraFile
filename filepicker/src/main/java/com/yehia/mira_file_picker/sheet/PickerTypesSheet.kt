@@ -268,7 +268,7 @@ class PickerTypesSheet(
                     FileUtils.getReadableFileSize(compressedFile.length().toInt())
                 fileData.compressPath = compressedFile.path
                 if (file.extension.isEmpty()) {
-                    fileData.compressPath += type.extension
+                    fileData.compressPath += ".${type.extension}"
                 }
             }
         } else {
