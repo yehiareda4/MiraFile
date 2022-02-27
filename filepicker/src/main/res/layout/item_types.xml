@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_4sdp"
+    android:paddingTop="@dimen/_6sdp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_image"
+        android:layout_width="@dimen/_35sdp"
+        android:layout_height="@dimen/_35sdp" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/_4sdp"
-        android:paddingTop="@dimen/_6sdp">
+        android:textSize="@dimen/_9sdp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/civ_image"
-            android:layout_width="@dimen/_35sdp"
-            android:layout_height="@dimen/_35sdp" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/_9sdp" />
-
-    </LinearLayout>
-
-</layout>
+</LinearLayout>

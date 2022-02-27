@@ -4,37 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
+import androidx.viewbinding.ViewBinding
+import com.aait.sa.ui.base.util.Inflate
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-abstract class BaseBottomSheetFragment<T : ViewDataBinding> : BottomSheetDialogFragment() {
+abstract class BaseBottomSheetFragment<VB : ViewBinding>(private val inflate: Inflate<VB>) :
+    BottomSheetDialogFragment() {
 
     private var isInitialized: Boolean = false
 
-    lateinit var binding: T
+    private var _binding: VB? = null
+    val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (!::binding.isInitialized) {
-            binding = DataBindingUtil.inflate(
-                layoutInflater,
-                getFragmentView(),
-                container,
-                false
-            )
 
-            isInitialized = false
+        if (_binding == null) {
+            _binding = inflate.invoke(inflater, container, false)
             afterCreateView()
         } else {
             isInitialized = true
-            afterInitializedBinding()
         }
-
-//        backDefaultKey()
 
         return binding.root
     }
@@ -43,30 +36,13 @@ abstract class BaseBottomSheetFragment<T : ViewDataBinding> : BottomSheetDialogF
 
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        afterInitializedBinding()
+    }
+
     open fun afterInitializedBinding() {
 
     }
-
-    abstract fun getFragmentView(): Int
-
-//    private fun backDefaultKey() {
-//        requireView().isFocusableInTouchMode = true
-//        requireView().requestFocus()
-//
-//        requireView().setOnKeyListener(object : View.OnKeyListener {
-//            override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-//                if (event.action == KeyEvent.ACTION_DOWN) {
-//                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-//                        onBack()
-//                        return true
-//                    }
-//                }
-//                return false
-//            }
-//        })
-//    }
-//
-//    fun onBack() {
-//        dismiss()
-//    }
 }

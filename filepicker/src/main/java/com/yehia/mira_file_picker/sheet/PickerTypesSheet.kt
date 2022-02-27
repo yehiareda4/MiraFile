@@ -18,12 +18,6 @@ import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.MultipartBody.Part.Companion.createFormData
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 class PickerTypesSheet(
@@ -32,7 +26,7 @@ class PickerTypesSheet(
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
     val resultFile: (FileData) -> Unit
-) : BaseBottomSheetFragment<SheetTypesBinding>() {
+) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
     companion object {
         const val MIME_TYPE_AUDIO = "audio/*"
@@ -49,7 +43,7 @@ class PickerTypesSheet(
         const val MIME_TYPE_XLS = "application/xls"
     }
 
-    override fun getFragmentView(): Int = R.layout.sheet_types
+    //    override fun getFragmentView(): Int = R.layout.sheet_types
     private lateinit var adapter: TypesAdapter
     lateinit var type: Type
     var previewRequest: ActivityResultLauncher<Intent>
@@ -297,21 +291,21 @@ class PickerTypesSheet(
         }
     }
 
-    fun convertFileToMultipart(
-        path: String?,
-        key: String,
-        contentType: MediaType?
-    ): MultipartBody.Part? {
-        "image/*".toMediaTypeOrNull()
-        return if (path != null) {
-            val file = File(path)
-            val requestBody: RequestBody = file.asRequestBody(contentType)
-            val body: MultipartBody.Part =
-                createFormData(key, file.name, requestBody)
-
-            body
-        } else {
-            null
-        }
-    }
+//    fun convertFileToMultipart(
+//        path: String?,
+//        key: String,
+//        contentType: MediaType?
+//    ): MultipartBody.Part? {
+//        "image/*".toMediaTypeOrNull()
+//        return if (path != null) {
+//            val file = File(path)
+//            val requestBody: RequestBody = file.asRequestBody(contentType)
+//            val body: MultipartBody.Part =
+//                createFormData(key, file.name, requestBody)
+//
+//            body
+//        } else {
+//            null
+//        }
+//    }
 }
