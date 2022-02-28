@@ -90,8 +90,13 @@ class PickerTypesSheet(
                 intent.putExtra("camera", type.camera)
                 previewRequest.launch(intent)
             }
+            val span = if (typesList.size > 3) {
+                4
+            } else {
+                typesList.size
+            }
 
-            val gridLayoutManager = GridLayoutManager(requireContext(), 4)
+            val gridLayoutManager = GridLayoutManager(requireContext(), span)
             binding.rvTypes.layoutManager = gridLayoutManager
             binding.rvTypes.adapter = adapter
         } else {
