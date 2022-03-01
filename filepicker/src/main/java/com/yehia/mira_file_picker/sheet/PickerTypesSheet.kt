@@ -2,7 +2,6 @@ package com.yehia.mira_file_picker.sheet
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,7 +11,6 @@ import com.yehia.mira_file_picker.FileUtils
 import com.yehia.mira_file_picker.FileUtils.getThumbnail
 import com.yehia.mira_file_picker.MiraFilePickerActivity
 import com.yehia.mira_file_picker.R
-import com.yehia.mira_file_picker.RealPathUtil.getUriRealPath
 import com.yehia.mira_file_picker.databinding.SheetTypesBinding
 import com.yehia.mira_file_picker.pickit.PickiT
 import com.yehia.mira_file_picker.pickit.PickiTCallbacks
@@ -63,15 +61,15 @@ class PickerTypesSheet(
                 if (it.resultCode == Activity.RESULT_OK) {
                     if (it.data?.data != null) {
                         pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
-//                        val file: File = File(getUriRealPath(requireContext(), it.data?.data))
-
                     }
                     if (it.data?.clipData != null) {
-                        for (i in 0 until it.data?.clipData?.itemCount!!) {
-                            val uri: Uri = it.data?.clipData?.getItemAt(i)?.uri!!
-                            val file: File = File(getUriRealPath(requireContext(), uri))
-                            addFile(file)
-                        }
+                        pickiT.getMultiplePaths(it.data?.clipData)
+//                        pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
+//                        for (i in 0 until it.data?.clipData?.itemCount!!) {
+//                            val uri: Uri = it.data?.clipData?.getItemAt(i)?.uri!!
+//                            val file: File = File(getUriRealPath(requireContext(), uri))
+//                            addFile(file)
+//                        }
                     }
                 }
             }
@@ -351,7 +349,9 @@ class PickerTypesSheet(
                 wasSuccessful: Boolean,
                 Reason: String?
             ) {
-                TODO("Not yet implemented")
+                paths?.forEach {
+                    addFile(File(it))
+                }
             }
 
         }, requireActivity())
