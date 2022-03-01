@@ -96,30 +96,30 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
     }
 
     private fun chooseFile() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (!checkStoragePermissionApi30(this)) {
-                return
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            if (!checkStoragePermissionApi30(this)) {
+//                return
+//            }
+//        }
 
         val chooserIntent = FileUtils.createGetContentIntent(type, multiple)
         startActivityForResult(chooserIntent, REQUEST_CODE)
     }
 
-    @RequiresApi(30)
-    fun checkStoragePermissionApi30(activity: AppCompatActivity): Boolean {
-        val appOps = activity.getSystemService(AppOpsManager::class.java)
-        val mode = appOps.unsafeCheckOpNoThrow(
-            MANAGE_EXTERNAL_STORAGE_PERMISSION,
-            activity.applicationInfo.uid,
-            activity.packageName
-        )
-        if(mode !=AppOpsManager.MODE_ALLOWED){
-            requestStoragePermissionApi30(this)
-        }
-
-        return mode == AppOpsManager.MODE_ALLOWED
-    }
+//    @RequiresApi(30)
+//    fun checkStoragePermissionApi30(activity: AppCompatActivity): Boolean {
+//        val appOps = activity.getSystemService(AppOpsManager::class.java)
+//        val mode = appOps.unsafeCheckOpNoThrow(
+//            MANAGE_EXTERNAL_STORAGE_PERMISSION,
+//            activity.applicationInfo.uid,
+//            activity.packageName
+//        )
+//        if(mode !=AppOpsManager.MODE_ALLOWED){
+//            requestStoragePermissionApi30(this)
+//        }
+//
+//        return mode == AppOpsManager.MODE_ALLOWED
+//    }
 
     @RequiresApi(30)
     fun requestStoragePermissionApi30(activity: AppCompatActivity) {
