@@ -448,7 +448,74 @@ public class FileUtils {
             if (path != null && isLocal(path)) {
                 return new File(path);
             } else {
-                return createCopyAndReturnRealPath(context, uri);
+                return new File(getRealPathFromURI_BelowAPI11(context, uri));
+            }
+        }
+        return null;
+    }
+
+    public static String getRealPathFromURI_BelowAPI11(Context context, Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+        int column_index = 0;
+        String result = "";
+        if (cursor != null) {
+            column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            result = cursor.getString(column_index);
+            cursor.close();
+            return result;
+        }
+        return result;
+    }
+
+    public static String getRealPath(Context context,Uri uri) {
+        String docId = DocumentsContract.getDocumentId(uri);
+        String[] split = docId.split(":");
+        String type = split[0];
+        Uri contentUri;
+        switch (type) {
+            case "image":
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                break;
+            case "video":
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                break;
+            case "audio":
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                break;
+            default:
+                contentUri = MediaStore.Files.getContentUri("external");
+        }
+        String selection = "_id=?";
+        String[] selectionArgs = new String[]{
+                split[1]
+        };
+
+        return getDataColumnx(context, contentUri, selection, selectionArgs);
+    }
+
+    public static String getDataColumnx(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        String column = "_data";
+        String[] projection = {
+                column
+        };
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int column_index = cursor.getColumnIndexOrThrow(column);
+                String value = cursor.getString(column_index);
+                if (value.startsWith("content://") || !value.startsWith("/") && !value.startsWith("file://")) {
+                    return null;
+                }
+                return value;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
             }
         }
         return null;

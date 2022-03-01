@@ -39,7 +39,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         )
 
         selectedFiles = ArrayList<String>()
-        adapter = ItemAdapter(selectedFiles, requireContext())
+        adapter = ItemAdapter(selectedFiles, requireActivity())
         binding.rvFiles.addItemDecoration(
             DividerItemDecoration(
                 requireContext(),
@@ -68,7 +68,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
             camera = false,
             multiple = true
         ) { file ->
-            selectedFiles?.add(file.name)
+            selectedFiles?.add(file.path)
             adapter!!.notifyDataSetChanged()
         }
 

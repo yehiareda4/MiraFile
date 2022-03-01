@@ -3,6 +3,7 @@ package com.yehia.mira_file_picker.sheet
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -11,7 +12,10 @@ import com.yehia.mira_file_picker.FileUtils
 import com.yehia.mira_file_picker.FileUtils.getThumbnail
 import com.yehia.mira_file_picker.MiraFilePickerActivity
 import com.yehia.mira_file_picker.R
+import com.yehia.mira_file_picker.RealPathUtil.getUriRealPath
 import com.yehia.mira_file_picker.databinding.SheetTypesBinding
+import com.yehia.mira_file_picker.pickit.PickiT
+import com.yehia.mira_file_picker.pickit.PickiTCallbacks
 import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.mira_file_picker.sheet.model.Type
 import id.zelory.compressor.Compressor
@@ -19,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
+
 
 class PickerTypesSheet(
     private val fragment: Fragment,
@@ -43,6 +48,8 @@ class PickerTypesSheet(
         const val MIME_TYPE_XLS = "application/xls"
     }
 
+    private lateinit var pickiT: PickiT
+
     //    override fun getFragmentView(): Int = R.layout.sheet_types
     private lateinit var adapter: TypesAdapter
     lateinit var type: Type
@@ -55,13 +62,14 @@ class PickerTypesSheet(
             fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
                     if (it.data?.data != null) {
-                        val file: File = FileUtils.getFile(requireContext(), it.data?.data)
-                        addFile(file)
+                        pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
+//                        val file: File = File(getUriRealPath(requireContext(), it.data?.data))
+
                     }
                     if (it.data?.clipData != null) {
                         for (i in 0 until it.data?.clipData?.itemCount!!) {
                             val uri: Uri = it.data?.clipData?.getItemAt(i)?.uri!!
-                            val file: File = FileUtils.getFile(requireContext(), uri)
+                            val file: File = File(getUriRealPath(requireContext(), uri))
                             addFile(file)
                         }
                     }
@@ -313,4 +321,39 @@ class PickerTypesSheet(
 //            null
 //        }
 //    }
+
+    override fun onStart() {
+        super.onStart()
+        pickiT = PickiT(context, object : PickiTCallbacks {
+            override fun PickiTonUriReturned() {
+            }
+
+            override fun PickiTonStartListener() {
+            }
+
+            override fun PickiTonProgressUpdate(progress: Int) {
+            }
+
+            override fun PickiTonCompleteListener(
+                path: String?,
+                wasDriveFile: Boolean,
+                wasUnknownProvider: Boolean,
+                wasSuccessful: Boolean,
+                Reason: String?
+            ) {
+                if (path != null) {
+                    addFile(File(path))
+                }
+            }
+
+            override fun PickiTonMultipleCompleteListener(
+                paths: java.util.ArrayList<String>?,
+                wasSuccessful: Boolean,
+                Reason: String?
+            ) {
+                TODO("Not yet implemented")
+            }
+
+        }, requireActivity())
+    }
 }
