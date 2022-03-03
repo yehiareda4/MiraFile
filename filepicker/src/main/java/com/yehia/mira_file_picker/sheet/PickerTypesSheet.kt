@@ -29,7 +29,7 @@ class PickerTypesSheet(
     private val types: MutableList<String>,
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
-    private val multipleCount: Int = 0,
+    private var multipleCount: Int = 0,
     val resultFile: (FileData) -> Unit
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
@@ -63,7 +63,7 @@ class PickerTypesSheet(
                 if (it.resultCode == Activity.RESULT_OK) {
 
                     if (it.data?.data != null) {
-                    startLic()
+                        startLic()
                         pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
                     }
                     if (it.data?.clipData != null) {
@@ -297,6 +297,24 @@ class PickerTypesSheet(
     }
 
     fun show() {
+        if (this.isAdded) {
+            if (types.size == 1) {
+                type = createType(types[0])
+                val intent = Intent(activity, MiraFilePickerActivity::class.java)
+                intent.putExtra("multiple", type.multiple)
+                intent.putExtra("type", type.key)
+                intent.putExtra("camera", type.camera)
+                previewRequest.launch(intent)
+            } else {
+                this.dialog!!.show()
+            }
+        } else {
+            this.show(fragment.childFragmentManager, "")
+        }
+    }
+
+    fun show(multipleCount: Int) {
+        this.multipleCount = multipleCount
         if (this.isAdded) {
             if (types.size == 1) {
                 type = createType(types[0])
