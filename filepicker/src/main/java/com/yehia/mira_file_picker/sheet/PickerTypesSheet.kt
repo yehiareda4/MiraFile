@@ -30,8 +30,10 @@ class PickerTypesSheet(
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
     private var multipleCount: Int = 0,
-    val resultFile: (FileData) -> Unit
+    val resultFile: (FileData, Boolean) -> Unit
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
+
+    private var sizeList: Int = 0
 
     companion object {
         const val MIME_TYPE_AUDIO = "audio/*"
@@ -48,6 +50,7 @@ class PickerTypesSheet(
         const val MIME_TYPE_XLS = "application/xls"
     }
 
+    private var maxFile: Boolean = false
     private lateinit var pickiT: PickiT
 
     //    override fun getFragmentView(): Int = R.layout.sheet_types
@@ -64,17 +67,30 @@ class PickerTypesSheet(
 
                     if (it.data?.data != null) {
                         startLic()
-                        pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
+                        if (multipleCount != 0) {
+                            if (sizeList <= multipleCount) {
+                                sizeList += 1
+                                maxFile = false
+                                pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
+                            } else {
+                                maxFile = true
+                            }
+                        } else {
+                            pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
+                        }
                     }
                     if (it.data?.clipData != null) {
-//                        pickiT.getMultiplePaths(it.data?.clipData)
                         for (i in 0 until it.data?.clipData?.itemCount!!) {
                             val uri: Uri = it.data?.clipData?.getItemAt(i)?.uri!!
 
                             if (multipleCount != 0) {
-                                if (i <= multipleCount) {
+                                if (sizeList <= multipleCount) {
+                                    sizeList += 1
                                     startLic()
+                                    maxFile = false
                                     pickiT.getPath(uri, Build.VERSION.SDK_INT)
+                                } else {
+                                    maxFile = true
                                 }
                             } else {
                                 startLic()
@@ -293,7 +309,7 @@ class PickerTypesSheet(
         }
         dialog?.dismiss()
 
-        resultFile(fileData)
+        resultFile(fileData, maxFile)
     }
 
     fun show() {
@@ -313,8 +329,8 @@ class PickerTypesSheet(
         }
     }
 
-    fun show(multipleCount: Int) {
-        this.multipleCount = multipleCount
+    fun show(sizeList: Int) {
+        this.sizeList = sizeList
         if (this.isAdded) {
             if (types.size == 1) {
                 type = createType(types[0])
