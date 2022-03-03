@@ -454,6 +454,18 @@ public class FileUtils {
         return null;
     }
 
+    public static String getFilePath(Context context, Uri uri) {
+        if (uri != null) {
+            String path = getPath(context, uri);
+            if (isLocal(path)) {
+                return createCopyAndReturnRealPath(context,uri).getPath();
+            } else {
+                return (getRealPathFromURI_BelowAPI11(context, uri));
+            }
+        }
+        return null;
+    }
+
     public static String getRealPathFromURI_BelowAPI11(Context context, Uri contentUri) {
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
