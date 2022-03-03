@@ -312,6 +312,10 @@ class PickerTypesSheet(
         resultFile(fileData, maxFile)
     }
 
+//    fun showMaxFile(){
+//        Toa
+//    }
+
     fun show() {
         if (this.isAdded) {
             if (types.size == 1) {
