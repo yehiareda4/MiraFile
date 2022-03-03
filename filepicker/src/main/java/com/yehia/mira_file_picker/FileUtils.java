@@ -1,8 +1,5 @@
 package com.yehia.mira_file_picker;
 
-import static com.yehia.mira_file_picker.file2.getMediaFilePathForN;
-import static com.yehia.mira_file_picker.file2.getPathFromUri;
-
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -17,15 +14,12 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 import androidx.loader.content.CursorLoader;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileOutputStream;
@@ -52,8 +46,6 @@ public class FileUtils {
     public static final String MIME_TYPE_ANY = "*/*";
 
     public static final String HIDDEN_PREFIX = ".";
-    private static final String IMAGE_DIRECTORY = "/demonuts_upload_gallery";
-    private static final int BUFFER_SIZE = 1024 * 2;
 
     /**
      * Gets the extension of a file name, like ".png" or ".jpg".
@@ -456,24 +448,90 @@ public class FileUtils {
             if (path != null && isLocal(path)) {
                 return new File(path);
             } else {
-                return new File(getMediaFilePathForN(uri,context));/*createCopyAndReturnRealPath(context, uri);*/
+                return new File(getRealPathFromURI_BelowAPI11(context, uri));
             }
         }
         return null;
     }
 
-    private static String getRealPdathFromURI(Context context, Uri contentUri) {
-        MediaStore.Files.getContentUri("external");
-        String[] proj = { MediaStore.Files.getContentUri("external").toString() };
-        CursorLoader loader = new CursorLoader(context, contentUri, proj, null, null, null);
-        Cursor cursor = loader.loadInBackground();
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Files.getContentUri("external").toString());
-        cursor.moveToFirst();
-        String result = cursor.getString(column_index);
-        cursor.close();
+    public static String getFilePath(Context context, Uri uri) {
+        if (uri != null) {
+            String path = getPath(context, uri);
+            if (isLocal(path)) {
+                return createCopyAndReturnRealPath(context,uri).getPath();
+            } else {
+                return (getRealPathFromURI_BelowAPI11(context, uri));
+            }
+        }
+        return null;
+    }
+
+    public static String getRealPathFromURI_BelowAPI11(Context context, Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+        int column_index = 0;
+        String result = "";
+        if (cursor != null) {
+            column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            result = cursor.getString(column_index);
+            cursor.close();
+            return result;
+        }
         return result;
     }
 
+    public static String getRealPath(Context context,Uri uri) {
+        String docId = DocumentsContract.getDocumentId(uri);
+        String[] split = docId.split(":");
+        String type = split[0];
+        Uri contentUri;
+        switch (type) {
+            case "image":
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                break;
+            case "video":
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                break;
+            case "audio":
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                break;
+            default:
+                contentUri = MediaStore.Files.getContentUri("external");
+        }
+        String selection = "_id=?";
+        String[] selectionArgs = new String[]{
+                split[1]
+        };
+
+        return getDataColumnx(context, contentUri, selection, selectionArgs);
+    }
+
+    public static String getDataColumnx(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        String column = "_data";
+        String[] projection = {
+                column
+        };
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int column_index = cursor.getColumnIndexOrThrow(column);
+                String value = cursor.getString(column_index);
+                if (value.startsWith("content://") || !value.startsWith("/") && !value.startsWith("file://")) {
+                    return null;
+                }
+                return value;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
 
     /**
      * Get the file size in a human-readable string.
@@ -632,7 +690,7 @@ public class FileUtils {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
         // Only return URIs that can be opened with ContentResolver
-//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         return intent;
     }
 
@@ -830,10 +888,9 @@ public class FileUtils {
         if (contentResolver == null)
             return null;
 
-        File fileOld = new File(String.valueOf(uri));
         // Create file path inside app's data dir
         String filePath = context.getApplicationInfo().dataDir + File.separator
-                + fileOld.getName();
+                + System.currentTimeMillis();
 
         File file = new File(filePath);
         try {
@@ -854,78 +911,6 @@ public class FileUtils {
         }
 
         return file;
-    }
-
-    public static String getFilePathFromURI(Context context, Uri contentUri) {
-        //copy file and send new file path
-        String fileName = getFileName(contentUri);
-        File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
-        // have the object build the directory structure, if needed.
-        if (!wallpaperDirectory.exists()) {
-            wallpaperDirectory.mkdirs();
-        }
-        if (!TextUtils.isEmpty(fileName)) {
-            File copyFile = new File(wallpaperDirectory + File.separator + fileName);
-            // create folder if not exists
-
-            copy(context, contentUri, copyFile);
-            return copyFile.getAbsolutePath();
-        }
-        return null;
-    }
-
-    public static String getFileName(Uri uri) {
-        if (uri == null) return null;
-        String fileName = null;
-        String path = uri.getPath();
-        int cut = path.lastIndexOf('/');
-        if (cut != -1) {
-            fileName = path.substring(cut + 1);
-        }
-        return fileName;
-    }
-
-    public static void copy(Context context, Uri srcUri, File dstFile) {
-        try {
-            InputStream inputStream = context.getContentResolver().openInputStream(srcUri);
-            if (inputStream == null) return;
-            OutputStream outputStream = new FileOutputStream(dstFile);
-            copystream(inputStream, outputStream);
-            inputStream.close();
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static int copystream(InputStream input, OutputStream output) throws Exception, IOException {
-        byte[] buffer = new byte[BUFFER_SIZE];
-
-        BufferedInputStream in = new BufferedInputStream(input, BUFFER_SIZE);
-        BufferedOutputStream out = new BufferedOutputStream(output, BUFFER_SIZE);
-        int count = 0, n = 0;
-        try {
-            while ((n = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
-                out.write(buffer, 0, n);
-                count += n;
-            }
-            out.flush();
-        } finally {
-            try {
-                out.close();
-            } catch (IOException e) {
-                Log.e(e.getMessage(), String.valueOf(e));
-            }
-            try {
-                in.close();
-            } catch (IOException e) {
-                Log.e(e.getMessage(), String.valueOf(e));
-            }
-        }
-        return count;
     }
 }
 

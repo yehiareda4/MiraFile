@@ -8,9 +8,10 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
-    <!--    <uses-permission-->
-    <!--        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"-->
-    <!--        android:minSdkVersion="30" />-->
+<!--    <uses-permission-->
+<!--        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"-->
+<!--        android:minSdkVersion="30"-->
+<!--        tools:ignore="ScopedStorage" />-->
 
     <!--    ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION-->
     <!--    MANAGE_EXTERNAL_STORAGE-->
@@ -24,16 +25,6 @@
 
         <activity android:name="com.yehia.mira_file_picker.MiraFilePickerJavaActivity" />
         <activity android:name="com.yehia.mira_file_picker.MiraFilePickerActivity" />
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="android.getqardio.com.gmslocationtest"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
 
     </application>
 

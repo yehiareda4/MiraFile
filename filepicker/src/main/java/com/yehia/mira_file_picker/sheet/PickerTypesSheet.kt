@@ -2,13 +2,11 @@ package com.yehia.mira_file_picker.sheet
 
 import android.app.Activity
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
-import android.provider.OpenableColumns
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yehia.mira_file_picker.FileUtils
@@ -16,27 +14,27 @@ import com.yehia.mira_file_picker.FileUtils.getThumbnail
 import com.yehia.mira_file_picker.MiraFilePickerActivity
 import com.yehia.mira_file_picker.R
 import com.yehia.mira_file_picker.databinding.SheetTypesBinding
+import com.yehia.mira_file_picker.pickit.PickiT
+import com.yehia.mira_file_picker.pickit.PickiTCallbacks
 import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.mira_file_picker.sheet.model.Type
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.MultipartBody.Part.Companion.createFormData
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+
 
 class PickerTypesSheet(
     private val fragment: Fragment,
     private val types: MutableList<String>,
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
-    val resultFile: (FileData) -> Unit
-) : BaseBottomSheetFragment<SheetTypesBinding>() {
+    private var multipleCount: Int = 0,
+    val resultFile: (FileData, Boolean) -> Unit
+) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
+
+    private var sizeList: Int = 0
 
     companion object {
         const val MIME_TYPE_AUDIO = "audio/*"
@@ -53,7 +51,10 @@ class PickerTypesSheet(
         const val MIME_TYPE_XLS = "application/xls"
     }
 
-    override fun getFragmentView(): Int = R.layout.sheet_types
+    private var maxFile: Boolean = false
+    private lateinit var pickiT: PickiT
+
+    //    override fun getFragmentView(): Int = R.layout.sheet_types
     private lateinit var adapter: TypesAdapter
     lateinit var type: Type
     var previewRequest: ActivityResultLauncher<Intent>
@@ -64,74 +65,57 @@ class PickerTypesSheet(
         previewRequest =
             fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
+
                     if (it.data?.data != null) {
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                            createCopyAndReturnRealPath(it.data?.data!!)
-//                        }
-                        val file: File? = FileUtils.getFile(requireContext(), it.data?.data)
-                        if (file == null) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                                file = createCopyAndReturnRealPath(
-//                                    it.data?.data!!
-//                                )
+                        startLic()
+                        if (multipleCount != 0) {
+                            if (sizeList < multipleCount) {
+                                sizeList += 1
+                                maxFile = false
+                                pushPath(it.data!!.data!!)
+                            } else {
+                                maxFile = true
                             }
+                        } else {
+                            pushPath(it.data!!.data!!)
                         }
-                        addFile(file!!)
                     }
                     if (it.data?.clipData != null) {
                         for (i in 0 until it.data?.clipData?.itemCount!!) {
                             val uri: Uri = it.data?.clipData?.getItemAt(i)?.uri!!
-                            var file: File? = FileUtils.getFile(requireContext(), uri)
-                            if (file == null) {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                                    file = createCopyAndReturnRealPath(
-//                                        it.data?.clipData?.getItemAt(i)?.uri!!
-//                                    )
+
+                            if (multipleCount != 0) {
+                                if (sizeList < multipleCount) {
+                                    sizeList += 1
+                                    startLic()
+                                    maxFile = false
+                                    pushPath(uri)
+                                } else {
+                                    maxFile = true
                                 }
+                            } else {
+                                startLic()
+                                pushPath(uri)
                             }
-                            addFile(file!!)
                         }
                     }
                 }
             }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun createCopyAndReturnRealPath(uri: Uri){
-//        val contentResolver = context.contentResolver ?: return null
-////        val mimeType = getMimeType(context, uri)
-////        val fileExt = "." + mimeType.substring(mimeType.indexOf('/') + 1)
-//        val filePath: String = (context.dataDir.absolutePath + File.separator
-//                + System.currentTimeMillis())
-//        val file = File(filePath)
-//        try {
-//            file.parentFile.mkdirs()
-//            file.createNewFile()
-//            val inputStream = contentResolver.openInputStream(uri) ?: return null //crashing here
-//            val outputStream: OutputStream = FileOutputStream(file)
-//            val buf = ByteArray(1024)
-//            var len: Int
-//            while (inputStream.read(buf).also { len = it } > 0) outputStream.write(buf, 0, len)
-//            outputStream.close()
-//            inputStream.close()
-//        } catch (ignore: IOException) {
-//            return null
-//        }
-//        return file
-        if (uri.toString().startsWith("content://")) {
-            var myCursor: Cursor? = null
-            try {
-                // Setting the PDF to the TextView
-                myCursor = requireContext().contentResolver.query(uri, null, null, null, null)
-                if (myCursor != null && myCursor.moveToFirst()) {
-                    myCursor.getString(myCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                }
-            } finally {
-                myCursor?.close()
-            }
+    private fun pushPath(data: Uri) {
+        val path = FileUtils.getPath(context, data)
+        if (path != null && FileUtils.isLocal(path)) {
+            val uri =
+                FileUtils.createCopyAndReturnRealPath(
+                    context!!,
+                    data
+                )
+            pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
+        } else {
+            pickiT.getPath(data, Build.VERSION.SDK_INT)
         }
     }
-
 
     override fun afterCreateView() {
         typesList.clear()
@@ -154,8 +138,13 @@ class PickerTypesSheet(
                 intent.putExtra("camera", type.camera)
                 previewRequest.launch(intent)
             }
+            val span = if (typesList.size > 3) {
+                4
+            } else {
+                typesList.size
+            }
 
-            val gridLayoutManager = GridLayoutManager(requireContext(), 4)
+            val gridLayoutManager = GridLayoutManager(requireContext(), span)
             binding.rvTypes.layoutManager = gridLayoutManager
             binding.rvTypes.adapter = adapter
         } else {
@@ -335,8 +324,12 @@ class PickerTypesSheet(
         }
         dialog?.dismiss()
 
-        resultFile(fileData)
+        resultFile(fileData, maxFile)
     }
+
+//    fun showMaxFile(){
+//        Toa
+//    }
 
     fun show() {
         if (this.isAdded) {
@@ -355,21 +348,69 @@ class PickerTypesSheet(
         }
     }
 
-    fun convertFileToMultipart(
-        path: String?,
-        key: String,
-        contentType: MediaType?
-    ): MultipartBody.Part? {
-        "image/*".toMediaTypeOrNull()
-        return if (path != null) {
-            val file = File(path)
-            val requestBody: RequestBody = file.asRequestBody(contentType)
-            val body: MultipartBody.Part =
-                createFormData(key, file.name, requestBody)
-
-            body
+    fun show(sizeList: Int) {
+        this.sizeList = sizeList
+        if (this.isAdded) {
+            if (types.size == 1) {
+                type = createType(types[0])
+                val intent = Intent(activity, MiraFilePickerActivity::class.java)
+                intent.putExtra("multiple", type.multiple)
+                intent.putExtra("type", type.key)
+                intent.putExtra("camera", type.camera)
+                previewRequest.launch(intent)
+            } else {
+                this.dialog!!.show()
+            }
         } else {
-            null
+            this.show(fragment.childFragmentManager, "")
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        startLic()
+    }
+
+    private fun startLic() {
+        pickiT = PickiT(context, object : PickiTCallbacks {
+            override fun PickiTonUriReturned() {
+            }
+
+            override fun PickiTonStartListener() {
+            }
+
+            override fun PickiTonProgressUpdate(progress: Int) {
+            }
+
+            override fun PickiTonCompleteListener(
+                path: String?,
+                wasDriveFile: Boolean,
+                wasUnknownProvider: Boolean,
+                wasSuccessful: Boolean,
+                Reason: String?
+            ) {
+                if (path != null) {
+                    addFile(File(path))
+                }
+            }
+
+            override fun PickiTonMultipleCompleteListener(
+                paths: java.util.ArrayList<String>?,
+                wasSuccessful: Boolean,
+                Reason: String?
+            ) {
+                paths?.forEachIndexed { index, it ->
+                    if (multipleCount != 0) {
+                        if (index <= multipleCount) {
+                            addFile(File(it))
+                        }
+                    } else {
+                        addFile(File(it))
+                    }
+                }
+            }
+
+        }, requireActivity())
     }
 }

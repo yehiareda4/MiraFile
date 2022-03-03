@@ -18,11 +18,4 @@
     <external-path
         name="filespath"
         path="/" />
-    <external-files-path
-        name="my_images"
-        path="/" />
-    <files-path
-        name="my_images"
-        path="images/" />
-
 </paths>

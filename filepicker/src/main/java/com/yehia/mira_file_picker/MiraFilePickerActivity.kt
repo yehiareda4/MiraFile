@@ -5,14 +5,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.Settings
-import androidx.annotation.RequiresApi
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AppCompatActivity
 import pub.devrel.easypermissions.EasyPermissions
 
 class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
-    private val MANAGE_EXTERNAL_STORAGE_PERMISSION = "android:manage_external_storage"
+//    private val MANAGE_EXTERNAL_STORAGE_PERMISSION = "android:manage_external_storage"
 
     private val perms = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -30,6 +29,13 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
     private var REQUEST_CODE = 0
     private var type: String? = null
     private var multiple = false
+
+    var startActivityForResult = registerForActivityResult(
+        StartActivityForResult()
+    ) {
+        setResult(Activity.RESULT_OK, it.data)
+        finish()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +95,7 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
 //            }
 //        }
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(cameraIntent, REQUEST_CODE)
+        startActivityForResult.launch(cameraIntent)
     }
 
     private fun chooseFile() {
@@ -98,8 +104,9 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
 //                return
 //            }
 //        }
+
         val chooserIntent = FileUtils.createGetContentIntent(type, multiple)
-        startActivityForResult(chooserIntent, REQUEST_CODE)
+        startActivityForResult.launch(chooserIntent)
     }
 
 //    @RequiresApi(30)
@@ -117,18 +124,18 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
 //        return mode == AppOpsManager.MODE_ALLOWED
 //    }
 
-    @RequiresApi(30)
-    fun requestStoragePermissionApi30(activity: AppCompatActivity) {
-        val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
-
-        activity.startActivityForResult(intent, 1)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        setResult(Activity.RESULT_OK, data)
-        finish()
-    }
+//    @RequiresApi(30)
+//    fun requestStoragePermissionApi30(activity: AppCompatActivity) {
+//        val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+//
+//        activity.startActivityForResult(intent, 1)
+//    }
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        setResult(Activity.RESULT_OK, data)
+//        finish()
+//    }
 
     override fun onPermissionsGranted(requestCode: Int, perms: List<String?>) {
         if (requestCode == RC_READ_WRITE) {

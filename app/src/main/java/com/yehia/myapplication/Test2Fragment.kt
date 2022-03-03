@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
@@ -39,7 +40,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         )
 
         selectedFiles = ArrayList<String>()
-        adapter = ItemAdapter(selectedFiles, requireContext())
+        adapter = ItemAdapter(selectedFiles, requireActivity())
         binding.rvFiles.addItemDecoration(
             DividerItemDecoration(
                 requireContext(),
@@ -66,10 +67,14 @@ class Test2Fragment : Fragment(), View.OnClickListener {
             this,
             types,
             camera = false,
-            multiple = true
-        ) { file ->
+            multiple = true,
+            multipleCount = 5,
+        ) { file, maxFile ->
             selectedFiles?.add(file.path)
             adapter!!.notifyDataSetChanged()
+            if (maxFile) {
+                Toast.makeText(requireContext(), "maxFile", Toast.LENGTH_LONG).show()
+            }
         }
 
         return binding.root
@@ -77,6 +82,6 @@ class Test2Fragment : Fragment(), View.OnClickListener {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onClick(v: View?) {
-       typesSheet.show()
+        typesSheet.show(selectedFiles!!.size)
     }
 }

@@ -1,19 +1,15 @@
 package com.yehia.mira_file_picker.sheet
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.yehia.mira_file_picker.MiraFilePickerActivity
 import com.yehia.mira_file_picker.databinding.ItemTypesBinding
-import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.mira_file_picker.sheet.model.Type
 
 class TypesAdapter(
     private val dataList: MutableList<Type>,
     val onItemClick: (Type) -> Unit
 ) : RecyclerView.Adapter<TypesAdapter.ViewHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

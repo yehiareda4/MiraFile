@@ -5,7 +5,7 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.mira.mira_file"
@@ -29,7 +29,7 @@ android {
     }
     buildFeatures {
         viewBinding true
-        dataBinding true
+//        dataBinding true
     }
 }
 
@@ -49,4 +49,5 @@ dependencies {
     //easy permission
     implementation 'pub.devrel:easypermissions:3.0.0'
 //    implementation 'com.github.Ru95Gasol:File-Picker:1.0'
+    implementation 'com.github.HBiSoft:PickiT:2.0.3'
 }
