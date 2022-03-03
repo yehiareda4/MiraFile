@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yehia.mira_file_picker.FileUtils
@@ -71,12 +72,12 @@ class PickerTypesSheet(
                             if (sizeList < multipleCount) {
                                 sizeList += 1
                                 maxFile = false
-                                pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
+                                pushPath(it.data!!.data!!)
                             } else {
                                 maxFile = true
                             }
                         } else {
-                            pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
+                            pushPath(it.data!!.data!!)
                         }
                     }
                     if (it.data?.clipData != null) {
@@ -88,18 +89,32 @@ class PickerTypesSheet(
                                     sizeList += 1
                                     startLic()
                                     maxFile = false
-                                    pickiT.getPath(uri, Build.VERSION.SDK_INT)
+                                    pushPath(uri)
                                 } else {
                                     maxFile = true
                                 }
                             } else {
                                 startLic()
-                                pickiT.getPath(uri, Build.VERSION.SDK_INT)
+                                pushPath(uri)
                             }
                         }
                     }
                 }
             }
+    }
+
+    private fun pushPath(data: Uri) {
+        val path = FileUtils.getPath(context, data)
+        if (path != null && FileUtils.isLocal(path)) {
+            pickiT.getPath(data, Build.VERSION.SDK_INT)
+        } else {
+            val uri =
+                FileUtils.getRealPathFromURI_BelowAPI11(
+                    context,
+                    data
+                )
+            pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
+        }
     }
 
     override fun afterCreateView() {
