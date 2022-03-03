@@ -1,5 +1,8 @@
 package com.yehia.mira_file_picker;
 
+import static com.yehia.mira_file_picker.file2.getMediaFilePathForN;
+import static com.yehia.mira_file_picker.file2.getPathFromUri;
+
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -14,12 +17,15 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 import androidx.loader.content.CursorLoader;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileOutputStream;
@@ -46,6 +52,8 @@ public class FileUtils {
     public static final String MIME_TYPE_ANY = "*/*";
 
     public static final String HIDDEN_PREFIX = ".";
+    private static final String IMAGE_DIRECTORY = "/demonuts_upload_gallery";
+    private static final int BUFFER_SIZE = 1024 * 2;
 
     /**
      * Gets the extension of a file name, like ".png" or ".jpg".
@@ -448,11 +456,24 @@ public class FileUtils {
             if (path != null && isLocal(path)) {
                 return new File(path);
             } else {
-                return createCopyAndReturnRealPath(context, uri);
+                return new File(getMediaFilePathForN(uri,context));/*createCopyAndReturnRealPath(context, uri);*/
             }
         }
         return null;
     }
+
+    private static String getRealPdathFromURI(Context context, Uri contentUri) {
+        MediaStore.Files.getContentUri("external");
+        String[] proj = { MediaStore.Files.getContentUri("external").toString() };
+        CursorLoader loader = new CursorLoader(context, contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Files.getContentUri("external").toString());
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
+    }
+
 
     /**
      * Get the file size in a human-readable string.
@@ -611,7 +632,7 @@ public class FileUtils {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
         // Only return URIs that can be opened with ContentResolver
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
         return intent;
     }
 
@@ -809,9 +830,10 @@ public class FileUtils {
         if (contentResolver == null)
             return null;
 
+        File fileOld = new File(String.valueOf(uri));
         // Create file path inside app's data dir
         String filePath = context.getApplicationInfo().dataDir + File.separator
-                + System.currentTimeMillis();
+                + fileOld.getName();
 
         File file = new File(filePath);
         try {
@@ -832,6 +854,78 @@ public class FileUtils {
         }
 
         return file;
+    }
+
+    public static String getFilePathFromURI(Context context, Uri contentUri) {
+        //copy file and send new file path
+        String fileName = getFileName(contentUri);
+        File wallpaperDirectory = new File(
+                Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
+        // have the object build the directory structure, if needed.
+        if (!wallpaperDirectory.exists()) {
+            wallpaperDirectory.mkdirs();
+        }
+        if (!TextUtils.isEmpty(fileName)) {
+            File copyFile = new File(wallpaperDirectory + File.separator + fileName);
+            // create folder if not exists
+
+            copy(context, contentUri, copyFile);
+            return copyFile.getAbsolutePath();
+        }
+        return null;
+    }
+
+    public static String getFileName(Uri uri) {
+        if (uri == null) return null;
+        String fileName = null;
+        String path = uri.getPath();
+        int cut = path.lastIndexOf('/');
+        if (cut != -1) {
+            fileName = path.substring(cut + 1);
+        }
+        return fileName;
+    }
+
+    public static void copy(Context context, Uri srcUri, File dstFile) {
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(srcUri);
+            if (inputStream == null) return;
+            OutputStream outputStream = new FileOutputStream(dstFile);
+            copystream(inputStream, outputStream);
+            inputStream.close();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static int copystream(InputStream input, OutputStream output) throws Exception, IOException {
+        byte[] buffer = new byte[BUFFER_SIZE];
+
+        BufferedInputStream in = new BufferedInputStream(input, BUFFER_SIZE);
+        BufferedOutputStream out = new BufferedOutputStream(output, BUFFER_SIZE);
+        int count = 0, n = 0;
+        try {
+            while ((n = in.read(buffer, 0, BUFFER_SIZE)) != -1) {
+                out.write(buffer, 0, n);
+                count += n;
+            }
+            out.flush();
+        } finally {
+            try {
+                out.close();
+            } catch (IOException e) {
+                Log.e(e.getMessage(), String.valueOf(e));
+            }
+            try {
+                in.close();
+            } catch (IOException e) {
+                Log.e(e.getMessage(), String.valueOf(e));
+            }
+        }
+        return count;
     }
 }
 

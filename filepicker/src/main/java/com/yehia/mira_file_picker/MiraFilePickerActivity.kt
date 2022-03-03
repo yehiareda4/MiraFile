@@ -2,16 +2,13 @@ package com.yehia.mira_file_picker
 
 import android.Manifest
 import android.app.Activity
-import android.app.AppOpsManager
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import pub.devrel.easypermissions.EasyPermissions
-
 
 class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
@@ -20,13 +17,13 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
     private val perms = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.MANAGE_EXTERNAL_STORAGE
+//        Manifest.permission.MANAGE_EXTERNAL_STORAGE
     )
     private val cameraPermission = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.MANAGE_EXTERNAL_STORAGE
+//        Manifest.permission.MANAGE_EXTERNAL_STORAGE
     )
     private val RC_READ_WRITE = 1
     private val RC_CAMERA = 2

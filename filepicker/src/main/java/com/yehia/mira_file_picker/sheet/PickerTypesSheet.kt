@@ -2,9 +2,13 @@ package com.yehia.mira_file_picker.sheet
 
 import android.app.Activity
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
+import android.os.Build
+import android.provider.OpenableColumns
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yehia.mira_file_picker.FileUtils
@@ -61,19 +65,73 @@ class PickerTypesSheet(
             fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
                     if (it.data?.data != null) {
-                        val file: File = FileUtils.getFile(requireContext(), it.data?.data)
-                        addFile(file)
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                            createCopyAndReturnRealPath(it.data?.data!!)
+//                        }
+                        val file: File? = FileUtils.getFile(requireContext(), it.data?.data)
+                        if (file == null) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                                file = createCopyAndReturnRealPath(
+//                                    it.data?.data!!
+//                                )
+                            }
+                        }
+                        addFile(file!!)
                     }
                     if (it.data?.clipData != null) {
                         for (i in 0 until it.data?.clipData?.itemCount!!) {
                             val uri: Uri = it.data?.clipData?.getItemAt(i)?.uri!!
-                            val file: File = FileUtils.getFile(requireContext(), uri)
-                            addFile(file)
+                            var file: File? = FileUtils.getFile(requireContext(), uri)
+                            if (file == null) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                                    file = createCopyAndReturnRealPath(
+//                                        it.data?.clipData?.getItemAt(i)?.uri!!
+//                                    )
+                                }
+                            }
+                            addFile(file!!)
                         }
                     }
                 }
             }
     }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun createCopyAndReturnRealPath(uri: Uri){
+//        val contentResolver = context.contentResolver ?: return null
+////        val mimeType = getMimeType(context, uri)
+////        val fileExt = "." + mimeType.substring(mimeType.indexOf('/') + 1)
+//        val filePath: String = (context.dataDir.absolutePath + File.separator
+//                + System.currentTimeMillis())
+//        val file = File(filePath)
+//        try {
+//            file.parentFile.mkdirs()
+//            file.createNewFile()
+//            val inputStream = contentResolver.openInputStream(uri) ?: return null //crashing here
+//            val outputStream: OutputStream = FileOutputStream(file)
+//            val buf = ByteArray(1024)
+//            var len: Int
+//            while (inputStream.read(buf).also { len = it } > 0) outputStream.write(buf, 0, len)
+//            outputStream.close()
+//            inputStream.close()
+//        } catch (ignore: IOException) {
+//            return null
+//        }
+//        return file
+        if (uri.toString().startsWith("content://")) {
+            var myCursor: Cursor? = null
+            try {
+                // Setting the PDF to the TextView
+                myCursor = requireContext().contentResolver.query(uri, null, null, null, null)
+                if (myCursor != null && myCursor.moveToFirst()) {
+                    myCursor.getString(myCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                }
+            } finally {
+                myCursor?.close()
+            }
+        }
+    }
+
 
     override fun afterCreateView() {
         typesList.clear()

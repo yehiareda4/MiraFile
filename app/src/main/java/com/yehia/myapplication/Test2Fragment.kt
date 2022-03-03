@@ -68,7 +68,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
             camera = false,
             multiple = true
         ) { file ->
-            selectedFiles?.add(file.name)
+            selectedFiles?.add(file.path)
             adapter!!.notifyDataSetChanged()
         }
 
