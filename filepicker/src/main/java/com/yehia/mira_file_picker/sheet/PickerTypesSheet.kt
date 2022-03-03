@@ -2,6 +2,7 @@ package com.yehia.mira_file_picker.sheet
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,6 +29,7 @@ class PickerTypesSheet(
     private val types: MutableList<String>,
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
+    private val multipleCount: Int = 0,
     val resultFile: (FileData) -> Unit
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
@@ -59,17 +61,26 @@ class PickerTypesSheet(
         previewRequest =
             fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
+
                     if (it.data?.data != null) {
+                    startLic()
                         pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
                     }
                     if (it.data?.clipData != null) {
-                        pickiT.getMultiplePaths(it.data?.clipData)
-//                        pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
-//                        for (i in 0 until it.data?.clipData?.itemCount!!) {
-//                            val uri: Uri = it.data?.clipData?.getItemAt(i)?.uri!!
-//                            val file: File = File(getUriRealPath(requireContext(), uri))
-//                            addFile(file)
-//                        }
+//                        pickiT.getMultiplePaths(it.data?.clipData)
+                        for (i in 0 until it.data?.clipData?.itemCount!!) {
+                            val uri: Uri = it.data?.clipData?.getItemAt(i)?.uri!!
+
+                            if (multipleCount != 0) {
+                                if (i <= multipleCount) {
+                                    startLic()
+                                    pickiT.getPath(uri, Build.VERSION.SDK_INT)
+                                }
+                            } else {
+                                startLic()
+                                pickiT.getPath(uri, Build.VERSION.SDK_INT)
+                            }
+                        }
                     }
                 }
             }
@@ -302,26 +313,13 @@ class PickerTypesSheet(
         }
     }
 
-//    fun convertFileToMultipart(
-//        path: String?,
-//        key: String,
-//        contentType: MediaType?
-//    ): MultipartBody.Part? {
-//        "image/*".toMediaTypeOrNull()
-//        return if (path != null) {
-//            val file = File(path)
-//            val requestBody: RequestBody = file.asRequestBody(contentType)
-//            val body: MultipartBody.Part =
-//                createFormData(key, file.name, requestBody)
-//
-//            body
-//        } else {
-//            null
-//        }
-//    }
-
     override fun onStart() {
         super.onStart()
+
+        startLic()
+    }
+
+    private fun startLic() {
         pickiT = PickiT(context, object : PickiTCallbacks {
             override fun PickiTonUriReturned() {
             }
@@ -349,8 +347,14 @@ class PickerTypesSheet(
                 wasSuccessful: Boolean,
                 Reason: String?
             ) {
-                paths?.forEach {
-                    addFile(File(it))
+                paths?.forEachIndexed { index, it ->
+                    if (multipleCount != 0) {
+                        if (index <= multipleCount) {
+                            addFile(File(it))
+                        }
+                    } else {
+                        addFile(File(it))
+                    }
                 }
             }
 
