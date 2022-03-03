@@ -68,7 +68,7 @@ class PickerTypesSheet(
                     if (it.data?.data != null) {
                         startLic()
                         if (multipleCount != 0) {
-                            if (sizeList <= multipleCount) {
+                            if (sizeList < multipleCount) {
                                 sizeList += 1
                                 maxFile = false
                                 pickiT.getPath(it.data?.data, Build.VERSION.SDK_INT)
@@ -84,7 +84,7 @@ class PickerTypesSheet(
                             val uri: Uri = it.data?.clipData?.getItemAt(i)?.uri!!
 
                             if (multipleCount != 0) {
-                                if (sizeList <= multipleCount) {
+                                if (sizeList < multipleCount) {
                                     sizeList += 1
                                     startLic()
                                     maxFile = false
