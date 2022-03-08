@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
@@ -108,7 +109,7 @@ class PickerTypesSheet(
         if (path != null && FileUtils.isLocal(path)) {
             val uri =
                 FileUtils.createCopyAndReturnRealPath(
-                    context!!,
+                    requireContext(),
                     data
                 )
             pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
@@ -121,7 +122,12 @@ class PickerTypesSheet(
         typesList.clear()
 
         dialog?.setOnDismissListener {
+            try {
+                (fragment.requireView().parent as ViewGroup).removeView(binding.root)
+                this.dialog!!.cancel()
+            } catch (e: Exception) {
 
+            }
         }
 
         if (types.size > 1) {
@@ -344,7 +350,7 @@ class PickerTypesSheet(
                 this.dialog!!.show()
             }
         } else {
-            this.show(fragment.childFragmentManager, "")
+            this.show(fragment.requireActivity().supportFragmentManager, "")
         }
     }
 
