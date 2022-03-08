@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.appcompat.app.AppCompatActivity
 import pub.devrel.easypermissions.EasyPermissions
 
-
 class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
 //    private val MANAGE_EXTERNAL_STORAGE_PERMISSION = "android:manage_external_storage"

@@ -10,7 +10,7 @@
     <string name="pdf">ملفات PDF</string>
     <string name="compress">ملفات مطغوطه</string>
     <string name="word">Word ملفات</string>
-    <string name="powerPoint">PowerPoint ملفات</string>
+    <string name="powerPoint">PowerPoint</string>
     <string name="excel">Excel ملفات</string>
     <string name="any_type">Any type</string>
 </resources>
