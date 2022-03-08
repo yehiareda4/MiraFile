@@ -373,7 +373,7 @@ class PickerTypesSheet(
                 this.dialog!!.show()
             }
         } else {
-            this.show(fragment.childFragmentManager, "")
+            this.show(fragment.requireActivity().supportFragmentManager, "")
         }
     }
 
