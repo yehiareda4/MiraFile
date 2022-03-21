@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,6 +19,8 @@ import com.yehia.mira_file_picker.pickit.PickiT
 import com.yehia.mira_file_picker.pickit.PickiTCallbacks
 import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.mira_file_picker.sheet.model.Type
+import gun0912.tedimagepicker.builder.TedImagePicker
+import gun0912.tedimagepicker.builder.type.MediaType
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -36,6 +37,7 @@ class PickerTypesSheet(
     val resultFile: (FileData, Boolean) -> Unit
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
+    private var dismissed: Boolean = false
     private var sizeList: Int = 0
 
     companion object {
@@ -51,6 +53,7 @@ class PickerTypesSheet(
         const val MIME_TYPE_PPT = "application/ppt"
         const val MIME_TYPE_PPTX = "application/pptx"
         const val MIME_TYPE_XLS = "application/xls"
+        const val MIME_ALL_TYPE = "*/*"
     }
 
     private var maxFile: Boolean = false
@@ -105,16 +108,22 @@ class PickerTypesSheet(
             }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
+        if (dismissed) {
+            dialog!!.dismiss()
+        }
+        this.dialog?.setOnDismissListener {
+            dismissed = true
+        }
     }
 
     private fun pushPath(data: Uri) {
-        val path = FileUtils.getPath(context, data)
+        val path = FileUtils.getPath(fragment.requireContext(), data)
         if (path != null && FileUtils.isLocal(path)) {
             val uri =
                 FileUtils.createCopyAndReturnRealPath(
-                    requireContext(),
+                    fragment.requireContext(),
                     data
                 )
             pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
@@ -143,11 +152,8 @@ class PickerTypesSheet(
             }
             adapter = TypesAdapter(typesList) {
                 type = it
-                val intent = Intent(activity, MiraFilePickerActivity::class.java)
-                intent.putExtra("multiple", type.multiple)
-                intent.putExtra("type", type.key)
-                intent.putExtra("camera", type.camera)
-                previewRequest.launch(intent)
+
+                openSinglType(type)
             }
             val span = if (typesList.size > 3) {
                 4
@@ -155,25 +161,32 @@ class PickerTypesSheet(
                 typesList.size
             }
 
-            val gridLayoutManager = GridLayoutManager(requireContext(), span)
+            val gridLayoutManager = GridLayoutManager(fragment.requireContext(), span)
             binding.rvTypes.layoutManager = gridLayoutManager
             binding.rvTypes.adapter = adapter
         } else {
             type = createType(types[0])
-            val intent = Intent(activity, MiraFilePickerActivity::class.java)
-            intent.putExtra("multiple", type.multiple)
-            intent.putExtra("type", type.key)
-            intent.putExtra("camera", type.camera)
-            previewRequest.launch(intent)
+
+            openSinglType(type)
         }
     }
 
     private fun createType(it: String): Type {
         return when (it) {
+            MIME_ALL_TYPE -> {
+                Type(
+                    it,
+                    fragment.getString(R.string.any_type),
+                    "",
+                    R.drawable.ic_any_type,
+                    false,
+                    multiple, "application"
+                )
+            }
             MIME_TYPE_AUDIO -> {
                 Type(
                     it,
-                    getString(R.string.voice),
+                    fragment.getString(R.string.voice),
                     "",
                     R.drawable.ic_voice,
                     false,
@@ -182,13 +195,19 @@ class PickerTypesSheet(
             }
             MIME_TYPE_TEXT -> {
                 Type(
-                    it, getString(R.string.text), "", R.drawable.ic_text, false, multiple, "text"
+                    it,
+                    fragment.getString(R.string.text),
+                    "",
+                    R.drawable.ic_text,
+                    false,
+                    multiple,
+                    "text"
                 )
             }
             MIME_TYPE_IMAGE -> {
                 Type(
                     it,
-                    getString(R.string.images),
+                    fragment.getString(R.string.images),
                     "",
                     R.drawable.ic_gallary,
                     camera,
@@ -198,8 +217,8 @@ class PickerTypesSheet(
             MIME_TYPE_VIDEO -> {
                 Type(
                     it,
-                    getString(R.string.video),
-                    "",
+                    fragment.getString(R.string.video),
+                    "mp4",
                     R.drawable.ic_video,
                     camera,
                     multiple, "video"
@@ -208,7 +227,7 @@ class PickerTypesSheet(
             MIME_TYPE_PDF -> {
                 Type(
                     it,
-                    getString(R.string.pdf),
+                    fragment.getString(R.string.pdf),
                     "pdf",
                     R.drawable.ic_pdf,
                     false,
@@ -219,7 +238,7 @@ class PickerTypesSheet(
             MIME_TYPE_ZIP -> {
                 Type(
                     it,
-                    getString(R.string.compress),
+                    fragment.getString(R.string.compress),
                     "zip",
                     R.drawable.ic_zip,
                     false,
@@ -229,7 +248,7 @@ class PickerTypesSheet(
             MIME_TYPE_RAR -> {
                 Type(
                     it,
-                    getString(R.string.compress),
+                    fragment.getString(R.string.compress),
                     "rar",
                     R.drawable.ic_rar,
                     false,
@@ -240,7 +259,7 @@ class PickerTypesSheet(
             MIME_TYPE_DOC -> {
                 Type(
                     it,
-                    getString(R.string.word),
+                    fragment.getString(R.string.word),
                     "doc",
                     R.drawable.ic_doc,
                     false,
@@ -251,7 +270,7 @@ class PickerTypesSheet(
             MIME_TYPE_DOCX -> {
                 Type(
                     it,
-                    getString(R.string.word),
+                    fragment.getString(R.string.word),
                     "docx",
                     R.drawable.ic_doc,
                     false,
@@ -262,7 +281,7 @@ class PickerTypesSheet(
             MIME_TYPE_PPT -> {
                 Type(
                     it,
-                    getString(R.string.powerPoint),
+                    fragment.getString(R.string.powerPoint),
                     "ppt",
                     R.drawable.ic_ppt,
                     false,
@@ -273,7 +292,7 @@ class PickerTypesSheet(
             MIME_TYPE_PPTX -> {
                 Type(
                     it,
-                    getString(R.string.powerPoint),
+                    fragment.getString(R.string.powerPoint),
                     "pptx",
                     R.drawable.ic_ppt,
                     false,
@@ -284,7 +303,7 @@ class PickerTypesSheet(
             MIME_TYPE_XLS -> {
                 Type(
                     it,
-                    getString(R.string.excel),
+                    fragment.getString(R.string.excel),
                     "xls",
                     R.drawable.ic_xls,
                     false,
@@ -295,7 +314,7 @@ class PickerTypesSheet(
             else -> {
                 Type(
                     it,
-                    getString(R.string.any_type),
+                    fragment.getString(R.string.any_type),
                     "",
                     R.drawable.ic_any_type,
                     false,
@@ -319,7 +338,7 @@ class PickerTypesSheet(
         if (type.key == MIME_TYPE_IMAGE) {
             GlobalScope.launch {
                 val compressedFile =
-                    Compressor.compress(requireContext(), file, Dispatchers.Main)
+                    Compressor.compress(fragment.requireContext(), file, Dispatchers.Main)
                 fileData.compressFile = compressedFile
                 fileData.compressName = compressedFile.name
                 fileData.compressSize =
@@ -330,7 +349,7 @@ class PickerTypesSheet(
                 }
             }
         } else {
-            val thumbnail = getThumbnail(requireContext(), file)
+            val thumbnail = getThumbnail(fragment.requireContext(), file)
             fileData.Thumbnail = thumbnail
         }
         dialog?.dismiss()
@@ -338,43 +357,31 @@ class PickerTypesSheet(
         resultFile(fileData, maxFile)
     }
 
-//    fun showMaxFile(){
-//        Toa
-//    }
-
-    fun show() {
-        if (this.isAdded) {
-            if (types.size == 1) {
-                type = createType(types[0])
-                val intent = Intent(activity, MiraFilePickerActivity::class.java)
-                intent.putExtra("multiple", type.multiple)
-                intent.putExtra("type", type.key)
-                intent.putExtra("camera", type.camera)
-                previewRequest.launch(intent)
-            } else {
-                this.dialog!!.show()
-            }
-        } else {
-            this.show(fragment.requireActivity().supportFragmentManager, "")
-        }
-    }
-
-    fun show(sizeList: Int) {
+    fun show(sizeList: Int): Boolean {
+        dismissed = false
         this.sizeList = sizeList
+
+        if (sizeList > multipleCount && multiple) {
+            return false
+        }
         if (this.isAdded) {
             if (types.size == 1) {
                 type = createType(types[0])
-                val intent = Intent(activity, MiraFilePickerActivity::class.java)
-                intent.putExtra("multiple", type.multiple)
-                intent.putExtra("type", type.key)
-                intent.putExtra("camera", type.camera)
-                previewRequest.launch(intent)
+
+                openSinglType(type)
             } else {
                 this.dialog!!.show()
             }
         } else {
-            this.show(fragment.requireActivity().supportFragmentManager, "")
+            if (types.size == 1) {
+                type = createType(types[0])
+
+                openSinglType(type)
+            } else {
+                this.show(fragment.requireActivity().supportFragmentManager, "")
+            }
         }
+        return true
     }
 
     override fun onStart() {
@@ -384,7 +391,7 @@ class PickerTypesSheet(
     }
 
     private fun startLic() {
-        pickiT = PickiT(context, object : PickiTCallbacks {
+        pickiT = PickiT(fragment.requireContext(), object : PickiTCallbacks {
             override fun PickiTonUriReturned() {
             }
 
@@ -422,6 +429,42 @@ class PickerTypesSheet(
                 }
             }
 
-        }, requireActivity())
+        }, fragment.requireActivity())
+    }
+
+    private fun openSinglType(type: Type) {
+        if (type.key == MIME_TYPE_IMAGE || type.key == MIME_TYPE_VIDEO) {
+            val with = TedImagePicker.with(fragment.requireContext())
+            if (type.key == MIME_TYPE_VIDEO) {
+                with.video()
+                with.mediaType(MediaType.VIDEO)
+            }
+            with.showCameraTile(type.camera)
+            if (type.multiple) {
+                with.max(
+                    multipleCount - sizeList,
+                    fragment.getString(R.string.ted_image_picker_max_count)
+                )
+                with.startMultiImage { uriList ->
+                    uriList.forEach {
+                        startLic()
+
+                        pickiT.getPath(it, Build.VERSION.SDK_INT)
+                    }
+                }
+            } else {
+                with.start { uri ->
+                    startLic()
+
+                    pickiT.getPath(uri, Build.VERSION.SDK_INT)
+                }
+            }
+        } else {
+            val intent = Intent(fragment.requireActivity(), MiraFilePickerActivity::class.java)
+            intent.putExtra("multiple", type.multiple)
+            intent.putExtra("type", type.key)
+            intent.putExtra("camera", type.camera)
+            previewRequest.launch(intent)
+        }
     }
 }

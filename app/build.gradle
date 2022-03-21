@@ -14,6 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
 
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,7 +30,7 @@ android {
     }
     buildFeatures {
         viewBinding true
-//        dataBinding true
+        dataBinding true
     }
 }
 
@@ -50,4 +51,5 @@ dependencies {
     implementation 'pub.devrel:easypermissions:3.0.0'
 //    implementation 'com.github.Ru95Gasol:File-Picker:1.0'
     implementation 'com.github.HBiSoft:PickiT:2.0.3'
+    implementation 'com.android.support:multidex:1.0.3'
 }

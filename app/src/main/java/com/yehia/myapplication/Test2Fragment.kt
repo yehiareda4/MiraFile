@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
+import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_ALL_TYPE
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_AUDIO
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_DOC
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_IMAGE
@@ -52,21 +53,21 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         binding.tvChooseFile.setOnClickListener(this)
 
         val types: MutableList<String> = ArrayList()
-        types.add(MIME_TYPE_AUDIO)
-        types.add(MIME_TYPE_TEXT)
+//        types.add(MIME_TYPE_AUDIO)
+//        types.add(MIME_TYPE_TEXT)
         types.add(MIME_TYPE_IMAGE)
-        types.add(MIME_TYPE_VIDEO)
+        types.add(MIME_ALL_TYPE)
         types.add(MIME_TYPE_PDF)
-        types.add(MIME_TYPE_ZIP)
-        types.add(MIME_TYPE_RAR)
-        types.add(MIME_TYPE_DOC)
-        types.add(MIME_TYPE_PPT)
-        types.add(MIME_TYPE_XLS)
+//        types.add(MIME_TYPE_ZIP)
+//        types.add(MIME_TYPE_RAR)
+//        types.add(MIME_TYPE_DOC)
+//        types.add(MIME_TYPE_PPT)
+//        types.add(MIME_TYPE_XLS)
 
         typesSheet = PickerTypesSheet(
             this,
             types,
-            camera = false,
+            camera = true,
             multiple = true,
             multipleCount = 5,
         ) { file, maxFile ->

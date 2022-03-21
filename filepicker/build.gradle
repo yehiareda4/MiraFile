@@ -15,6 +15,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+        multiDexEnabled true
+
     }
 
     buildTypes {
@@ -29,7 +31,7 @@ android {
     }
     buildFeatures {
         viewBinding true
-//        dataBinding true
+        dataBinding true
     }
 }
 
@@ -55,6 +57,10 @@ dependencies {
     implementation 'id.zelory:compressor:3.0.1'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0-native-mt"
+
+    implementation 'com.github.yehiareda4:TedImagePicker:1.0.22'
+//    implementation 'androidx.multidex:multidex: 2.0.1'
+
 }
 repositories {
     mavenCentral()
