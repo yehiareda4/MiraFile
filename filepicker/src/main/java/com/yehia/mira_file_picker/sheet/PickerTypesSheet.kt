@@ -134,15 +134,6 @@ class PickerTypesSheet(
     override fun afterCreateView() {
         typesList.clear()
 
-        dialog?.setOnDismissListener {
-            try {
-                (fragment.requireView().parent as ViewGroup).removeView(binding.root)
-                this.dialog!!.cancel()
-            } catch (e: Exception) {
-
-            }
-        }
-
         if (types.size > 1) {
             types.forEach {
                 val type = createType(it)

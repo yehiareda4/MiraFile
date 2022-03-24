@@ -6,7 +6,7 @@ import com.yehia.myapplication.databinding.ActivityMainBinding
 
 class MainActivityK : AppCompatActivity() {
 
-    private lateinit var test2Fragment: Test2Fragment
+    private lateinit var test2Fragment: Test1Fragment
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,7 +18,7 @@ class MainActivityK : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         if (!::test2Fragment.isInitialized) {
-            test2Fragment = Test2Fragment()
+            test2Fragment = Test1Fragment()
         }
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame, test2Fragment)
