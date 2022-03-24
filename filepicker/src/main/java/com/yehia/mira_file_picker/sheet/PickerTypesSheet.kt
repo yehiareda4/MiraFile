@@ -59,7 +59,6 @@ class PickerTypesSheet(
     private var maxFile: Boolean = false
     private lateinit var pickiT: PickiT
 
-    //    override fun getFragmentView(): Int = R.layout.sheet_types
     private lateinit var adapter: TypesAdapter
     lateinit var type: Type
     var previewRequest: ActivityResultLauncher<Intent>
@@ -357,7 +356,7 @@ class PickerTypesSheet(
         resultFile(fileData, maxFile)
     }
 
-    fun show(sizeList: Int): Boolean {
+    fun show(sizeList: Int = 0): Boolean {
         dismissed = false
         this.sizeList = sizeList
 
