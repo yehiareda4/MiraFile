@@ -8,9 +8,9 @@ class MainActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame, Test1Fragment())
-        transaction.addToBackStack(null)
-        transaction.commit()
+//        val transaction = supportFragmentManager.beginTransaction()
+//        transaction.replace(R.id.frame, Test1Fragment())
+//        transaction.addToBackStack(null)
+//        transaction.commit()
     }
 }

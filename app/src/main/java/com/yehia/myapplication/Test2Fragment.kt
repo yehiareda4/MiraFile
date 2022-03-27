@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
@@ -40,7 +41,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
             false
         )
 
-        selectedFiles = ArrayList<String>()
+        selectedFiles = ArrayList()
         adapter = ItemAdapter(selectedFiles, requireActivity())
         binding.rvFiles.addItemDecoration(
             DividerItemDecoration(
@@ -65,6 +66,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
 //        types.add(MIME_TYPE_XLS)
 
         typesSheet = PickerTypesSheet(
+            requireActivity() as AppCompatActivity,
             this,
             types,
             camera = true,

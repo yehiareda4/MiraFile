@@ -4,9 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,8 +27,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 
-
 class PickerTypesSheet(
+    private val activity: AppCompatActivity,
     private val fragment: Fragment,
     private val types: MutableList<String>,
     private val camera: Boolean = false,
@@ -118,11 +118,11 @@ class PickerTypesSheet(
     }
 
     private fun pushPath(data: Uri) {
-        val path = FileUtils.getPath(fragment.requireContext(), data)
+        val path = FileUtils.getPath(activity, data)
         if (path != null && FileUtils.isLocal(path)) {
             val uri =
                 FileUtils.createCopyAndReturnRealPath(
-                    fragment.requireContext(),
+                    activity,
                     data
                 )
             pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
@@ -151,7 +151,7 @@ class PickerTypesSheet(
                 typesList.size
             }
 
-            val gridLayoutManager = GridLayoutManager(fragment.requireContext(), span)
+            val gridLayoutManager = GridLayoutManager(activity, span)
             binding.rvTypes.layoutManager = gridLayoutManager
             binding.rvTypes.adapter = adapter
         } else {
@@ -328,7 +328,7 @@ class PickerTypesSheet(
         if (type.key == MIME_TYPE_IMAGE) {
             GlobalScope.launch {
                 val compressedFile =
-                    Compressor.compress(fragment.requireContext(), file, Dispatchers.Main)
+                    Compressor.compress(activity, file, Dispatchers.Main)
                 fileData.compressFile = compressedFile
                 fileData.compressName = compressedFile.name
                 fileData.compressSize =
@@ -339,7 +339,7 @@ class PickerTypesSheet(
                 }
             }
         } else {
-            val thumbnail = getThumbnail(fragment.requireContext(), file)
+            val thumbnail = getThumbnail(activity, file)
             fileData.Thumbnail = thumbnail
         }
         dialog?.dismiss()
@@ -368,7 +368,7 @@ class PickerTypesSheet(
 
                 openSinglType(type)
             } else {
-                this.show(fragment.requireActivity().supportFragmentManager, "")
+                this.show(activity.supportFragmentManager, "")
             }
         }
         return true
@@ -381,7 +381,7 @@ class PickerTypesSheet(
     }
 
     private fun startLic() {
-        pickiT = PickiT(fragment.requireContext(), object : PickiTCallbacks {
+        pickiT = PickiT(activity, object : PickiTCallbacks {
             override fun PickiTonUriReturned() {
             }
 
@@ -419,12 +419,12 @@ class PickerTypesSheet(
                 }
             }
 
-        }, fragment.requireActivity())
+        }, activity)
     }
 
     private fun openSinglType(type: Type) {
         if (type.key == MIME_TYPE_IMAGE || type.key == MIME_TYPE_VIDEO) {
-            val with = TedImagePicker.with(fragment.requireContext())
+            val with = TedImagePicker.with(activity)
             if (type.key == MIME_TYPE_VIDEO) {
                 with.video()
                 with.mediaType(MediaType.VIDEO)
@@ -450,7 +450,7 @@ class PickerTypesSheet(
                 }
             }
         } else {
-            val intent = Intent(fragment.requireActivity(), MiraFilePickerActivity::class.java)
+            val intent = Intent(activity, MiraFilePickerActivity::class.java)
             intent.putExtra("multiple", type.multiple)
             intent.putExtra("type", type.key)
             intent.putExtra("camera", type.camera)

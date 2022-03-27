@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nag_main"
+    app:startDestination="@id/test1Fragment">
+
+    <fragment
+        android:id="@+id/test1Fragment"
+        android:name="com.yehia.myapplication.Test1Fragment"
+        android:label="Test1Fragment">
+        <action
+            android:id="@+id/action_test1Fragment_to_test2Fragment"
+            app:destination="@id/test2Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/test2Fragment"
+        android:name="com.yehia.myapplication.Test2Fragment"
+        android:label="Test2Fragment" />
+</navigation>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="read_write_permissions">اس ایپ کو بیرونی اسٹوریج کی اجازت درکار ہے۔</string>
+    <string name="camera_permission">اس ایپ کو کیمرے سے تصویر لینے کی اجازت دیں۔</string>
+    <string name="voice">آڈیو فائلیں</string>
+    <string name="text">دستاویزات</string>
+    <string name="images">تصویر</string>
+    <string name="video">ویڈیوز</string>
+    <string name="files">فائلوں</string>
+    <string name="pdf">پی ڈی ایف فائلیں۔</string>
+    <string name="compress">کمپریسڈ فائلیں</string>
+    <string name="word">ورڈ فائلز</string>
+    <string name="powerPoint">پاور پوائنٹ</string>
+    <string name="excel">ایکسل فائلیں۔</string>
+    <string name="any_type">ہر کوئی</string>
+</resources>
