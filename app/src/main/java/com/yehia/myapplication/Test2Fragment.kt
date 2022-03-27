@@ -1,7 +1,9 @@
 package com.yehia.myapplication
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,23 +13,26 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_ALL_TYPE
-import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_AUDIO
-import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_DOC
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_IMAGE
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_PDF
-import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_PPT
-import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_RAR
-import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_TEXT
-import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_VIDEO
-import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_XLS
-import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_ZIP
+import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.myapplication.databinding.FragmentTestBinding
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.createFormData
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 class Test2Fragment : Fragment(), View.OnClickListener {
 
     private lateinit var typesSheet: PickerTypesSheet
     private lateinit var binding: FragmentTestBinding
-    private var selectedFiles: MutableList<String>? = null
+    private var selectedFiles: MutableList<FileData>? = null
     private var adapter: ItemAdapter? = null
 
     override fun onCreateView(
@@ -42,7 +47,25 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         )
 
         selectedFiles = ArrayList()
-        adapter = ItemAdapter(selectedFiles, requireActivity())
+        adapter = ItemAdapter(
+            selectedFiles, requireActivity()
+        ) {
+
+            provideRetrofit().create(api::class.java)
+                .uploadFileAsync(preparePDFPart("file", it.file))
+                .enqueue(object : Callback<Any> {
+                    override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                        Log.d(TAG, "onResponse: $response")
+                    }
+
+                    override fun onFailure(call: Call<Any>, t: Throwable) {
+                        Log.d(TAG, "onResponse: $t")
+                    }
+
+                })
+
+            true
+        }
         binding.rvFiles.addItemDecoration(
             DividerItemDecoration(
                 requireContext(),
@@ -73,7 +96,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
             multiple = true,
             multipleCount = 5,
         ) { file, maxFile ->
-            selectedFiles?.add(file.path)
+            selectedFiles?.add(file)
             adapter!!.notifyDataSetChanged()
             if (maxFile) {
                 Toast.makeText(requireContext(), "maxFile", Toast.LENGTH_LONG).show()
@@ -86,5 +109,37 @@ class Test2Fragment : Fragment(), View.OnClickListener {
     @SuppressLint("NotifyDataSetChanged")
     override fun onClick(v: View?) {
         typesSheet.show(selectedFiles!!.size)
+    }
+
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https:///")
+            .build()
+    }
+
+    fun convertFileToMultipart(path: String?, key: String): MultipartBody.Part? {
+        return if (path != null) {
+            val file = File(path)
+
+            val requestBody: RequestBody = RequestBody.create(null, file)
+            val body: MultipartBody.Part =
+                MultipartBody.Part.createFormData(key, file.name, requestBody)
+
+            body
+        } else {
+            null
+        }
+    }
+
+    fun preparePDFPart(
+        partName: String,
+        file: File
+    ): MultipartBody.Part {
+        val requestFile = RequestBody.create(
+            MediaType.parse("pdf/*"),
+            file
+        )
+        return createFormData(partName, file.name, requestFile)
     }
 }

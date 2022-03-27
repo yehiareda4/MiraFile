@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.mira.mira_file"
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -56,4 +56,8 @@ dependencies {
 //    implementation 'com.github.Ru95Gasol:File-Picker:1.0'
     implementation 'com.github.HBiSoft:PickiT:2.0.3'
     implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
 }

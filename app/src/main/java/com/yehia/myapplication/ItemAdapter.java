@@ -1,10 +1,6 @@
 package com.yehia.myapplication;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +9,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.yehia.mira_file_picker.sheet.model.FileData;
+
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
 
-    private List<String> data;
+    private final OnClick onClick;
+    private List<FileData> data;
     private Activity context;
 
-    public ItemAdapter(List<String> data, Activity context) {
+    public ItemAdapter(List<FileData> data, Activity context, OnClick onClick) {
         this.data = data;
         this.context = context;
+        this.onClick = onClick;
     }
 
     @NonNull
@@ -36,22 +36,23 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.MyViewHolder holder, int position) {
-        holder.textView.setText(data.get(position));
+        holder.textView.setText(data.get(position).getPath());
 
         holder.textView.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(data.get(position)), "application/pdf");
-
-            try {
-                context.startActivity(intent);
-            } catch (ActivityNotFoundException e) {
-                //if user doesn't have pdf reader instructing to download a pdf reader
-                Log.d("TAG", "onBindViewHolder: $e");
-            }
-
-//            Intent i = new Intent(Intent.ACTION_VIEW);
-//            i.setData(Uri.parse(data.get(position).substring(0, 1)));
-//            context.startActivity(i);
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setDataAndType(Uri.parse(data.get(position)), "application/pdf");
+//
+//            try {
+//                context.startActivity(intent);
+//            } catch (ActivityNotFoundException e) {
+//                //if user doesn't have pdf reader instructing to download a pdf reader
+//                Log.d("TAG", "onBindViewHolder: $e");
+//            }
+//
+////            Intent i = new Intent(Intent.ACTION_VIEW);
+////            i.setData(Uri.parse(data.get(position).substring(0, 1)));
+////            context.startActivity(i);
+            onClick.onClick(data.get(position));
         });
     }
 

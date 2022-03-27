@@ -119,17 +119,19 @@ class PickerTypesSheet(
 
     private fun pushPath(data: Uri) {
         val path = FileUtils.getPath(activity, data)
-        if (path != null && FileUtils.isLocal(path)) {
-            if (FileUtils.isLocal(path)) {
-                addFile(File(path))
-            } else {
+        if (path != null) {
+//            if (FileUtils.isLocal(path)) {
+//
+////                addFile(File(path))
+//                pickiT.getPath(data, Build.VERSION.SDK_INT)
+//            } else {
                 val uri =
                     FileUtils.createCopyAndReturnRealPath(
                         activity,
                         data
                     )
                 pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
-            }
+//            }
         } else {
             pickiT.getPath(data, Build.VERSION.SDK_INT)
         }
