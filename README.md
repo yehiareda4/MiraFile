@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/yehiareda4/MiraFilePiker.svg)](https://jitpack.io/#yehiareda4/MiraFile)
+[![](https://jitpack.io/v/yehiareda4/MiraFile.svg)](https://jitpack.io/#yehiareda4/MiraFile)
 
 # Preview
 

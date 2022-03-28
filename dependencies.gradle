@@ -1,0 +1,28 @@
+ext {
+    versions = [
+            'minSdkVersion'    : 17,
+            'compileSdkVersion': 30,
+            'targetSdkVersion' : 30,
+            'gradle'           : '7.0.2',
+            'kotlin'           : '1.5.30',
+            'supportLibrary'   : '25.0.0',
+    ]
+
+    deps = [
+            'rx'      : [
+                    'rxJava'   : 'io.reactivex.rxjava2:rxjava:2.2.8',
+                    'rxAndroid': 'io.reactivex.rxjava2:rxandroid:2.1.1',
+            ],
+
+
+            'androidx': [
+                    'appcompat': 'androidx.appcompat:appcompat:1.0.2',
+            ],
+
+            'glide'   : [
+                    'glide'     : 'com.github.bumptech.glide:glide:4.12.0',
+                    'annotation': 'com.github.bumptech.glide:compiler:4.12.0',
+            ],
+
+    ]
+}

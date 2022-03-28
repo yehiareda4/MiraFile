@@ -58,7 +58,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0-native-mt"
 
-    implementation 'com.github.yehiareda4:TedImagePicker:1.0.22'
+    implementation project(path: ':tedimagepicker')
 //    implementation 'androidx.multidex:multidex: 2.0.1'
 
 }

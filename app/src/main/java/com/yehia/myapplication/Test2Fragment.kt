@@ -114,7 +114,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https:///")
+            .baseUrl("https://abr-almodon.4hoste.com/api/")
             .build()
     }
 
@@ -137,7 +137,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         file: File
     ): MultipartBody.Part {
         val requestFile = RequestBody.create(
-            MediaType.parse("pdf/*"),
+            MediaType.parse("*/*"),
             file
         )
         return createFormData(partName, file.name, requestFile)
