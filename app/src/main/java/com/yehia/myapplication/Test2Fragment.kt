@@ -52,7 +52,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         ) {
 
             provideRetrofit().create(api::class.java)
-                .uploadFileAsync(preparePDFPart("file", it.file))
+                .uploadFileAsync(it.filePart)
                 .enqueue(object : Callback<Any> {
                     override fun onResponse(call: Call<Any>, response: Response<Any>) {
                         Log.d(TAG, "onResponse: $response")
@@ -91,7 +91,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         typesSheet = PickerTypesSheet(
             requireActivity() as AppCompatActivity,
             this,
-            types,
+            types, "file",
             camera = true,
             multiple = true,
             multipleCount = 5,

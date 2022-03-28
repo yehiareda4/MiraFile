@@ -2,6 +2,7 @@ package com.yehia.mira_file_picker.sheet
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
@@ -25,12 +26,17 @@ import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 
 class PickerTypesSheet(
     private val activity: AppCompatActivity,
     private val fragment: Fragment,
     private val types: MutableList<String>,
+    private val partName: String,
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
     private var multipleCount: Int = 0,
@@ -125,12 +131,12 @@ class PickerTypesSheet(
 ////                addFile(File(path))
 //                pickiT.getPath(data, Build.VERSION.SDK_INT)
 //            } else {
-                val uri =
-                    FileUtils.createCopyAndReturnRealPath(
-                        activity,
-                        data
-                    )
-                pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
+            val uri =
+                FileUtils.createCopyAndReturnRealPath(
+                    activity,
+                    data
+                )
+            pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
 //            }
         } else {
             pickiT.getPath(data, Build.VERSION.SDK_INT)
@@ -323,7 +329,7 @@ class PickerTypesSheet(
     private fun addFile(file: File) {
         val fileData = FileData(
             file, file.name, FileUtils.getReadableFileSize(file.length().toInt()),
-            file.path, file.extension, type.mediaType
+            file.path, file.extension, type.mediaType, preparePart(file)
         )
         if (file.extension.isEmpty()) {
             fileData.path += ".${type.extension}"
@@ -343,10 +349,14 @@ class PickerTypesSheet(
                 if (file.extension.isEmpty()) {
                     fileData.compressPath += ".${type.extension}"
                 }
+                preparePart(fileData.compressFile!!)
             }
         } else {
             val thumbnail = getThumbnail(activity, file)
             fileData.Thumbnail = thumbnail
+            if (fileData.Thumbnail != null) {
+                preparePart(fileData.Thumbnail!!)
+            }
         }
         dialog?.dismiss()
 
@@ -463,4 +473,40 @@ class PickerTypesSheet(
             previewRequest.launch(intent)
         }
     }
+
+    private fun preparePart(
+        file: File
+    ): MultipartBody.Part {
+        val requestFile = RequestBody.create(
+            okhttp3.MediaType.parse("*/*"),
+            file
+        )
+        return MultipartBody.Part.createFormData(partName, file.name, requestFile)
+    }
+
+    private fun preparePart(
+        ImageFile: Bitmap
+    ): MultipartBody.Part? {
+        return try {
+            val file = File(activity.cacheDir, ImageFile.config.name)
+            file.createNewFile()
+            val bos = ByteArrayOutputStream()
+            ImageFile.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos)
+            val bitmapdata: ByteArray = bos.toByteArray()
+            val fos = FileOutputStream(file)
+            fos.write(bitmapdata)
+            fos.flush()
+            fos.close()
+            val requestBody = RequestBody.create(
+                okhttp3.MediaType.parse("*/*"),
+                file
+            )
+
+            return MultipartBody.Part.createFormData(partName, file.name, requestBody)
+        } catch (e: java.lang.Exception) {
+            null
+        }
+    }
+
+
 }
