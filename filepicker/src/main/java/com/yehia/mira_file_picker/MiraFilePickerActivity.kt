@@ -3,6 +3,7 @@ package com.yehia.mira_file_picker
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
@@ -14,12 +15,6 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
 //    private val MANAGE_EXTERNAL_STORAGE_PERMISSION = "android:manage_external_storage"
 
     private val perms = arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//        Manifest.permission.MANAGE_EXTERNAL_STORAGE
-    )
-    private val cameraPermission = arrayOf(
-        Manifest.permission.CAMERA,
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
 //        Manifest.permission.MANAGE_EXTERNAL_STORAGE
@@ -55,14 +50,14 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
     }
 
     private fun checkCameraPermissions() {
-        if (EasyPermissions.hasPermissions(this, *cameraPermission)) {
-            openCamera()
-        } else {
-            EasyPermissions.requestPermissions(
-                this, getString(R.string.camera_permission),
-                RC_CAMERA, *cameraPermission
-            )
-        }
+//        if (EasyPermissions.hasPermissions(this, *cameraPermission)) {
+//            openCamera()
+//        } else {
+//            EasyPermissions.requestPermissions(
+//                this, getString(R.string.camera_permission),
+//                RC_CAMERA, *cameraPermission
+//            )
+//        }
     }
 
     //    const val MANAGE_EXTERNAL_STORAGE_PERMISSION = "android:manage_external_storage"
@@ -75,7 +70,23 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
             )
 
         } else {
-            chooseFile()
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (!EasyPermissions.hasPermissions(
+                        this,
+                        Manifest.permission.ACCESS_MEDIA_LOCATION
+                    )
+                ) {
+                    EasyPermissions.requestPermissions(
+                        this, getString(R.string.read_write_permissions),
+                        RC_READ_WRITE, Manifest.permission.ACCESS_MEDIA_LOCATION
+                    )
+                } else {
+                    chooseFile()
+                }
+            } else {
+                chooseFile()
+            }
         }
     }
 

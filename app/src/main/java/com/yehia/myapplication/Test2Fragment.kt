@@ -12,21 +12,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
-import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_ALL_TYPE
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_IMAGE
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_PDF
 import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.myapplication.databinding.FragmentTestBinding
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.MultipartBody.Part.createFormData
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.File
 
 class Test2Fragment : Fragment(), View.OnClickListener {
 
@@ -59,7 +53,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
                     }
 
                     override fun onFailure(call: Call<Any>, t: Throwable) {
-                        Log.d(TAG, "onResponse: $t")
+                        Log.d(TAG, "onfail: $t")
                     }
 
                 })
@@ -80,7 +74,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
 //        types.add(MIME_TYPE_AUDIO)
 //        types.add(MIME_TYPE_TEXT)
         types.add(MIME_TYPE_IMAGE)
-        types.add(MIME_ALL_TYPE)
+//        types.add(MIME_ALL_TYPE)
         types.add(MIME_TYPE_PDF)
 //        types.add(MIME_TYPE_ZIP)
 //        types.add(MIME_TYPE_RAR)
@@ -116,30 +110,5 @@ class Test2Fragment : Fragment(), View.OnClickListener {
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://abr-almodon.4hoste.com/api/")
             .build()
-    }
-
-    fun convertFileToMultipart(path: String?, key: String): MultipartBody.Part? {
-        return if (path != null) {
-            val file = File(path)
-
-            val requestBody: RequestBody = RequestBody.create(null, file)
-            val body: MultipartBody.Part =
-                MultipartBody.Part.createFormData(key, file.name, requestBody)
-
-            body
-        } else {
-            null
-        }
-    }
-
-    fun preparePDFPart(
-        partName: String,
-        file: File
-    ): MultipartBody.Part {
-        val requestFile = RequestBody.create(
-            MediaType.parse("*/*"),
-            file
-        )
-        return createFormData(partName, file.name, requestFile)
     }
 }
