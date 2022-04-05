@@ -2,7 +2,6 @@ ext {
     plugins = [
             library    : 'com.android.library',
             application: 'com.android.application',
-//            maven_publish: 'maven-publish'
     ]
 
     android = [
