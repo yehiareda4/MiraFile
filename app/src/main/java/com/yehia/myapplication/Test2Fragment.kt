@@ -50,10 +50,12 @@ class Test2Fragment : Fragment(), View.OnClickListener {
                 .enqueue(object : Callback<Any> {
                     override fun onResponse(call: Call<Any>, response: Response<Any>) {
                         Log.d(TAG, "onResponse: $response")
+                        Toast.makeText(requireContext(), "onResponse", Toast.LENGTH_LONG).show()
                     }
 
                     override fun onFailure(call: Call<Any>, t: Throwable) {
                         Log.d(TAG, "onfail: $t")
+                        Toast.makeText(requireContext(), "onfail", Toast.LENGTH_LONG).show()
                     }
 
                 })

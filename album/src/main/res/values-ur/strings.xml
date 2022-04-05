@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="album_loading">لوڈ ہو رہا ہے۔&#8230;</string>
+    <string name="album_converting">لوڈ ہو رہا ہے۔&#8230;</string>
+    <string name="album_thumbnail">تھمب نیلز بنائیں&#8230;</string>
+
+    <string name="album_not_found_image">کوئی تصویری آئٹمز نہیں ملے</string>
+    <string name="album_not_found_video">کوئی ویڈیو آئٹمز نہیں ملا</string>
+    <string name="album_not_found_album">کوئی میڈیا آئٹمز نہیں ملا</string>
+    <string name="album_camera_image_capture">تصویر کھینچنا</string>
+    <string name="album_camera_video_capture">ویڈیو ریکارڈنگ</string>
+    <string name="album_title">میڈیا البم</string>
+    <string name="album_all_images">تمام تصاویر</string>
+    <string name="album_all_videos">تمام ویڈیوز</string>
+    <string name="album_all_images_videos">تمام تصاویر/ویڈیوز</string>
+    <string name="album_ok">جی ہاں</string>
+    <string name="album_confirm">ضرور</string>
+    <string name="album_cancel">ختم کرتا ہے۔</string>
+    <string name="album_check_image_little">براہ کرم ایک تصویری عنصر منتخب کریں۔</string>
+    <string name="album_check_video_little">براہ کرم ایک ویڈیو عنصر منتخب کریں۔</string>
+    <string name="album_check_album_little">براہ کرم ایک میڈیا آئٹم منتخب کریں۔</string>
+    <string name="album_menu_finish">ختم</string>
+    <string name="album_check">فیصلہ کن</string>
+    <string name="album_title_permission_failed">اجازت نہیں دی گئی</string>
+    <string name="album_permission_storage_failed_hint">کوئی ذخیرہ کرنے کی اجازت نہیں، براہ کرم استعمال کرنے سے پہلے اجازت دیں۔</string>
+    <string name="album_permission_camera_image_failed_hint">کیمرے کی کوئی اجازت یا اسٹوریج کی اجازت نہیں ہے، براہ کرم استعمال کرنے سے پہلے اجازت دیں۔</string>
+    <string name="album_permission_camera_video_failed_hint">کیمرے کی اجازت، سٹوریج کی اجازت یا مائیکروفون کی اجازت نہیں ہے، براہ کرم استعمال سے پہلے اس کی اجازت دیں۔</string>
+    <string name="album_item_unavailable">دستیاب نہیں ہے</string>
+    <string name="album_take_file_unavailable">فائل دستیاب نہیں ہے، براہ کرم دوبارہ کوشش کریں۔</string>
+
+    <plurals name="album_check_image_limit" tools:ignore="MissingQuantity">
+        <item quantity="one">آپ صرف %1 $d تصویری عنصر منتخب کر سکتے ہیں۔</item>
+        <item quantity="other">آپ صرف %1 $d تصویری عنصر منتخب کر سکتے ہیں۔</item>
+    </plurals>
+    <plurals name="album_check_image_limit_camera" tools:ignore="MissingQuantity">
+        <item quantity="one">آپ صرف %1 $d تصویری عنصر منتخب کر سکتے ہیں، آپ کیمرہ استعمال نہیں کر سکتے۔</item>
+        <item quantity="other">آپ صرف %1 $d تصویری عنصر منتخب کر سکتے ہیں، اور آپ کیمرہ استعمال نہیں کر سکتے۔</item>
+    </plurals>
+
+    <plurals name="album_check_video_limit" tools:ignore="MissingQuantity">
+        <item quantity="one">آپ صرف %1$d ویڈیو منتخب کر سکتے ہیں۔</item>
+        <item quantity="other">آپ صرف %1$d ویڈیوز منتخب کر سکتے ہیں۔</item>
+    </plurals>
+
+    <plurals name="album_check_video_limit_camera" tools:ignore="MissingQuantity">
+        <item quantity="one">آپ صرف %1 $d ویڈیو عنصر منتخب کر سکتے ہیں، اور آپ کیمرہ استعمال نہیں کر سکتے۔</item>
+        <item quantity="other">آپ صرف %1$d ویڈیو عنصر منتخب کر سکتے ہیں، اور آپ کیمرہ استعمال نہیں کر سکتے۔</item>
+    </plurals>
+
+    <plurals name="album_check_album_limit" tools:ignore="MissingQuantity">
+        <item quantity="one">آپ صرف %1 $d میڈیا عنصر منتخب کر سکتے ہیں۔</item>
+        <item quantity="other">آپ صرف %1 $d میڈیا عنصر منتخب کر سکتے ہیں۔</item>
+    </plurals>
+
+    <plurals name="album_check_album_limit_camera" tools:ignore="MissingQuantity">
+        <item quantity="one">آپ صرف %1$d میڈیا عنصر منتخب کر سکتے ہیں، آپ کیمرہ استعمال نہیں کر سکتے۔</item>
+        <item quantity="other">آپ صرف %1$d میڈیا عنصر منتخب کر سکتے ہیں، اور آپ کیمرہ استعمال نہیں کر سکتے۔</item>
+    </plurals>
+
+</resources>

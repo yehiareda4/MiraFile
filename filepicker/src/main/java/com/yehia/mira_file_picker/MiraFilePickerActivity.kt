@@ -2,19 +2,29 @@ package com.yehia.mira_file_picker
 
 import android.Manifest
 import android.app.Activity
+import android.app.AppOpsManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import pub.devrel.easypermissions.EasyPermissions
 
 class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
-//    private val MANAGE_EXTERNAL_STORAGE_PERMISSION = "android:manage_external_storage"
+    private val MANAGE_EXTERNAL_STORAGE_PERMISSION = "android:manage_external_storage"
 
     private val perms = arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//        Manifest.permission.MANAGE_EXTERNAL_STORAGE
+    )
+    private val cameraPermission = arrayOf(
+        Manifest.permission.CAMERA,
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
 //        Manifest.permission.MANAGE_EXTERNAL_STORAGE
@@ -50,14 +60,14 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
     }
 
     private fun checkCameraPermissions() {
-//        if (EasyPermissions.hasPermissions(this, *cameraPermission)) {
-//            openCamera()
-//        } else {
-//            EasyPermissions.requestPermissions(
-//                this, getString(R.string.camera_permission),
-//                RC_CAMERA, *cameraPermission
-//            )
-//        }
+        if (EasyPermissions.hasPermissions(this, *cameraPermission)) {
+            openCamera()
+        } else {
+            EasyPermissions.requestPermissions(
+                this, getString(R.string.camera_permission),
+                RC_CAMERA, *cameraPermission
+            )
+        }
     }
 
     //    const val MANAGE_EXTERNAL_STORAGE_PERMISSION = "android:manage_external_storage"
@@ -70,23 +80,7 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
             )
 
         } else {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                if (!EasyPermissions.hasPermissions(
-                        this,
-                        Manifest.permission.ACCESS_MEDIA_LOCATION
-                    )
-                ) {
-                    EasyPermissions.requestPermissions(
-                        this, getString(R.string.read_write_permissions),
-                        RC_READ_WRITE, Manifest.permission.ACCESS_MEDIA_LOCATION
-                    )
-                } else {
-                    chooseFile()
-                }
-            } else {
-                chooseFile()
-            }
+            chooseFile()
         }
     }
 
@@ -120,33 +114,51 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
         startActivityForResult.launch(chooserIntent)
     }
 
-//    @RequiresApi(30)
-//    fun checkStoragePermissionApi30(activity: AppCompatActivity): Boolean {
-//        val appOps = activity.getSystemService(AppOpsManager::class.java)
-//        val mode = appOps.unsafeCheckOpNoThrow(
-//            MANAGE_EXTERNAL_STORAGE_PERMISSION,
-//            activity.applicationInfo.uid,
-//            activity.packageName
-//        )
-//        if(mode !=AppOpsManager.MODE_ALLOWED){
-//            requestStoragePermissionApi30(this)
-//        }
-//
-//        return mode == AppOpsManager.MODE_ALLOWED
-//    }
+    @RequiresApi(30)
+    fun checkStoragePermissionApi30(activity: AppCompatActivity): Boolean {
+        val appOps = activity.getSystemService(AppOpsManager::class.java)
+        val mode = appOps.unsafeCheckOpNoThrow(
+            MANAGE_EXTERNAL_STORAGE_PERMISSION,
+            activity.applicationInfo.uid,
+            activity.packageName
+        )
+        if (mode != AppOpsManager.MODE_ALLOWED) {
+            viewAlertDialog()
+        }
 
-//    @RequiresApi(30)
-//    fun requestStoragePermissionApi30(activity: AppCompatActivity) {
-//        val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
-//
-//        activity.startActivityForResult(intent, 1)
-//    }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        setResult(Activity.RESULT_OK, data)
-//        finish()
-//    }
+        return mode == AppOpsManager.MODE_ALLOWED
+    }
+
+    private fun viewAlertDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.alert))
+        builder.setMessage(R.string.alert_pr)
+
+        builder.setPositiveButton(R.string.allow) { _, _ ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                requestStoragePermissionApi30(this)
+            }
+        }
+
+        builder.setNegativeButton(R.string.not_allow) { dialog, _ ->
+            dialog.dismiss()
+            finish()
+        }
+        builder.show()
+    }
+
+    @RequiresApi(30)
+    fun requestStoragePermissionApi30(activity: AppCompatActivity) {
+        val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+
+        activity.startActivityForResult(intent, 1)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        setResult(Activity.RESULT_OK, data)
+        finish()
+    }
 
     override fun onPermissionsGranted(requestCode: Int, perms: List<String?>) {
         if (requestCode == RC_READ_WRITE) {

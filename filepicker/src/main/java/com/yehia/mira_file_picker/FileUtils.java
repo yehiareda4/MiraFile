@@ -1,5 +1,6 @@
 package com.yehia.mira_file_picker;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -681,7 +682,7 @@ public class FileUtils {
      */
     public static Intent createGetContentIntent(String type, boolean multiple) {
         // Implicitly allow the user to select a particular kind of data
-        final Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         // The MIME data type filter
         if (type != null) {
             intent.setType(type);
@@ -796,6 +797,7 @@ public class FileUtils {
     /**
      * Adapt api11-api18, get the absolute path of the image according to uri
      */
+    @SuppressLint("Range")
     private static String getRealPathFromUri_Api11To18(Context context, Uri uri) {
         String filePath = null;
         String[] projection = {MediaStore.Images.Media.DATA};
@@ -814,6 +816,7 @@ public class FileUtils {
     /**
      * Adapt to api11 (excluding api11), get the absolute path of the image according to uri
      */
+    @SuppressLint("Range")
     private static String getRealPathFromUri_BelowApi11(Context context, Uri uri) {
         String filePath = null;
         String[] projection = {MediaStore.Images.Media.DATA};

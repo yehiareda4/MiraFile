@@ -8,11 +8,10 @@ import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.yanzhenjie.album.AlbumFile
 import com.yehia.mira_file_picker.FileUtils
-import com.yehia.mira_file_picker.FileUtils.getThumbnail
 import com.yehia.mira_file_picker.MiraFilePickerActivity
 import com.yehia.mira_file_picker.R
 import com.yehia.mira_file_picker.databinding.SheetTypesBinding
@@ -20,8 +19,8 @@ import com.yehia.mira_file_picker.pickit.PickiT
 import com.yehia.mira_file_picker.pickit.PickiTCallbacks
 import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.mira_file_picker.sheet.model.Type
-import gun0912.tedimagepicker.builder.TedImagePicker
-import gun0912.tedimagepicker.builder.type.MediaType
+import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openAlbum
+import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openVideoAlbum
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -43,6 +42,8 @@ class PickerTypesSheet(
     val resultFile: (FileData, Boolean) -> Unit
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
+    private var lastImage: ArrayList<AlbumFile?> = ArrayList()
+    private var lastfile: AlbumFile? = null
     private var dismissed: Boolean = false
     private var sizeList: Int = 0
 
@@ -124,22 +125,20 @@ class PickerTypesSheet(
     }
 
     private fun pushPath(data: Uri) {
-        val path = FileUtils.getPath(activity, data)
-        if (path != null) {
-//            if (FileUtils.isLocal(path)) {
-////                addFile(File(path))
-////                pickiT.getPath(path.toUri(), Build.VERSION.SDK_INT)
-//            } else {
-            val uri =
-                FileUtils.createCopyAndReturnRealPath(
-                    activity,
-                    data
-                )
-            pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
-//            }
-        } else {
-            pickiT.getPath(data, Build.VERSION.SDK_INT)
-        }
+//        addFile(File(data.toString()))
+//        val path = FileUtils.getPath(activity, data)
+//        if (path != null) {
+//            val uri = AndroidXI.getInstance().with(activity).duplicate(
+//                FileUtils.createCopyAndReturnRealPath(
+//                    activity,
+//                    data
+//                ).path.toUri()
+//            )
+//
+//            pickiT.getPath(uri!!, Build.VERSION.SDK_INT)
+//        } else {
+        pickiT.getPath(data, Build.VERSION.SDK_INT)
+//        }
     }
 
     override fun afterCreateView() {
@@ -154,7 +153,7 @@ class PickerTypesSheet(
             adapter = TypesAdapter(typesList) {
                 type = it
 
-                openSinglType(type)
+                openSingleType(type)
             }
             val span = if (typesList.size > 3) {
                 4
@@ -168,7 +167,7 @@ class PickerTypesSheet(
         } else {
             type = createType(types[0])
 
-            openSinglType(type)
+            openSingleType(type)
         }
     }
 
@@ -336,6 +335,9 @@ class PickerTypesSheet(
         if (file.extension.isEmpty()) {
             fileData.name += ".${type.extension}"
         }
+        if (fileData.extension.isEmpty()) {
+            fileData.extension = type.extension
+        }
         if (type.key == MIME_TYPE_IMAGE) {
             GlobalScope.launch {
                 val compressedFile =
@@ -351,10 +353,13 @@ class PickerTypesSheet(
                 preparePart(fileData.compressFile!!)
             }
         } else {
-            val thumbnail = getThumbnail(activity, file)
-            fileData.Thumbnail = thumbnail
-            if (fileData.Thumbnail != null) {
-                preparePart(fileData.Thumbnail!!)
+            if (lastfile != null) {
+                val thumbnail = lastfile!!.thumbPath
+                fileData.Thumbnail = thumbnail
+                if (fileData.Thumbnail != null) {
+                    preparePart(File(fileData.Thumbnail!!))
+                }
+                lastfile = null
             }
         }
         dialog?.dismiss()
@@ -373,7 +378,7 @@ class PickerTypesSheet(
             if (types.size == 1) {
                 type = createType(types[0])
 
-                openSinglType(type)
+                openSingleType(type)
             } else {
                 this.dialog!!.show()
             }
@@ -381,7 +386,7 @@ class PickerTypesSheet(
             if (types.size == 1) {
                 type = createType(types[0])
 
-                openSinglType(type)
+                openSingleType(type)
             } else {
                 this.show(activity.supportFragmentManager, "")
             }
@@ -437,32 +442,32 @@ class PickerTypesSheet(
         }, activity)
     }
 
-    private fun openSinglType(type: Type) {
+    private fun openSingleType(type: Type) {
         if (type.key == MIME_TYPE_IMAGE || type.key == MIME_TYPE_VIDEO) {
-            val with = TedImagePicker.with(activity)
+
             if (type.key == MIME_TYPE_VIDEO) {
-                with.video()
-                with.mediaType(MediaType.VIDEO)
-            }
-            with.showCameraTile(type.camera)
-            if (type.multiple) {
-                with.max(
-                    multipleCount - sizeList,
-                    fragment.getString(R.string.ted_image_picker_max_count)
-                )
-                with.startMultiImage { uriList ->
-                    uriList.forEach {
-                        startLic()
-
-                        pickiT.getPath(it, Build.VERSION.SDK_INT)
+                activity.openVideoAlbum(multipleCount - sizeList, lastImage, {
+                    if (!it.isNullOrEmpty()) {
+                        it.forEach { itx ->
+                            if (!lastImage.contains(itx)) {
+                                lastImage.add(itx)
+                                lastfile = itx
+                                addFile(File(itx!!.path))
+                            }
+                        }
                     }
-                }
+                }, type.camera)
             } else {
-                with.start { uri ->
-                    startLic()
-
-                    pickiT.getPath(uri, Build.VERSION.SDK_INT)
-                }
+                activity.openAlbum(multipleCount - sizeList, lastImage, {
+                    if (!it.isNullOrEmpty()) {
+                        it.forEach { itx ->
+                            if (!lastImage.contains(itx)) {
+                                lastImage.add(itx)
+                                addFile(File(itx!!.path))
+                            }
+                        }
+                    }
+                }, type.camera)
             }
         } else {
             val intent = Intent(activity, MiraFilePickerActivity::class.java)
@@ -491,9 +496,9 @@ class PickerTypesSheet(
             file.createNewFile()
             val bos = ByteArrayOutputStream()
             ImageFile.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos)
-            val bitmapdata: ByteArray = bos.toByteArray()
+            val bitmapData: ByteArray = bos.toByteArray()
             val fos = FileOutputStream(file)
-            fos.write(bitmapdata)
+            fos.write(bitmapData)
             fos.flush()
             fos.close()
             val requestBody = RequestBody.create(

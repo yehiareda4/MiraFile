@@ -13,4 +13,10 @@
     <string name="powerPoint">پاور پوائنٹ</string>
     <string name="excel">ایکسل فائلیں۔</string>
     <string name="any_type">ہر کوئی</string>
+    <string name="alert">Alert</string>
+    <string name="alert_pr">تمام فائلوں تک رسائی کی اجازت درکار ہے تاکہ یہ یقینی بنایا جا سکے کہ آپ کی درخواست کردہ فائلیں اپ لوڈ کی گئی ہیں۔
+کیا آپ یہ بیان دینے سے اتفاق کرتے ہیں؟</string>
+    <string name="allow">فضل</string>
+    <string name="not_allow">انکار</string>
+
 </resources>

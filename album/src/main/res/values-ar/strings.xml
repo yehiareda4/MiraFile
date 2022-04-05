@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="album_loading">جاري التحميل&#8230;</string>
+    <string name="album_converting">جاري التحميل&#8230;</string>
+    <string name="album_thumbnail">توليد الصور المصغرة&#8230;</string>
+
+    <string name="album_not_found_image">لم يتم العثور على عناصر الصورة</string>
+    <string name="album_not_found_video">لم يتم العثور على عناصر الفيديو</string>
+    <string name="album_not_found_album">لم يتم العثور على عناصر وسائط</string>
+
+    <string name="album_camera_image_capture">التقط صورة</string>
+    <string name="album_camera_video_capture">تسجيل الفيديو</string>
+
+    <string name="album_title">ألبوم الوسائط</string>
+    <string name="album_all_images">جميع الصور</string>
+    <string name="album_all_videos">جميع مقاطع الفيديو</string>
+    <string name="album_all_images_videos">كل الصور / الفيديو</string>
+
+    <string name="album_ok">نعم</string>
+    <string name="album_confirm">يتأكد</string>
+    <string name="album_cancel">يلغي</string>
+
+    <string name="album_check_image_little">الرجاء تحديد عنصر صورة.</string>
+    <string name="album_check_video_little">الرجاء تحديد عنصر الفيديو.</string>
+    <string name="album_check_album_little">الرجاء تحديد عنصر وسائط.</string>
+    <string name="album_menu_finish">ينهي</string>
+    <string name="album_check">المحدد</string>
+
+    <string name="album_title_permission_failed">تم رفض الإذن</string>
+    <string name="album_permission_storage_failed_hint">لا يوجد إذن تخزين ، يرجى التصريح قبل الاستخدام.</string>
+    <string name="album_permission_camera_image_failed_hint">لا يوجد إذن كاميرا أو إذن تخزين ، يرجى التصريح قبل الاستخدام.</string>
+    <string name="album_permission_camera_video_failed_hint">لا يوجد إذن كاميرا أو إذن تخزين أو إذن ميكروفون ، يرجى التصريح به قبل الاستخدام.</string>
+
+    <plurals name="album_check_image_limit" tools:ignore="MissingQuantity">
+        <item quantity="one">يمكنك فقط تحديد عنصر صورة٪ 1 $ d.</item>
+        <item quantity="other">يمكنك فقط تحديد٪ 1 $ d عنصر صورة.</item>
+    </plurals>
+
+    <plurals name="album_check_image_limit_camera" tools:ignore="MissingQuantity">
+        <item quantity="one">يمكنك فقط تحديد عنصر صورة٪ 1 $ d ، لا يمكنك استخدام الكاميرا.</item>
+        <item quantity="other">يمكنك فقط تحديد٪ 1 $ d عنصر صورة ، ولا يمكنك استخدام الكاميرا.</item>
+    </plurals>
+
+    <plurals name="album_check_video_limit" tools:ignore="MissingQuantity">
+        <item quantity="one">يمكنك فقط تحديد٪ 1 $ d فيديو.</item>
+        <item quantity="other">يمكنك فقط تحديد٪ 1 $ d من مقاطع الفيديو.</item>
+    </plurals>
+
+    <plurals name="album_check_video_limit_camera" tools:ignore="MissingQuantity">
+        <item quantity="one">يمكنك فقط تحديد عنصر فيديو٪ 1 $ d ، ولا يمكنك استخدام الكاميرا.</item>
+        <item quantity="other">يمكنك فقط تحديد٪ 1 $ d عنصر فيديو ، ولا يمكنك استخدام الكاميرا.</item>
+    </plurals>
+
+    <plurals name="album_check_album_limit" tools:ignore="MissingQuantity">
+        <item quantity="one">يمكنك فقط تحديد٪ 1 $ d عنصر وسائط.</item>
+        <item quantity="other">يمكنك فقط تحديد٪ 1 $ d عنصر وسائط.</item>
+    </plurals>
+
+    <plurals name="album_check_album_limit_camera" tools:ignore="MissingQuantity">
+        <item quantity="one">يمكنك فقط تحديد٪ 1 $ d عنصر وسائط ، لا يمكنك استخدام الكاميرا.</item>
+        <item quantity="other">يمكنك فقط تحديد٪ 1 $ d عنصر وسائط ، ولا يمكنك استخدام الكاميرا.</item>
+    </plurals>
+
+    <string name="album_item_unavailable">غير متوفره</string>
+    <string name="album_take_file_unavailable">ملف غير متوفر ، يرجى المحاولة مرة أخرى.</string>
+</resources>

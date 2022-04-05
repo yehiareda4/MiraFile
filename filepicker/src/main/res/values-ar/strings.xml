@@ -13,4 +13,8 @@
     <string name="powerPoint">PowerPoint</string>
     <string name="excel">Excel ملفات</string>
     <string name="any_type">الكل</string>
+    <string name="alert">Alert</string>
+    <string name="alert_pr">يتطلب تصريح الوصول لكل الملفات لضمان رفع الملفات المطلوبه من قبلكم. \n هل توافق علي اعطاء هذا التصريح؟</string>
+    <string name="allow">سماح</string>
+    <string name="not_allow">رفض</string>
 </resources>

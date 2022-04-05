@@ -13,7 +13,7 @@ data class FileData(
     var extension: String,
     var filePart: MultipartBody.Part,
     val mediaType: String,
-    var Thumbnail: Bitmap?,
+    var Thumbnail: String?,
     var ThumbnailPart: MultipartBody.Part?,
     var compressFile: File?,
     var compressName: String?,

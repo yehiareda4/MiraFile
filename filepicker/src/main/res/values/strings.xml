@@ -13,4 +13,10 @@
     <string name="powerPoint">PowerPoint files</string>
     <string name="excel">Excel files</string>
     <string name="any_type">Any type</string>
+    <string name="ted_image_picker_max_count">You can not add more</string>
+    <string name="alert">Alert</string>
+    <string name="alert_pr">Requires access all files permission for to ensure that the files requested by you are uploaded.\n Do you agree to give this permission?</string>
+    <string name="allow">allowed</string>
+    <string name="not_allow">Refusal</string>
+
 </resources>

@@ -36,7 +36,6 @@ android {
 }
 
 dependencies {
-
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -58,12 +57,12 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
 
-    implementation project(path: ':tedimagepicker')
+    implementation project(path: ':album')
 //    implementation 'androidx.multidex:multidex: 2.0.1'
+    implementation 'com.github.bumptech.glide:glide:4.13.1'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-
 }
 repositories {
     mavenCentral()
