@@ -69,6 +69,7 @@ public class BaseActivity extends AppCompatActivity implements Bye {
 
     @Override
     public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (isGrantedResult(grantResults)) onPermissionGranted(requestCode);
         else onPermissionDenied(requestCode);
     }
