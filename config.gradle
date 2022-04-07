@@ -16,7 +16,7 @@ ext {
     ]
 
     dependencies = [
-            mediaScanner: 'com.yanzhenjie:mediascanner:1.0.3',
+//            mediaScanner: 'com.yanzhenjie:mediascanner:1.0.3',
 
             appCompat   : 'androidx.appcompat:appcompat:1.4.1',
             recyclerView: 'com.android.support:recyclerview-v7:28.0.0',
