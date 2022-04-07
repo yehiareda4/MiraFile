@@ -1,2 +1,2 @@
-include ':app', ':filepicker', ':album'
+include ':app', ':filepicker', ':miraAlbum'
 rootProject.name = "Mira File Piker"
