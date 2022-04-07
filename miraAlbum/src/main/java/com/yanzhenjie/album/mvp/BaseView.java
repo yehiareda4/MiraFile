@@ -39,6 +39,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.GenericLifecycleObserver;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -79,17 +81,21 @@ public abstract class BaseView<Presenter extends BasePresenter> {
             }
         });
 
-        getPresenter().getLifecycle().addObserver((GenericLifecycleObserver) (source1, event) -> {
-            if (event == Lifecycle.Event.ON_RESUME) {
-                resume();
-            } else if (event == Lifecycle.Event.ON_PAUSE) {
-                pause();
-            } else if (event == Lifecycle.Event.ON_STOP) {
-                stop();
-            } else if (event == Lifecycle.Event.ON_DESTROY) {
-                destroy();
+        getPresenter().getLifecycle().addObserver(new GenericLifecycleObserver() {
+            @Override
+            public void onStateChanged(LifecycleOwner source, Lifecycle.Event event) {
+                if (event == Lifecycle.Event.ON_RESUME) {
+                    resume();
+                } else if (event == Lifecycle.Event.ON_PAUSE) {
+                    pause();
+                } else if (event == Lifecycle.Event.ON_STOP) {
+                    stop();
+                } else if (event == Lifecycle.Event.ON_DESTROY) {
+                    destroy();
+                }
             }
         });
+
     }
 
     public final Presenter getPresenter() {
