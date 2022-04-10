@@ -3,11 +3,11 @@ package com.yehia.mira_file_picker.sheet.util
 import android.content.Context
 import android.graphics.Color
 import androidx.core.content.ContextCompat
-import com.yanzhenjie.album.Action
-import com.yanzhenjie.album.Album
-import com.yanzhenjie.album.AlbumConfig
-import com.yanzhenjie.album.AlbumFile
-import com.yanzhenjie.album.api.widget.Widget
+import com.yehia.album_media.Action
+import com.yehia.album_media.Album
+import com.yehia.album_media.AlbumConfig
+import com.yehia.album_media.AlbumFile
+import com.yehia.album_media.api.widget.Widget
 import com.yehia.mira_file_picker.R
 import java.util.*
 

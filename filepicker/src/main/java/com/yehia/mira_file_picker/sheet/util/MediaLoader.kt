@@ -2,8 +2,8 @@ package com.yehia.mira_file_picker.sheet.util
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.yanzhenjie.album.AlbumFile
-import com.yanzhenjie.album.AlbumLoader
+import com.yehia.album_media.AlbumFile
+import com.yehia.album_media.AlbumLoader
 
 class MediaLoader : AlbumLoader {
 

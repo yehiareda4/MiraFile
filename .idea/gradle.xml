@@ -11,9 +11,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/album_media" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/filepicker" />
-            <option value="$PROJECT_DIR$/miraAlbum" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
