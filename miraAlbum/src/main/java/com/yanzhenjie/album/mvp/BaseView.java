@@ -80,7 +80,6 @@ public abstract class BaseView<Presenter extends BasePresenter> {
                 optionsItemSelected(item);
             }
         });
-
         getPresenter().getLifecycle().addObserver(new GenericLifecycleObserver() {
             @Override
             public void onStateChanged(LifecycleOwner source, Lifecycle.Event event) {
