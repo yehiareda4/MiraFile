@@ -200,7 +200,7 @@ object Album {
      * Select images and videos.
      */
     fun album(fragment: Fragment): Choice<AlbumMultipleWrapper, AlbumSingleWrapper> {
-        return AlbumChoice(fragment.activity!!)
+        return AlbumChoice(fragment.requireActivity())
     }
 
     /**
