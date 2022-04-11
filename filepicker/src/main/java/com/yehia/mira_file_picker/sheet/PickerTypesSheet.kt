@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.yehia.album_media.Action
 import com.yehia.album_media.AlbumFile
 import com.yehia.mira_file_picker.FileUtils
 import com.yehia.mira_file_picker.MiraFilePickerActivity
@@ -42,7 +43,7 @@ class PickerTypesSheet(
     val resultFile: (FileData, Boolean) -> Unit
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
-    private var lastImage: ArrayList<AlbumFile?> = ArrayList()
+    private var lastImage: ArrayList<AlbumFile> = ArrayList()
     private var lastfile: AlbumFile? = null
     private var dismissed: Boolean = false
     private var sizeList: Int = 0
@@ -355,7 +356,7 @@ class PickerTypesSheet(
         } else {
             if (lastfile != null) {
                 val thumbnail = lastfile!!.thumbPath
-                fileData.Thumbnail = thumbnail
+                fileData.Thumbnail = thumbnail!!
                 if (fileData.Thumbnail != null) {
                     preparePart(File(fileData.Thumbnail!!))
                 }
@@ -412,11 +413,11 @@ class PickerTypesSheet(
             }
 
             override fun PickiTonCompleteListener(
-                path: String?,
+                path: String,
                 wasDriveFile: Boolean,
                 wasUnknownProvider: Boolean,
                 wasSuccessful: Boolean,
-                Reason: String?
+                Reason: String
             ) {
                 if (path != null) {
                     addFile(File(path))
@@ -426,7 +427,7 @@ class PickerTypesSheet(
             override fun PickiTonMultipleCompleteListener(
                 paths: java.util.ArrayList<String>?,
                 wasSuccessful: Boolean,
-                Reason: String?
+                Reason: String
             ) {
                 paths?.forEachIndexed { index, it ->
                     if (multipleCount != 0) {
@@ -446,28 +447,40 @@ class PickerTypesSheet(
         if (type.key == MIME_TYPE_IMAGE || type.key == MIME_TYPE_VIDEO) {
 
             if (type.key == MIME_TYPE_VIDEO) {
-                activity.openVideoAlbum(multipleCount - sizeList, lastImage, {
-                    if (!it.isNullOrEmpty()) {
-                        it.forEach { itx ->
-                            if (!lastImage.contains(itx)) {
-                                lastImage.add(itx)
-                                lastfile = itx
-                                addFile(File(itx!!.path))
+                activity.openVideoAlbum(
+                    multipleCount - sizeList,
+                    lastImage,
+                    object : Action<java.util.ArrayList<AlbumFile>?> {
+                        override fun onAction(result: java.util.ArrayList<AlbumFile>?) {
+                            if (!result.isNullOrEmpty()) {
+                                result.forEach { itx ->
+                                    if (!lastImage.contains(itx)) {
+                                        lastImage.add(itx)
+                                        lastfile = itx
+                                        addFile(File(itx!!.path))
+                                    }
+                                }
                             }
                         }
-                    }
-                }, type.camera)
+                    },
+                    type.camera
+                )
+
             } else {
-                activity.openAlbum(multipleCount - sizeList, lastImage, {
-                    if (!it.isNullOrEmpty()) {
-                        it.forEach { itx ->
-                            if (!lastImage.contains(itx)) {
-                                lastImage.add(itx)
-                                addFile(File(itx!!.path))
+                activity.openAlbum(multipleCount - sizeList, lastImage,
+                    object : Action<java.util.ArrayList<AlbumFile>?> {
+                        override fun onAction(result: java.util.ArrayList<AlbumFile>?) {
+                            if (!result.isNullOrEmpty()) {
+                                result.forEach { itx ->
+                                    if (!lastImage.contains(itx)) {
+                                        lastImage.add(itx)
+                                        addFile(File(itx!!.path))
+                                    }
+                                }
                             }
                         }
-                    }
-                }, type.camera)
+                    }, type.camera
+                )
             }
         } else {
             val intent = Intent(activity, MiraFilePickerActivity::class.java)

@@ -35,10 +35,10 @@ public final class ImageSingleWrapper extends BasicChoiceWrapper<ImageSingleWrap
 
     @Override
     public void start() {
-        AlbumActivity.sSizeFilter = mSizeFilter;
-        AlbumActivity.sMimeFilter = mMimeTypeFilter;
-        AlbumActivity.sResult = mResult;
-        AlbumActivity.sCancel = mCancel;
+        AlbumActivity.Companion.setSSizeFilter(mSizeFilter);
+        AlbumActivity.Companion.setSMimeFilter(mMimeTypeFilter);
+        AlbumActivity.Companion.setSResult(mResult);
+        AlbumActivity.Companion.setSCancel(mCancel);
         Intent intent = new Intent(mContext, AlbumActivity.class);
         intent.putExtra(Album.KEY_INPUT_WIDGET, mWidget);
 

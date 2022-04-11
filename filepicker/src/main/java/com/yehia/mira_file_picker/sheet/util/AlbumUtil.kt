@@ -15,8 +15,8 @@ object AlbumUtil {
 
     fun Context.openAlbum(
         Counter: Int,
-        ImagesFiles: ArrayList<AlbumFile?>?,
-        action: Action<ArrayList<AlbumFile?>?>,
+        ImagesFiles: ArrayList<AlbumFile>?,
+        action: Action<ArrayList<AlbumFile>?>,
         camera: Boolean = false
     ) {
         Album.initialize(
@@ -47,16 +47,18 @@ object AlbumUtil {
                     .build()
             )
             .onResult(action)
-            .onCancel {
-                // The Client canceled the operation.
-            }
+            .onCancel(object : Action<String> {
+                override fun onAction(result: String) {
+
+                }
+            })
             .start()
     }
 
     fun Context.openVideoAlbum(
         Counter: Int,
-        ImagesFiles: ArrayList<AlbumFile?>?,
-        action: Action<ArrayList<AlbumFile?>?>,
+        ImagesFiles: ArrayList<AlbumFile>?,
+        action: Action<ArrayList<AlbumFile>?>,
         camera: Boolean = false
     ) {
         Album.initialize(
@@ -87,13 +89,15 @@ object AlbumUtil {
                     .build()
             )
             .onResult(action)
-            .onCancel {
-                // The Client canceled the operation.
-            }
+            .onCancel(object : Action<String> {
+                override fun onAction(result: String) {
+
+                }
+            })
             .start()
     }
 
-    fun Context.openAlbum(action: Action<ArrayList<AlbumFile?>?>) {
+    fun Context.openAlbum(action: Action<ArrayList<AlbumFile>?>) {
         Album.initialize(
             AlbumConfig.newBuilder(this)
                 .setAlbumLoader(MediaLoader())
@@ -120,9 +124,11 @@ object AlbumUtil {
                     .build()
             )
             .onResult(action)
-            .onCancel {
-                // The Client canceled the operation.
-            }
+            .onCancel(object : Action<String> {
+                override fun onAction(result: String) {
+
+                }
+            })
             .start()
     }
 

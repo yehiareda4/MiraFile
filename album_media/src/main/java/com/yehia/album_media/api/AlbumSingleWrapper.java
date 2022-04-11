@@ -49,11 +49,11 @@ public class AlbumSingleWrapper extends BasicChoiceAlbumWrapper<AlbumSingleWrapp
 
     @Override
     public void start() {
-        AlbumActivity.sSizeFilter = mSizeFilter;
-        AlbumActivity.sMimeFilter = mMimeTypeFilter;
-        AlbumActivity.sDurationFilter = mDurationFilter;
-        AlbumActivity.sResult = mResult;
-        AlbumActivity.sCancel = mCancel;
+        AlbumActivity.Companion.setSSizeFilter(mSizeFilter);
+        AlbumActivity.Companion.setSMimeFilter(mMimeTypeFilter);
+        AlbumActivity.Companion.setSDurationFilter(mDurationFilter);
+        AlbumActivity.Companion.setSResult(mResult);
+        AlbumActivity.Companion.setSCancel(mCancel);
         Intent intent = new Intent(mContext, AlbumActivity.class);
         intent.putExtra(Album.KEY_INPUT_WIDGET, mWidget);
 

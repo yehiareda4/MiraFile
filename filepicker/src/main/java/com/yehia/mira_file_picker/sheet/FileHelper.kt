@@ -12,7 +12,7 @@ import android.webkit.MimeTypeMap
 
 class FileHelper(var mContext: Context?) {
 
-    fun getRealPathFromUri(uri: Uri): String? {
+    fun getRealPathFromUri(uri: Uri): String {
         // DocumentProvider
         // ExternalStorageProvider
         if (isExternalStorageDocument(uri)) {
@@ -27,7 +27,7 @@ class FileHelper(var mContext: Context?) {
             val contentUri: Uri = ContentUris.withAppendedId(
                 Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id)
             )
-            return getDataColumn(mContext, contentUri, null, null)
+            return getDataColumn(mContext, contentUri, "", null)
         } else if (isMediaDocument(uri)) {
             val docId = DocumentsContract.getDocumentId(uri)
             val split = docId.split(":").toTypedArray()
@@ -50,13 +50,13 @@ class FileHelper(var mContext: Context?) {
             )
             return getDataColumn(mContext, contentUri, selection, selectionArgs)
         }
-        return null
+        return ""
     }
 
     private fun getDataColumn(
-        context: Context?, uri: Uri?, selection: String?,
+        context: Context?, uri: Uri?, selection: String,
         selectionArgs: Array<String>?
-    ): String? {
+    ): String {
         var cursor: Cursor? = null
         val column = "_data"
         val projection = arrayOf(
@@ -74,14 +74,14 @@ class FileHelper(var mContext: Context?) {
         } finally {
             cursor?.close()
         }
-        return null
+        return ""
     }
 
-    fun getMimeType(uri: Uri): String? {
-        return if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
+    fun getMimeType(uri: Uri): String {
+        return if (ContentResolver.SCHEME_CONTENT == uri.scheme) ({
             val cr: ContentResolver = mContext!!.contentResolver
             cr.getType(uri)
-        } else {
+        })!!.toString() else ({
             val fileExtension = MimeTypeMap.getFileExtensionFromUrl(
                 uri
                     .toString()
@@ -89,7 +89,7 @@ class FileHelper(var mContext: Context?) {
             MimeTypeMap.getSingleton().getMimeTypeFromExtension(
                 fileExtension.toLowerCase()
             )
-        }
+        })!!.toString()
     }
 
 

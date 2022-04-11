@@ -76,8 +76,8 @@ public class Widget implements Parcelable {
         this.mToolBarColor = builder.mToolBarColor == 0 ? getColor(R.color.albumColorPrimary) : builder.mToolBarColor;
         this.mNavigationBarColor = builder.mNavigationBarColor == 0 ? getColor(R.color.albumColorPrimaryBlack) : builder.mNavigationBarColor;
         this.mTitle = TextUtils.isEmpty(builder.mTitle) ? mContext.getString(R.string.album_title) : builder.mTitle;
-        this.mMediaItemCheckSelector = builder.mMediaItemCheckSelector == null ? AlbumUtils.getColorStateList(getColor(R.color.albumSelectorNormal), getColor(R.color.albumColorPrimary)) : builder.mMediaItemCheckSelector;
-        this.mBucketItemCheckSelector = builder.mBucketItemCheckSelector == null ? AlbumUtils.getColorStateList(getColor(R.color.albumSelectorNormal), getColor(R.color.albumColorPrimary)) : builder.mBucketItemCheckSelector;
+        this.mMediaItemCheckSelector = builder.mMediaItemCheckSelector == null ? AlbumUtils.INSTANCE.getColorStateList(getColor(R.color.albumSelectorNormal), getColor(R.color.albumColorPrimary)) : builder.mMediaItemCheckSelector;
+        this.mBucketItemCheckSelector = builder.mBucketItemCheckSelector == null ? AlbumUtils.INSTANCE.getColorStateList(getColor(R.color.albumSelectorNormal), getColor(R.color.albumColorPrimary)) : builder.mBucketItemCheckSelector;
         this.mButtonStyle = builder.mButtonStyle == null ? ButtonStyle.newDarkBuilder(mContext).build() : builder.mButtonStyle;
     }
 
@@ -221,7 +221,7 @@ public class Widget implements Parcelable {
          * The color of the {@code Media Item} selector.
          */
         public Builder mediaItemCheckSelector(@ColorInt int normalColor, @ColorInt int highLightColor) {
-            this.mMediaItemCheckSelector = AlbumUtils.getColorStateList(normalColor, highLightColor);
+            this.mMediaItemCheckSelector = AlbumUtils.INSTANCE.getColorStateList(normalColor, highLightColor);
             return this;
         }
 
@@ -229,7 +229,7 @@ public class Widget implements Parcelable {
          * The color of the {@code Bucket Item} selector.
          */
         public Builder bucketItemCheckSelector(@ColorInt int normalColor, @ColorInt int highLightColor) {
-            this.mBucketItemCheckSelector = AlbumUtils.getColorStateList(normalColor, highLightColor);
+            this.mBucketItemCheckSelector = AlbumUtils.INSTANCE.getColorStateList(normalColor, highLightColor);
             return this;
         }
 
@@ -273,7 +273,7 @@ public class Widget implements Parcelable {
             this.mContext = builder.mContext;
             this.mUiStyle = builder.mUiStyle;
             this.mButtonSelector = builder.mButtonSelector == null ?
-                    AlbumUtils.getColorStateList(ContextCompat.getColor(mContext, R.color.albumColorPrimary),
+                    AlbumUtils.INSTANCE.getColorStateList(ContextCompat.getColor(mContext, R.color.albumColorPrimary),
                             ContextCompat.getColor(mContext, R.color.albumColorPrimaryDark)
                     ) :
                     builder.mButtonSelector;
@@ -333,7 +333,7 @@ public class Widget implements Parcelable {
              * @param highLightColor feedback color.
              */
             public Builder setButtonSelector(@ColorInt int normalColor, @ColorInt int highLightColor) {
-                mButtonSelector = AlbumUtils.getColorStateList(normalColor, highLightColor);
+                mButtonSelector = AlbumUtils.INSTANCE.getColorStateList(normalColor, highLightColor);
                 return this;
             }
 

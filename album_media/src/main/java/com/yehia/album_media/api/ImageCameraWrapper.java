@@ -32,8 +32,8 @@ public class ImageCameraWrapper extends BasicCameraWrapper<ImageCameraWrapper> {
     }
 
     public void start() {
-        CameraActivity.sResult = mResult;
-        CameraActivity.sCancel = mCancel;
+        CameraActivity.Companion.setSResult(mResult);
+        CameraActivity.Companion.setSCancel(mCancel);
         Intent intent = new Intent(mContext, CameraActivity.class);
 
         intent.putExtra(Album.KEY_INPUT_FUNCTION, Album.FUNCTION_CAMERA_IMAGE);

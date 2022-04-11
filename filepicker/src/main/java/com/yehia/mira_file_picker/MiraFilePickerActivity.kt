@@ -86,7 +86,7 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<String?>,
+        permissions: Array<String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -160,7 +160,7 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
         finish()
     }
 
-    override fun onPermissionsGranted(requestCode: Int, perms: List<String?>) {
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
         if (requestCode == RC_READ_WRITE) {
             chooseFile()
         } else if (requestCode == RC_CAMERA) {
@@ -168,6 +168,6 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
         }
     }
 
-    override fun onPermissionsDenied(requestCode: Int, perms: List<String?>) {}
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {}
 
 }

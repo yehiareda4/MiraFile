@@ -9,7 +9,7 @@
 //class FileUtilsKotlin {
 //    object Method {
 //
-//        fun handleUri(context: Context, uri: Uri): String? {
+//        fun handleUri(context: Context, uri: Uri): String {
 //            context.apply {
 //                val type = when (contentResolver.getType(uri)) {
 //                    "image/jpeg" -> ".jpeg"

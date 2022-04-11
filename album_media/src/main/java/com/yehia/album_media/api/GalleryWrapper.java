@@ -33,10 +33,10 @@ public class GalleryWrapper extends BasicGalleryWrapper<GalleryWrapper, String, 
 
     @Override
     public void start() {
-        GalleryActivity.sResult = mResult;
-        GalleryActivity.sCancel = mCancel;
-        GalleryActivity.sClick = mItemClick;
-        GalleryActivity.sLongClick = mItemLongClick;
+        GalleryActivity.Companion.setSResult(mResult);
+        GalleryActivity.Companion.setSCancel(mCancel);
+        GalleryActivity.Companion.setSClick(mItemClick);
+        GalleryActivity.Companion.setSLongClick(mItemLongClick);
         Intent intent = new Intent(mContext, GalleryActivity.class);
         intent.putExtra(Album.KEY_INPUT_WIDGET, mWidget);
         intent.putStringArrayListExtra(Album.KEY_INPUT_CHECKED_LIST, mChecked);

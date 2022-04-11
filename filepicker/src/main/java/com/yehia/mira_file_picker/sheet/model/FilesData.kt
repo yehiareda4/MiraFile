@@ -1,6 +1,5 @@
 package com.yehia.mira_file_picker.sheet.model
 
-import android.graphics.Bitmap
 import okhttp3.MultipartBody
 import java.io.File
 import java.io.Serializable
@@ -13,12 +12,12 @@ data class FileData(
     var extension: String,
     var filePart: MultipartBody.Part,
     val mediaType: String,
-    var Thumbnail: String?,
+    var Thumbnail: String,
     var ThumbnailPart: MultipartBody.Part?,
     var compressFile: File?,
-    var compressName: String?,
-    var compressSize: String?,
-    var compressPath: String?,
+    var compressName: String,
+    var compressSize: String,
+    var compressPath: String,
     var compressPart: MultipartBody.Part?,
 ) : Serializable {
     constructor(
@@ -30,7 +29,7 @@ data class FileData(
         mediaType: String,
         filePart: MultipartBody.Part,
     ) : this(
-        file, name, size, path, extension, filePart, mediaType, null, null, null,
+        file, name, size, path, extension, filePart, mediaType, "", null, null,
         "", "", "", null
     )
 }

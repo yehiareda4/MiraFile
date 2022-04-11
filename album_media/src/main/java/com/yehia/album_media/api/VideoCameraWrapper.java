@@ -17,7 +17,6 @@ package com.yehia.album_media.api;
 
 import android.content.Context;
 import android.content.Intent;
-
 import androidx.annotation.IntRange;
 
 import com.yehia.album_media.Album;
@@ -68,8 +67,8 @@ public class VideoCameraWrapper extends BasicCameraWrapper<VideoCameraWrapper> {
     }
 
     public void start() {
-        CameraActivity.sResult = mResult;
-        CameraActivity.sCancel = mCancel;
+        CameraActivity.Companion.setSResult(mResult);
+        CameraActivity.Companion.setSCancel(mCancel);
         Intent intent = new Intent(mContext, CameraActivity.class);
 
         intent.putExtra(Album.KEY_INPUT_FUNCTION, Album.FUNCTION_CAMERA_VIDEO);

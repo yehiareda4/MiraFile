@@ -16,7 +16,6 @@
 package com.yehia.album_media.api;
 
 import android.content.Context;
-
 import androidx.annotation.Nullable;
 
 import com.yehia.album_media.Action;
