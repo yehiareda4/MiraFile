@@ -13,32 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api;
+package com.yehia.album_media.api
 
-import android.content.Context;
-import androidx.annotation.IntRange;
+import android.content.Context
+import androidx.annotation.IntRange
 
 /**
  * Created by YanZhenjie on 2017/11/8.
  */
-public abstract class BasicChoiceVideoWrapper<Returner extends BasicChoiceVideoWrapper, Result, Cancel, Checked> extends BasicChoiceWrapper<Returner, Result, Cancel, Checked> {
-
-    BasicChoiceVideoWrapper(Context context) {
-        super(context);
-    }
-
-    int mQuality = 1;
-    long mLimitDuration = Integer.MAX_VALUE;
-    long mLimitBytes = Integer.MAX_VALUE;
+abstract class BasicChoiceVideoWrapper<Returner : BasicChoiceVideoWrapper<Returner, *, *, *>?, Result, Cancel, Checked> internal constructor(
+    context: Context
+) : BasicChoiceWrapper<Returner, Result, Cancel, Checked>(context) {
+    var mQuality = 1
+    var mLimitDuration = Int.MAX_VALUE.toLong()
+    var mLimitBytes = Int.MAX_VALUE.toLong()
 
     /**
      * Set the quality when taking video, should be 0 or 1. Currently value 0 means low quality, and value 1 means high quality.
      *
      * @param quality should be 0 or 1.
      */
-    public Returner quality(@IntRange(from = 0, to = 1) int quality) {
-        this.mQuality = quality;
-        return (Returner) this;
+    fun quality(@IntRange(from = 0, to = 1) quality: Int): Returner {
+        mQuality = quality
+        return this as Returner
     }
 
     /**
@@ -46,9 +43,9 @@ public abstract class BasicChoiceVideoWrapper<Returner extends BasicChoiceVideoW
      *
      * @param duration the maximum number of seconds.
      */
-    public Returner limitDuration(@IntRange(from = 1) long duration) {
-        this.mLimitDuration = duration;
-        return (Returner) this;
+    fun limitDuration(@IntRange(from = 1) duration: Long): Returner {
+        mLimitDuration = duration
+        return this as Returner
     }
 
     /**
@@ -56,8 +53,8 @@ public abstract class BasicChoiceVideoWrapper<Returner extends BasicChoiceVideoW
      *
      * @param bytes the size of the byte.
      */
-    public Returner limitBytes(@IntRange(from = 1) long bytes) {
-        this.mLimitBytes = bytes;
-        return (Returner) this;
+    fun limitBytes(@IntRange(from = 1) bytes: Long): Returner {
+        mLimitBytes = bytes
+        return this as Returner
     }
 }

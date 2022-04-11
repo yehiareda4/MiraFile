@@ -13,38 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api;
+package com.yehia.album_media.api
 
-import android.content.Context;
-
-import androidx.annotation.IntRange;
-
-import com.yehia.album_media.ItemAction;
-
-import java.util.ArrayList;
+import android.content.Context
+import androidx.annotation.IntRange
+import com.yehia.album_media.ItemAction
 
 /**
  * Created by YanZhenjie on 2017/8/19.
  */
-public abstract class BasicGalleryWrapper<Returner extends BasicGalleryWrapper, Result, Cancel, Checked> extends BasicAlbumWrapper<Returner, ArrayList<Result>, Cancel, ArrayList<Checked>> {
-
-    ItemAction<Checked> mItemClick;
-    ItemAction<Checked> mItemLongClick;
-    int mCurrentPosition;
-    boolean mCheckable;
-
-    public BasicGalleryWrapper(Context context) {
-        super(context);
-    }
+abstract class BasicGalleryWrapper<Returner : BasicGalleryWrapper<Returner, *, *, *>?, Result, Cancel, Checked>(
+    context: Context
+) : BasicAlbumWrapper<Returner, ArrayList<Result>, Cancel, ArrayList<Checked>?>(context) {
+    var mItemClick: ItemAction<Checked>? = null
+    var mItemLongClick: ItemAction<Checked>? = null
+    var mCurrentPosition = 0
+    var mCheckable = false
 
     /**
      * Set the list has been selected.
      *
      * @param checked the data list.
      */
-    public final Returner checkedList(ArrayList<Checked> checked) {
-        this.mChecked = checked;
-        return (Returner) this;
+    fun checkedList(checked: ArrayList<Checked>?): Returner {
+        mChecked = checked
+        return this as Returner
     }
 
     /**
@@ -52,9 +45,9 @@ public abstract class BasicGalleryWrapper<Returner extends BasicGalleryWrapper, 
      *
      * @param click action.
      */
-    public Returner itemClick(ItemAction<Checked> click) {
-        this.mItemClick = click;
-        return (Returner) this;
+    fun itemClick(click: ItemAction<Checked>?): Returner {
+        mItemClick = click
+        return this as Returner
     }
 
     /**
@@ -62,9 +55,9 @@ public abstract class BasicGalleryWrapper<Returner extends BasicGalleryWrapper, 
      *
      * @param longClick action.
      */
-    public Returner itemLongClick(ItemAction<Checked> longClick) {
-        this.mItemLongClick = longClick;
-        return (Returner) this;
+    fun itemLongClick(longClick: ItemAction<Checked>?): Returner {
+        mItemLongClick = longClick
+        return this as Returner
     }
 
     /**
@@ -72,9 +65,14 @@ public abstract class BasicGalleryWrapper<Returner extends BasicGalleryWrapper, 
      *
      * @param currentPosition the current position.
      */
-    public Returner currentPosition(@IntRange(from = 0, to = Integer.MAX_VALUE) int currentPosition) {
-        this.mCurrentPosition = currentPosition;
-        return (Returner) this;
+    fun currentPosition(
+        @IntRange(
+            from = 0,
+            to = Int.MAX_VALUE.toLong()
+        ) currentPosition: Int
+    ): Returner {
+        mCurrentPosition = currentPosition
+        return this as Returner
     }
 
     /**
@@ -82,8 +80,8 @@ public abstract class BasicGalleryWrapper<Returner extends BasicGalleryWrapper, 
      *
      * @param checkable checkBox is provided.
      */
-    public Returner checkable(boolean checkable) {
-        this.mCheckable = checkable;
-        return (Returner) this;
+    fun checkable(checkable: Boolean): Returner {
+        mCheckable = checkable
+        return this as Returner
     }
 }

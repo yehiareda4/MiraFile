@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api.camera;
+package com.yehia.album_media.api.camera
 
 /**
  * Created by YanZhenjie on 2017/8/18.
  */
-public interface Camera<Image, Video> {
-
+interface Camera<Image, Video> {
     /**
      * Take picture.
      */
-    Image image();
+    fun image(): Image
 
     /**
      * Take video.
      */
-    Video video();
-
+    fun video(): Video
 }

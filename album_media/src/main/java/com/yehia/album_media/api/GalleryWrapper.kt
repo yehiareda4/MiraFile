@@ -13,35 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api;
+package com.yehia.album_media.api
 
-import android.content.Context;
-import android.content.Intent;
-
-import com.yehia.album_media.Album;
-import com.yehia.album_media.app.gallery.GalleryActivity;
+import android.content.Context
+import android.content.Intent
+import com.yehia.album_media.Album
+import com.yehia.album_media.app.gallery.GalleryActivity
 
 /**
- * <p>Gallery wrapper.</p>
+ *
+ * Gallery wrapper.
  * Created by yanzhenjie on 17-3-29.
  */
-public class GalleryWrapper extends BasicGalleryWrapper<GalleryWrapper, String, String, String> {
-
-    public GalleryWrapper(Context context) {
-        super(context);
-    }
-
-    @Override
-    public void start() {
-        GalleryActivity.Companion.setSResult(mResult);
-        GalleryActivity.Companion.setSCancel(mCancel);
-        GalleryActivity.Companion.setSClick(mItemClick);
-        GalleryActivity.Companion.setSLongClick(mItemLongClick);
-        Intent intent = new Intent(mContext, GalleryActivity.class);
-        intent.putExtra(Album.KEY_INPUT_WIDGET, mWidget);
-        intent.putStringArrayListExtra(Album.KEY_INPUT_CHECKED_LIST, mChecked);
-        intent.putExtra(Album.KEY_INPUT_CURRENT_POSITION, mCurrentPosition);
-        intent.putExtra(Album.KEY_INPUT_GALLERY_CHECKABLE, mCheckable);
-        mContext.startActivity(intent);
+class GalleryWrapper(context: Context) :
+    BasicGalleryWrapper<GalleryWrapper?, String, String, String>(context) {
+    override fun start() {
+        GalleryActivity.sResult = mResult
+        GalleryActivity.sCancel = mCancel
+        GalleryActivity.sClick = mItemClick
+        GalleryActivity.sLongClick = mItemLongClick
+        val intent = Intent(mContext, GalleryActivity::class.java)
+        intent.putExtra(Album.KEY_INPUT_WIDGET, mWidget)
+        intent.putStringArrayListExtra(Album.KEY_INPUT_CHECKED_LIST, mChecked)
+        intent.putExtra(Album.KEY_INPUT_CURRENT_POSITION, mCurrentPosition)
+        intent.putExtra(Album.KEY_INPUT_GALLERY_CHECKABLE, mCheckable)
+        mContext.startActivity(intent)
     }
 }

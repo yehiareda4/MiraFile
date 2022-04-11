@@ -53,16 +53,16 @@
             android:windowSoftInputMode="stateAlwaysHidden|stateHidden"
             tools:ignore="Instantiatable" />
 
-<!--        <provider-->
-<!--            android:name=".provider.CameraFileProvider"-->
-<!--            android:authorities="${applicationId}.app.file.provider"-->
-<!--            android:exported="false"-->
-<!--            android:grantUriPermissions="true"-->
-<!--            android:multiprocess="true">-->
-<!--            <meta-data-->
-<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
-<!--                android:resource="@xml/album_camera_provider" />-->
-<!--        </provider>-->
+        <provider
+            android:name=".provider.CameraFileProvider"
+            android:authorities="${applicationId}.app.file.provider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            android:multiprocess="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/album_camera_provider" />
+        </provider>
     </application>
 
 </manifest>

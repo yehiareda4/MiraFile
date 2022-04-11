@@ -13,37 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api;
+package com.yehia.album_media.api
 
-import android.content.Context;
-import android.content.Intent;
-import androidx.annotation.IntRange;
-
-import com.yehia.album_media.Album;
-import com.yehia.album_media.app.camera.CameraActivity;
+import android.content.Context
+import android.content.Intent
+import androidx.annotation.IntRange
+import com.yehia.album_media.Album
+import com.yehia.album_media.app.camera.CameraActivity
 
 /**
- * <p>Camera wrapper.</p>
+ *
+ * Camera wrapper.
  * Created by Yan Zhenjie on 2017/4/18.
  */
-public class VideoCameraWrapper extends BasicCameraWrapper<VideoCameraWrapper> {
-
-    private int mQuality = 1;
-    private long mLimitDuration = Integer.MAX_VALUE;
-    private long mLimitBytes = Integer.MAX_VALUE;
-
-    public VideoCameraWrapper(Context context) {
-        super(context);
-    }
+class VideoCameraWrapper(context: Context) : BasicCameraWrapper<VideoCameraWrapper?>(context) {
+    private var mQuality = 1
+    private var mLimitDuration = Int.MAX_VALUE.toLong()
+    private var mLimitBytes = Int.MAX_VALUE.toLong()
 
     /**
      * Currently value 0 means low quality, suitable for MMS messages, and  value 1 means high quality.
      *
      * @param quality should be 0 or 1.
      */
-    public VideoCameraWrapper quality(@IntRange(from = 0, to = 1) int quality) {
-        this.mQuality = quality;
-        return this;
+    fun quality(@IntRange(from = 0, to = 1) quality: Int): VideoCameraWrapper {
+        mQuality = quality
+        return this
     }
 
     /**
@@ -51,9 +46,9 @@ public class VideoCameraWrapper extends BasicCameraWrapper<VideoCameraWrapper> {
      *
      * @param duration the maximum number of seconds.
      */
-    public VideoCameraWrapper limitDuration(@IntRange(from = 1) long duration) {
-        this.mLimitDuration = duration;
-        return this;
+    fun limitDuration(@IntRange(from = 1) duration: Long): VideoCameraWrapper {
+        mLimitDuration = duration
+        return this
     }
 
     /**
@@ -61,21 +56,20 @@ public class VideoCameraWrapper extends BasicCameraWrapper<VideoCameraWrapper> {
      *
      * @param bytes the size of the byte.
      */
-    public VideoCameraWrapper limitBytes(@IntRange(from = 1) long bytes) {
-        this.mLimitBytes = bytes;
-        return this;
+    fun limitBytes(@IntRange(from = 1) bytes: Long): VideoCameraWrapper {
+        mLimitBytes = bytes
+        return this
     }
 
-    public void start() {
-        CameraActivity.Companion.setSResult(mResult);
-        CameraActivity.Companion.setSCancel(mCancel);
-        Intent intent = new Intent(mContext, CameraActivity.class);
-
-        intent.putExtra(Album.KEY_INPUT_FUNCTION, Album.FUNCTION_CAMERA_VIDEO);
-        intent.putExtra(Album.KEY_INPUT_FILE_PATH, mFilePath);
-        intent.putExtra(Album.KEY_INPUT_CAMERA_QUALITY, mQuality);
-        intent.putExtra(Album.KEY_INPUT_CAMERA_DURATION, mLimitDuration);
-        intent.putExtra(Album.KEY_INPUT_CAMERA_BYTES, mLimitBytes);
-        mContext.startActivity(intent);
+    override fun start() {
+        CameraActivity.sResult = mResult
+        CameraActivity.sCancel = mCancel
+        val intent = Intent(mContext, CameraActivity::class.java)
+        intent.putExtra(Album.KEY_INPUT_FUNCTION, Album.FUNCTION_CAMERA_VIDEO)
+        intent.putExtra(Album.KEY_INPUT_FILE_PATH, mFilePath)
+        intent.putExtra(Album.KEY_INPUT_CAMERA_QUALITY, mQuality)
+        intent.putExtra(Album.KEY_INPUT_CAMERA_DURATION, mLimitDuration)
+        intent.putExtra(Album.KEY_INPUT_CAMERA_BYTES, mLimitBytes)
+        mContext.startActivity(intent)
     }
 }

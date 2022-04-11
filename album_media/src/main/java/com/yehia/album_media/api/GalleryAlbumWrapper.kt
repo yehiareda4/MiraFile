@@ -13,36 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api;
+package com.yehia.album_media.api
 
-import android.content.Context;
-import android.content.Intent;
-
-import com.yehia.album_media.Album;
-import com.yehia.album_media.AlbumFile;
-import com.yehia.album_media.app.gallery.GalleryAlbumActivity;
+import android.content.Context
+import android.content.Intent
+import com.yehia.album_media.Album
+import com.yehia.album_media.AlbumFile
+import com.yehia.album_media.app.gallery.GalleryAlbumActivity
 
 /**
- * <p>Gallery wrapper.</p>
+ *
+ * Gallery wrapper.
  * Created by yanzhenjie on 17-3-29.
  */
-public class GalleryAlbumWrapper extends BasicGalleryWrapper<GalleryAlbumWrapper, AlbumFile, String, AlbumFile> {
-
-    public GalleryAlbumWrapper(Context context) {
-        super(context);
-    }
-
-    @Override
-    public void start() {
-        GalleryAlbumActivity.Companion.setSResult(mResult);
-        GalleryAlbumActivity.Companion.setSCancel(mCancel);
-        GalleryAlbumActivity.Companion.setSClick(mItemClick);
-        GalleryAlbumActivity.Companion.setSLongClick(mItemLongClick);
-        Intent intent = new Intent(mContext, GalleryAlbumActivity.class);
-        intent.putExtra(Album.KEY_INPUT_WIDGET, mWidget);
-        intent.putParcelableArrayListExtra(Album.KEY_INPUT_CHECKED_LIST, mChecked);
-        intent.putExtra(Album.KEY_INPUT_CURRENT_POSITION, mCurrentPosition);
-        intent.putExtra(Album.KEY_INPUT_GALLERY_CHECKABLE, mCheckable);
-        mContext.startActivity(intent);
+class GalleryAlbumWrapper(context: Context) :
+    BasicGalleryWrapper<GalleryAlbumWrapper?, AlbumFile, String, AlbumFile>(context) {
+    override fun start() {
+        GalleryAlbumActivity.sResult = mResult
+        GalleryAlbumActivity.sCancel = mCancel
+        GalleryAlbumActivity.sClick = mItemClick
+        GalleryAlbumActivity.sLongClick = mItemLongClick
+        val intent = Intent(mContext, GalleryAlbumActivity::class.java)
+        intent.putExtra(Album.KEY_INPUT_WIDGET, mWidget)
+        intent.putParcelableArrayListExtra(Album.KEY_INPUT_CHECKED_LIST, mChecked)
+        intent.putExtra(Album.KEY_INPUT_CURRENT_POSITION, mCurrentPosition)
+        intent.putExtra(Album.KEY_INPUT_GALLERY_CHECKABLE, mCheckable)
+        mContext.startActivity(intent)
     }
 }

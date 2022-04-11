@@ -11,6 +11,7 @@ import com.yehia.album_media.api.widget.Widget
 import com.yehia.mira_file_picker.R
 import java.util.*
 
+
 object AlbumUtil {
 
     fun Context.openAlbum(
@@ -27,10 +28,10 @@ object AlbumUtil {
         Album.image(this) // Image and video mix options.
             .multipleChoice() // Multi-Mode, Single-Mode: singleChoice().
             .columnCount(3) // The number of columns in the page list.
-            .selectCount(Counter) // Choose up to a few images.
-            .camera(camera) // Whether the camera appears in the Item.
-            .checkedList(ImagesFiles) // To reverse the list.
-            .widget(
+            ?.selectCount(Counter) // Choose up to a few images.
+            ?.camera(camera) // Whether the camera appears in the Item.
+            ?.checkedList(ImagesFiles) // To reverse the list.
+            ?.widget(
                 Widget.newDarkBuilder(this)
                     .title("")
                     .statusBarColor(ContextCompat.getColor(this, R.color.gray))
@@ -46,13 +47,13 @@ object AlbumUtil {
                     ) // Select the folder selection box.
                     .build()
             )
-            .onResult(action)
-            .onCancel(object : Action<String> {
+            ?.onResult(action)
+            ?.onCancel(object : Action<String> {
                 override fun onAction(result: String) {
 
                 }
             })
-            .start()
+            ?.start()
     }
 
     fun Context.openVideoAlbum(
@@ -69,10 +70,10 @@ object AlbumUtil {
         Album.video(this) // Image and video mix options.
             .multipleChoice() // Multi-Mode, Single-Mode: singleChoice().
             .columnCount(3) // The number of columns in the page list.
-            .selectCount(Counter) // Choose up to a few images.
-            .camera(camera) // Whether the camera appears in the Item.
-            .checkedList(ImagesFiles) // To reverse the list.
-            .widget(
+            ?.selectCount(Counter) // Choose up to a few images.
+            ?.camera(camera) // Whether the camera appears in the Item.
+            ?.checkedList(ImagesFiles) // To reverse the list.
+            ?.widget(
                 Widget.newDarkBuilder(this)
                     .title("")
                     .statusBarColor(ContextCompat.getColor(this, R.color.gray))
@@ -88,13 +89,13 @@ object AlbumUtil {
                     ) // Select the folder selection box.
                     .build()
             )
-            .onResult(action)
-            .onCancel(object : Action<String> {
+            ?.onResult(action)
+            ?.onCancel(object : Action<String> {
                 override fun onAction(result: String) {
 
                 }
             })
-            .start()
+            ?.start()
     }
 
     fun Context.openAlbum(action: Action<ArrayList<AlbumFile>?>) {
@@ -106,8 +107,8 @@ object AlbumUtil {
         Album.image(this) // Image and video mix options.
             .singleChoice() // Multi-Mode, Single-Mode: singleChoice().
             .columnCount(3) // The number of columns in the page list.
-            .camera(true) // Whether the camera appears in the Item.
-            .widget(
+            ?.camera(true) // Whether the camera appears in the Item.
+            ?.widget(
                 Widget.newDarkBuilder(this)
                     .title("")
                     .statusBarColor(ContextCompat.getColor(this, R.color.gray))
@@ -123,13 +124,13 @@ object AlbumUtil {
                     ) // Select the folder selection box.
                     .build()
             )
-            .onResult(action)
-            .onCancel(object : Action<String> {
+            ?.onResult(action)
+            ?.onCancel(object : Action<String> {
                 override fun onAction(result: String) {
 
                 }
             })
-            .start()
+            ?.start()
     }
 
 }

@@ -13,39 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api;
+package com.yehia.album_media.api
 
-import android.content.Context;
-import android.content.Intent;
-
-import androidx.annotation.IntRange;
-
-import com.yehia.album_media.Album;
-import com.yehia.album_media.AlbumFile;
-import com.yehia.album_media.app.album.AlbumActivity;
-
-import java.util.ArrayList;
+import android.content.Context
+import android.content.Intent
+import androidx.annotation.IntRange
+import com.yehia.album_media.Album
+import com.yehia.album_media.AlbumFile
+import com.yehia.album_media.app.album.AlbumActivity
+import com.yehia.album_media.app.album.AlbumActivity.Companion.sMimeFilter
+import com.yehia.album_media.app.album.AlbumActivity.Companion.sSizeFilter
 
 /**
  * Created by YanZhenjie on 2017/8/16.
  */
-public final class ImageMultipleWrapper extends BasicChoiceWrapper<ImageMultipleWrapper, ArrayList<AlbumFile>, String, ArrayList<AlbumFile>> {
-
-    @IntRange(from = 1, to = Integer.MAX_VALUE)
-    private int mLimitCount = Integer.MAX_VALUE;
-
-    public ImageMultipleWrapper(Context context) {
-        super(context);
-    }
+class ImageMultipleWrapper(context: Context) :
+    BasicChoiceWrapper<ImageMultipleWrapper?, ArrayList<AlbumFile>?, String, ArrayList<AlbumFile>?>(
+        context
+    ) {
+    @IntRange(from = 1, to = Int.MAX_VALUE.toLong())
+    private var mLimitCount = Int.MAX_VALUE
 
     /**
      * Set the list has been selected.
      *
      * @param checked the data list.
      */
-    public final ImageMultipleWrapper checkedList(ArrayList<AlbumFile> checked) {
-        this.mChecked = checked;
-        return this;
+    fun checkedList(checked: ArrayList<AlbumFile>?): ImageMultipleWrapper {
+        mChecked = checked
+        return this
     }
 
     /**
@@ -53,27 +49,30 @@ public final class ImageMultipleWrapper extends BasicChoiceWrapper<ImageMultiple
      *
      * @param count the maximum number.
      */
-    public ImageMultipleWrapper selectCount(@IntRange(from = 1, to = Integer.MAX_VALUE) int count) {
-        this.mLimitCount = count;
-        return this;
+    fun selectCount(
+        @IntRange(
+            from = 1,
+            to = Int.MAX_VALUE.toLong()
+        ) count: Int
+    ): ImageMultipleWrapper {
+        mLimitCount = count
+        return this
     }
 
-    @Override
-    public void start() {
-        AlbumActivity.Companion.setSSizeFilter(mSizeFilter);
-        AlbumActivity.Companion.setSMimeFilter(mMimeTypeFilter);
-        AlbumActivity.Companion.setSResult(mResult);
-        AlbumActivity.Companion.setSCancel(mCancel);
-        Intent intent = new Intent(mContext, AlbumActivity.class);
-        intent.putExtra(Album.KEY_INPUT_WIDGET, mWidget);
-        intent.putParcelableArrayListExtra(Album.KEY_INPUT_CHECKED_LIST, mChecked);
-
-        intent.putExtra(Album.KEY_INPUT_FUNCTION, Album.FUNCTION_CHOICE_IMAGE);
-        intent.putExtra(Album.KEY_INPUT_CHOICE_MODE, Album.MODE_MULTIPLE);
-        intent.putExtra(Album.KEY_INPUT_COLUMN_COUNT, mColumnCount);
-        intent.putExtra(Album.KEY_INPUT_ALLOW_CAMERA, mHasCamera);
-        intent.putExtra(Album.KEY_INPUT_LIMIT_COUNT, mLimitCount);
-        intent.putExtra(Album.KEY_INPUT_FILTER_VISIBILITY, mFilterVisibility);
-        mContext.startActivity(intent);
+    override fun start() {
+        sSizeFilter = mSizeFilter
+        sMimeFilter = mMimeTypeFilter
+        AlbumActivity.sResult = mResult
+        AlbumActivity.sCancel = mCancel
+        val intent = Intent(mContext, AlbumActivity::class.java)
+        intent.putExtra(Album.KEY_INPUT_WIDGET, mWidget)
+        intent.putParcelableArrayListExtra(Album.KEY_INPUT_CHECKED_LIST, mChecked)
+        intent.putExtra(Album.KEY_INPUT_FUNCTION, Album.FUNCTION_CHOICE_IMAGE)
+        intent.putExtra(Album.KEY_INPUT_CHOICE_MODE, Album.MODE_MULTIPLE)
+        intent.putExtra(Album.KEY_INPUT_COLUMN_COUNT, mColumnCount)
+        intent.putExtra(Album.KEY_INPUT_ALLOW_CAMERA, mHasCamera)
+        intent.putExtra(Album.KEY_INPUT_LIMIT_COUNT, mLimitCount)
+        intent.putExtra(Album.KEY_INPUT_FILTER_VISIBILITY, mFilterVisibility)
+        mContext.startActivity(intent)
     }
 }

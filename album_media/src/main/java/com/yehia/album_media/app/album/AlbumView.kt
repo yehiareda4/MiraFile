@@ -87,11 +87,11 @@ internal class AlbumView(private val mActivity: Activity, presenter: AlbumPresen
             AlbumUtils.setDrawableTint(completeIcon, getColor(R.color.albumIconDark))
             mCompleteMenu!!.icon = completeIcon
         } else {
-            mProgressBar.setColorFilter(widget.getToolBarColor())
+            mProgressBar.setColorFilter(widget.toolBarColor)
             SystemBar.setStatusBarColor(mActivity, statusBarColor)
             setHomeAsUpIndicator(R.drawable.album_ic_back_white)
         }
-        mToolbar.setBackgroundColor(widget.getToolBarColor())
+        mToolbar.setBackgroundColor(widget.toolBarColor)
         val config = mActivity.resources.configuration
         mLayoutManager = GridLayoutManager(context, column, getOrientation(config), false)
         mRecyclerView.layoutManager = mLayoutManager

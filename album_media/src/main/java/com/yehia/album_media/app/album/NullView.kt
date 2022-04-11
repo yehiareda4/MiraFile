@@ -57,12 +57,12 @@ internal class NullView(private val mActivity: Activity, presenter: NullPresente
             SystemBar.setStatusBarColor(mActivity, statusBarColor)
             setHomeAsUpIndicator(navigationIcon)
         }
-        SystemBar.setNavigationBarColor(mActivity, widget.getNavigationBarColor())
-        val buttonStyle = widget.getButtonStyle()
-        val buttonSelector = buttonStyle.buttonSelector
+        SystemBar.setNavigationBarColor(mActivity, widget.navigationBarColor)
+        val buttonStyle = widget.buttonStyle
+        val buttonSelector = buttonStyle?.buttonSelector
         mBtnTakeImage.supportBackgroundTintList = buttonSelector
         mBtnTakeVideo.supportBackgroundTintList = buttonSelector
-        if (buttonStyle.uiStyle == Widget.STYLE_LIGHT) {
+        if (buttonStyle?.uiStyle == Widget.STYLE_LIGHT) {
             var drawable = mBtnTakeImage.compoundDrawables[0]
             AlbumUtils.setDrawableTint(drawable, getColor(R.color.albumIconDark))
             mBtnTakeImage.setCompoundDrawables(drawable, null, null, null)

@@ -13,37 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api;
+package com.yehia.album_media.api
 
-import android.content.Context;
-
-import androidx.annotation.IntRange;
-
-import com.yehia.album_media.Filter;
+import android.content.Context
+import androidx.annotation.IntRange
+import com.yehia.album_media.Filter
 
 /**
  * Created by YanZhenjie on 2017/8/16.
  */
-public abstract class BasicChoiceWrapper<Returner extends BasicChoiceWrapper, Result, Cancel, Checked> extends BasicAlbumWrapper<Returner, Result, Cancel, Checked> {
-
-    boolean mHasCamera = true;
-    int mColumnCount = 2;
-
-    Filter<Long> mSizeFilter;
-    Filter<String> mMimeTypeFilter;
-
-    boolean mFilterVisibility = true;
-
-    BasicChoiceWrapper(Context context) {
-        super(context);
-    }
+abstract class BasicChoiceWrapper<Returner : BasicChoiceWrapper<Returner, *, *, *>?, Result, Cancel, Checked> internal constructor(
+    context: Context
+) : BasicAlbumWrapper<Returner, Result, Cancel, Checked>(context) {
+    var mHasCamera = true
+    var mColumnCount = 2
+    var mSizeFilter: Filter<Long>? = null
+    var mMimeTypeFilter: Filter<String>? = null
+    var mFilterVisibility = true
 
     /**
      * Turn on the camera function.
      */
-    public Returner camera(boolean hasCamera) {
-        this.mHasCamera = hasCamera;
-        return (Returner) this;
+    fun camera(hasCamera: Boolean): Returner {
+        mHasCamera = hasCamera
+        return this as Returner
     }
 
     /**
@@ -51,9 +44,9 @@ public abstract class BasicChoiceWrapper<Returner extends BasicChoiceWrapper, Re
      *
      * @param count the number of columns.
      */
-    public Returner columnCount(@IntRange(from = 2, to = 4) int count) {
-        this.mColumnCount = count;
-        return (Returner) this;
+    fun columnCount(@IntRange(from = 2, to = 4) count: Int): Returner {
+        mColumnCount = count
+        return this as Returner
     }
 
     /**
@@ -61,9 +54,9 @@ public abstract class BasicChoiceWrapper<Returner extends BasicChoiceWrapper, Re
      *
      * @param filter filter.
      */
-    public Returner filterSize(Filter<Long> filter) {
-        this.mSizeFilter = filter;
-        return (Returner) this;
+    fun filterSize(filter: Filter<Long>?): Returner {
+        mSizeFilter = filter
+        return this as Returner
     }
 
     /**
@@ -71,9 +64,9 @@ public abstract class BasicChoiceWrapper<Returner extends BasicChoiceWrapper, Re
      *
      * @param filter filter.
      */
-    public Returner filterMimeType(Filter<String> filter) {
-        this.mMimeTypeFilter = filter;
-        return (Returner) this;
+    fun filterMimeType(filter: Filter<String>?): Returner {
+        mMimeTypeFilter = filter
+        return this as Returner
     }
 
     /**
@@ -81,9 +74,8 @@ public abstract class BasicChoiceWrapper<Returner extends BasicChoiceWrapper, Re
      *
      * @param visibility true is displayed, false is not displayed.
      */
-    public Returner afterFilterVisibility(boolean visibility) {
-        this.mFilterVisibility = visibility;
-        return (Returner) this;
+    fun afterFilterVisibility(visibility: Boolean): Returner {
+        mFilterVisibility = visibility
+        return this as Returner
     }
-
 }

@@ -101,35 +101,35 @@ object Album {
     /**
      * Select images.
      */
-    fun image(context: Context?): Choice<ImageMultipleWrapper, ImageSingleWrapper> {
+    fun image(context: Context): Choice<ImageMultipleWrapper, ImageSingleWrapper> {
         return ImageChoice(context)
     }
 
     /**
      * Select videos.
      */
-    fun video(context: Context?): Choice<VideoMultipleWrapper, VideoSingleWrapper> {
+    fun video(context: Context): Choice<VideoMultipleWrapper, VideoSingleWrapper> {
         return VideoChoice(context)
     }
 
     /**
      * Select images and videos.
      */
-    fun album(context: Context?): Choice<AlbumMultipleWrapper, AlbumSingleWrapper> {
+    fun album(context: Context): Choice<AlbumMultipleWrapper, AlbumSingleWrapper> {
         return AlbumChoice(context!!)
     }
 
     /**
      * Preview picture.
      */
-    fun gallery(context: Context?): GalleryWrapper {
+    fun gallery(context: Context): GalleryWrapper {
         return GalleryWrapper(context)
     }
 
     /**
      * Preview Album.
      */
-    fun galleryAlbum(context: Context?): GalleryAlbumWrapper {
+    fun galleryAlbum(context: Context): GalleryAlbumWrapper {
         return GalleryAlbumWrapper(context)
     }
 
@@ -143,35 +143,35 @@ object Album {
     /**
      * Select images.
      */
-    fun image(activity: Activity?): Choice<ImageMultipleWrapper, ImageSingleWrapper> {
+    fun image(activity: Activity): Choice<ImageMultipleWrapper, ImageSingleWrapper> {
         return ImageChoice(activity)
     }
 
     /**
      * Select videos.
      */
-    fun video(activity: Activity?): Choice<VideoMultipleWrapper, VideoSingleWrapper> {
+    fun video(activity: Activity): Choice<VideoMultipleWrapper, VideoSingleWrapper> {
         return VideoChoice(activity)
     }
 
     /**
      * Select images and videos.
      */
-    fun album(activity: Activity?): Choice<AlbumMultipleWrapper, AlbumSingleWrapper> {
-        return AlbumChoice(activity!!)
+    fun album(activity: Activity): Choice<AlbumMultipleWrapper, AlbumSingleWrapper> {
+        return AlbumChoice(activity)
     }
 
     /**
      * Preview picture.
      */
-    fun gallery(activity: Activity?): BasicGalleryWrapper<GalleryWrapper, String, String, String> {
+    fun gallery(activity: Activity): BasicGalleryWrapper<GalleryWrapper?, String, String, String> {
         return GalleryWrapper(activity)
     }
 
     /**
      * Preview Album.
      */
-    fun galleryAlbum(activity: Activity?): BasicGalleryWrapper<GalleryAlbumWrapper, AlbumFile, String, AlbumFile> {
+    fun galleryAlbum(activity: Activity): BasicGalleryWrapper<GalleryAlbumWrapper?, AlbumFile, String, AlbumFile> {
         return GalleryAlbumWrapper(activity)
     }
 
@@ -186,14 +186,14 @@ object Album {
      * Select images.
      */
     fun image(fragment: Fragment): Choice<ImageMultipleWrapper, ImageSingleWrapper> {
-        return ImageChoice(fragment.activity)
+        return ImageChoice(fragment.requireActivity())
     }
 
     /**
      * Select videos.
      */
     fun video(fragment: Fragment): Choice<VideoMultipleWrapper, VideoSingleWrapper> {
-        return VideoChoice(fragment.activity)
+        return VideoChoice(fragment.requireActivity())
     }
 
     /**
@@ -206,15 +206,15 @@ object Album {
     /**
      * Preview picture.
      */
-    fun gallery(fragment: Fragment): BasicGalleryWrapper<GalleryWrapper, String, String, String> {
-        return GalleryWrapper(fragment.activity)
+    fun gallery(fragment: Fragment): BasicGalleryWrapper<GalleryWrapper?, String, String, String> {
+        return GalleryWrapper(fragment.requireActivity())
     }
 
     /**
      * Preview Album.
      */
-    fun galleryAlbum(fragment: Fragment): BasicGalleryWrapper<GalleryAlbumWrapper, AlbumFile, String, AlbumFile> {
-        return GalleryAlbumWrapper(fragment.activity)
+    fun galleryAlbum(fragment: Fragment): BasicGalleryWrapper<GalleryAlbumWrapper?, AlbumFile, String, AlbumFile> {
+        return GalleryAlbumWrapper(fragment.requireActivity())
     }
 
     @IntDef(FUNCTION_CHOICE_IMAGE, FUNCTION_CHOICE_VIDEO, FUNCTION_CHOICE_ALBUM)

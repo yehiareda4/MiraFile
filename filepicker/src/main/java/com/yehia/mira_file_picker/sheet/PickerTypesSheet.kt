@@ -425,7 +425,7 @@ class PickerTypesSheet(
             }
 
             override fun PickiTonMultipleCompleteListener(
-                paths: java.util.ArrayList<String>?,
+                paths: java.util.ArrayList<String?>?,
                 wasSuccessful: Boolean,
                 Reason: String
             ) {

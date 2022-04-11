@@ -46,7 +46,7 @@ class GalleryActivity : BaseActivity(), GalleryPresenter {
         mCheckable = argument.getBoolean(Album.KEY_INPUT_GALLERY_CHECKABLE)
         mCheckedMap = HashMap()
         for (path in mPathList!!) (mCheckedMap as HashMap<String, Boolean>)[path] = true
-        mView!!.setTitle(mWidget!!.title)
+        mView!!.setTitle(mWidget!!.title!!)
         mView!!.setupViews(mWidget!!, mCheckable)
         if (!mCheckable) mView!!.setBottomDisplay(false)
         mView!!.setLayerDisplay(false)

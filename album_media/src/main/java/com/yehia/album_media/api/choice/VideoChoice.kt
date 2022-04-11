@@ -13,32 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api.choice;
+package com.yehia.album_media.api.choice
 
-import android.content.Context;
-
-import com.yehia.album_media.api.VideoMultipleWrapper;
-import com.yehia.album_media.api.VideoSingleWrapper;
+import android.content.Context
+import com.yehia.album_media.api.VideoMultipleWrapper
+import com.yehia.album_media.api.VideoSingleWrapper
 
 /**
  * Created by YanZhenjie on 2017/8/16.
  */
-public final class VideoChoice implements Choice<VideoMultipleWrapper, VideoSingleWrapper> {
-
-    private Context mContext;
-
-    public VideoChoice(Context context) {
-        mContext = context;
+class VideoChoice(private val mContext: Context) :
+    Choice<VideoMultipleWrapper, VideoSingleWrapper> {
+    override fun multipleChoice(): VideoMultipleWrapper {
+        return VideoMultipleWrapper(mContext)
     }
 
-    @Override
-    public VideoMultipleWrapper multipleChoice() {
-        return new VideoMultipleWrapper(mContext);
+    override fun singleChoice(): VideoSingleWrapper {
+        return VideoSingleWrapper(mContext)
     }
-
-    @Override
-    public VideoSingleWrapper singleChoice() {
-        return new VideoSingleWrapper(mContext);
-    }
-
 }

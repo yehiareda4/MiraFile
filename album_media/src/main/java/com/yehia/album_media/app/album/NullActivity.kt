@@ -44,7 +44,7 @@ class NullActivity : BaseActivity(), NullPresenter {
         mLimitBytes = argument.getLong(Album.KEY_INPUT_CAMERA_BYTES)
         mWidget = argument.getParcelable(Album.KEY_INPUT_WIDGET)
         mView!!.setupViews(mWidget)
-        mView!!.setTitle(mWidget!!.title)
+        mView!!.setTitle(mWidget!!.title!!)
         when (function) {
             Album.FUNCTION_CHOICE_IMAGE -> {
                 mView!!.setMessage(R.string.album_not_found_image)
@@ -71,7 +71,7 @@ class NullActivity : BaseActivity(), NullPresenter {
         Album.camera(this)
             .image()
             .onResult(mCameraAction)
-            .start()
+            ?.start()
     }
 
     override fun takeVideo() {
@@ -81,7 +81,7 @@ class NullActivity : BaseActivity(), NullPresenter {
             .limitDuration(mLimitDuration)
             .limitBytes(mLimitBytes)
             .onResult(mCameraAction)
-            .start()
+            ?.start()
     }
 
     private val mCameraAction: Action<String> = object :Action<String> {

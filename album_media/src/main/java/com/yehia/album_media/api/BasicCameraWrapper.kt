@@ -13,35 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api;
+package com.yehia.album_media.api
 
-import android.content.Context;
-import androidx.annotation.Nullable;
-
-import com.yehia.album_media.Action;
+import android.content.Context
+import com.yehia.album_media.Action
 
 /**
  * Created by YanZhenjie on 2017/8/18.
  */
-public abstract class BasicCameraWrapper<Returner extends BasicCameraWrapper> {
-
-    Context mContext;
-    Action<String> mResult;
-    Action<String> mCancel;
-    String mFilePath;
-
-    public BasicCameraWrapper(Context context) {
-        this.mContext = context;
-    }
+abstract class BasicCameraWrapper<Returner : BasicCameraWrapper<Returner>?>(var mContext: Context) {
+    var mResult: Action<String>? = null
+    var mCancel: Action<String>? = null
+    var mFilePath: String? = null
 
     /**
      * Set the action when result.
      *
      * @param result action when producing result.
      */
-    public final Returner onResult(Action<String> result) {
-        this.mResult = result;
-        return (Returner) this;
+    fun onResult(result: Action<String>?): Returner {
+        mResult = result
+        return this as Returner
     }
 
     /**
@@ -49,9 +41,9 @@ public abstract class BasicCameraWrapper<Returner extends BasicCameraWrapper> {
      *
      * @param cancel action when canceled.
      */
-    public final Returner onCancel(Action<String> cancel) {
-        this.mCancel = cancel;
-        return (Returner) this;
+    fun onCancel(cancel: Action<String>?): Returner {
+        mCancel = cancel
+        return this as Returner
     }
 
     /**
@@ -59,14 +51,13 @@ public abstract class BasicCameraWrapper<Returner extends BasicCameraWrapper> {
      *
      * @param filePath storage path.
      */
-    public Returner filePath(@Nullable String filePath) {
-        this.mFilePath = filePath;
-        return (Returner) this;
+    fun filePath(filePath: String?): Returner {
+        mFilePath = filePath
+        return this as Returner
     }
 
     /**
      * Start up.
      */
-    public abstract void start();
-
+    abstract fun start()
 }

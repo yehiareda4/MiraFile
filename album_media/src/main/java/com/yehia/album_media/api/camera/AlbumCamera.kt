@@ -13,32 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api.camera;
+package com.yehia.album_media.api.camera
 
-import android.content.Context;
-
-import com.yehia.album_media.api.ImageCameraWrapper;
-import com.yehia.album_media.api.VideoCameraWrapper;
+import android.content.Context
+import com.yehia.album_media.api.ImageCameraWrapper
+import com.yehia.album_media.api.VideoCameraWrapper
 
 /**
  * Created by YanZhenjie on 2017/8/18.
  */
-public class AlbumCamera implements Camera<ImageCameraWrapper, VideoCameraWrapper> {
-
-    private Context mContext;
-
-    public AlbumCamera(Context context) {
-        mContext = context;
+class AlbumCamera(private val mContext: Context) : Camera<ImageCameraWrapper, VideoCameraWrapper> {
+    override fun image(): ImageCameraWrapper {
+        return ImageCameraWrapper(mContext)
     }
 
-    @Override
-    public ImageCameraWrapper image() {
-        return new ImageCameraWrapper(mContext);
+    override fun video(): VideoCameraWrapper {
+        return VideoCameraWrapper(mContext)
     }
-
-    @Override
-    public VideoCameraWrapper video() {
-        return new VideoCameraWrapper(mContext);
-    }
-
 }

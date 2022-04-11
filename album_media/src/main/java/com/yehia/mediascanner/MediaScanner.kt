@@ -13,49 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.mediascanner;
+package com.yehia.mediascanner
 
-import android.content.Context;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.webkit.MimeTypeMap;
-
-import java.util.LinkedList;
-import java.util.List;
+import android.content.Context
+import android.media.MediaScannerConnection
+import android.net.Uri
+import android.webkit.MimeTypeMap
+import java.util.*
 
 /**
- * <p>MediaScanner.</p>
+ *
+ * MediaScanner.
  * Created by YanZhenjie on 17-3-27.
  */
-public class MediaScanner implements MediaScannerConnection.MediaScannerConnectionClient {
+class MediaScanner(context: Context) : MediaScannerConnection.MediaScannerConnectionClient {
 
-    private MediaScannerConnection mMediaScanConn;
-    private ScannerListener mScannerListener;
-
-    private LinkedList<String[]> mLinkedList = new LinkedList<>();
-    private String[] mCurrentScanPaths;
-    private int mScanCount = 0;
-
-    /**
-     * Create scanner.
-     *
-     * @param context context.
-     */
-    public MediaScanner(Context context) {
-        this.mMediaScanConn = new MediaScannerConnection(context.getApplicationContext(), this);
-    }
+    private val mMediaScanConn: MediaScannerConnection =
+        MediaScannerConnection(context.applicationContext, this)
+    private var mScannerListener: ScannerListener? = null
+    private val mLinkedList = LinkedList<Array<String>>()
+    private var mCurrentScanPaths: Array<String>? = null
+    private var mScanCount = 0
 
     /**
      * Create scanner.
      *
      * @param context         context.
-     * @param scannerListener {@link ScannerListener}.
-     * @deprecated use {@link #MediaScanner(Context)} instead.
+     * @param scannerListener [ScannerListener].
      */
-    @Deprecated
-    public MediaScanner(Context context, ScannerListener scannerListener) {
-        this(context);
-        this.mScannerListener = scannerListener;
+    @Deprecated("use {@link #MediaScanner(Context)} instead.")
+    constructor(context: Context, scannerListener: ScannerListener?) : this(context) {
+        mScannerListener = scannerListener
     }
 
     /**
@@ -63,17 +51,16 @@ public class MediaScanner implements MediaScannerConnection.MediaScannerConnecti
      *
      * @return true, other wise false.
      */
-    public boolean isRunning() {
-        return mMediaScanConn.isConnected();
-    }
+    val isRunning: Boolean
+        get() = mMediaScanConn.isConnected
 
     /**
      * Scan file.
      *
      * @param filePath file absolute path.
      */
-    public void scan(String filePath) {
-        scan(new String[]{filePath});
+    fun scan(filePath: String) {
+        scan(arrayOf(filePath))
     }
 
     /**
@@ -81,8 +68,8 @@ public class MediaScanner implements MediaScannerConnection.MediaScannerConnecti
      *
      * @param filePaths file absolute path list.
      */
-    public void scan(List<String> filePaths) {
-        scan(filePaths.toArray(new String[filePaths.size()]));
+    fun scan(filePaths: List<String>) {
+        scan(filePaths.toTypedArray())
     }
 
     /**
@@ -90,42 +77,41 @@ public class MediaScanner implements MediaScannerConnection.MediaScannerConnecti
      *
      * @param filePaths file absolute path array.
      */
-    public void scan(String[] filePaths) {
-        if (filePaths != null && filePaths.length > 0) {
-            this.mLinkedList.add(filePaths);
-            executeOnce();
+    fun scan(filePaths: Array<String>?) {
+        if (filePaths != null && filePaths.size > 0) {
+            mLinkedList.add(filePaths)
+            executeOnce()
         }
     }
 
     /**
      * Execute scanner.
      */
-    private void executeOnce() {
-        if (!isRunning() && mLinkedList.size() > 0) {
-            this.mCurrentScanPaths = mLinkedList.remove(0);
-            this.mMediaScanConn.connect();
+    private fun executeOnce() {
+        if (!isRunning && mLinkedList.size > 0) {
+            mCurrentScanPaths = mLinkedList.removeAt(0)
+            mMediaScanConn.connect()
         }
     }
 
-    @Override
-    public void onMediaScannerConnected() {
-        for (String filePath : mCurrentScanPaths) {
-            String extension = MimeTypeMap.getFileExtensionFromUrl(filePath);
-            String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-            mMediaScanConn.scanFile(filePath, mimeType);
+    override fun onMediaScannerConnected() {
+        for (filePath in mCurrentScanPaths!!) {
+            val extension = MimeTypeMap.getFileExtensionFromUrl(filePath)
+            val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+            mMediaScanConn.scanFile(filePath, mimeType)
         }
     }
 
-    @Override
-    public void onScanCompleted(String path, Uri uri) {
-        if (mScannerListener != null) mScannerListener.oneComplete(path, uri);
-        mScanCount += 1;
-        if (mScanCount == mCurrentScanPaths.length) {
-            mMediaScanConn.disconnect();
-            if (mScannerListener != null) mScannerListener.allComplete(mCurrentScanPaths);
-            mScanCount = 0;
-            mCurrentScanPaths = null;
-            executeOnce();
+    override fun onScanCompleted(path: String, uri: Uri) {
+        if (mScannerListener != null) mScannerListener!!.oneComplete(path, uri)
+        mScanCount += 1
+        if (mScanCount == mCurrentScanPaths!!.size) {
+            mMediaScanConn.disconnect()
+            if (mScannerListener != null) mScannerListener!!.allComplete(mCurrentScanPaths)
+            mScanCount = 0
+            mCurrentScanPaths = null
+            executeOnce()
         }
     }
+
 }

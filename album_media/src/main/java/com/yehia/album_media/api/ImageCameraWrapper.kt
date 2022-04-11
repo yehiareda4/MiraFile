@@ -13,31 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api;
+package com.yehia.album_media.api
 
-import android.content.Context;
-import android.content.Intent;
-
-import com.yehia.album_media.Album;
-import com.yehia.album_media.app.camera.CameraActivity;
+import android.content.Context
+import android.content.Intent
+import com.yehia.album_media.Album
+import com.yehia.album_media.app.camera.CameraActivity
 
 /**
- * <p>Camera wrapper.</p>
+ *
+ * Camera wrapper.
  * Created by Yan Zhenjie on 2017/4/18.
  */
-public class ImageCameraWrapper extends BasicCameraWrapper<ImageCameraWrapper> {
-
-    public ImageCameraWrapper(Context context) {
-        super(context);
-    }
-
-    public void start() {
-        CameraActivity.Companion.setSResult(mResult);
-        CameraActivity.Companion.setSCancel(mCancel);
-        Intent intent = new Intent(mContext, CameraActivity.class);
-
-        intent.putExtra(Album.KEY_INPUT_FUNCTION, Album.FUNCTION_CAMERA_IMAGE);
-        intent.putExtra(Album.KEY_INPUT_FILE_PATH, mFilePath);
-        mContext.startActivity(intent);
+class ImageCameraWrapper(context: Context) : BasicCameraWrapper<ImageCameraWrapper?>(context) {
+    override fun start() {
+        CameraActivity.sResult = mResult
+        CameraActivity.sCancel = mCancel
+        val intent = Intent(mContext, CameraActivity::class.java)
+        intent.putExtra(Album.KEY_INPUT_FUNCTION, Album.FUNCTION_CAMERA_IMAGE)
+        intent.putExtra(Album.KEY_INPUT_FILE_PATH, mFilePath)
+        mContext.startActivity(intent)
     }
 }

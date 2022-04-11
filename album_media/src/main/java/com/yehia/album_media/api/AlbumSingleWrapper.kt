@@ -13,59 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api;
+package com.yehia.album_media.api
 
-import android.content.Context;
-import android.content.Intent;
-
-import com.yehia.album_media.Album;
-import com.yehia.album_media.AlbumFile;
-import com.yehia.album_media.Filter;
-import com.yehia.album_media.app.album.AlbumActivity;
-
-import java.util.ArrayList;
+import android.content.Context
+import android.content.Intent
+import com.yehia.album_media.Album
+import com.yehia.album_media.AlbumFile
+import com.yehia.album_media.Filter
+import com.yehia.album_media.app.album.AlbumActivity
+import com.yehia.album_media.app.album.AlbumActivity.Companion.sDurationFilter
+import com.yehia.album_media.app.album.AlbumActivity.Companion.sMimeFilter
+import com.yehia.album_media.app.album.AlbumActivity.Companion.sSizeFilter
 
 /**
- * <p>Album wrapper.</p>
+ *
+ * Album wrapper.
  * Created by yanzhenjie on 17-3-29.
  */
-public class AlbumSingleWrapper extends BasicChoiceAlbumWrapper<AlbumSingleWrapper, ArrayList<AlbumFile>, String, AlbumFile> {
-
-    private Filter<Long> mDurationFilter;
-
-    public AlbumSingleWrapper(Context context) {
-        super(context);
-    }
+class AlbumSingleWrapper(context: Context) :
+    BasicChoiceAlbumWrapper<AlbumSingleWrapper?, ArrayList<AlbumFile>?, String, AlbumFile?>(
+        context
+    ) {
+    private var mDurationFilter: Filter<Long>? = null
 
     /**
      * Filter video duration.
      *
      * @param filter filter.
      */
-    public AlbumSingleWrapper filterDuration(Filter<Long> filter) {
-        this.mDurationFilter = filter;
-        return this;
+    fun filterDuration(filter: Filter<Long>?): AlbumSingleWrapper {
+        mDurationFilter = filter
+        return this
     }
 
-    @Override
-    public void start() {
-        AlbumActivity.Companion.setSSizeFilter(mSizeFilter);
-        AlbumActivity.Companion.setSMimeFilter(mMimeTypeFilter);
-        AlbumActivity.Companion.setSDurationFilter(mDurationFilter);
-        AlbumActivity.Companion.setSResult(mResult);
-        AlbumActivity.Companion.setSCancel(mCancel);
-        Intent intent = new Intent(mContext, AlbumActivity.class);
-        intent.putExtra(Album.KEY_INPUT_WIDGET, mWidget);
-
-        intent.putExtra(Album.KEY_INPUT_FUNCTION, Album.FUNCTION_CHOICE_ALBUM);
-        intent.putExtra(Album.KEY_INPUT_CHOICE_MODE, Album.MODE_SINGLE);
-        intent.putExtra(Album.KEY_INPUT_COLUMN_COUNT, mColumnCount);
-        intent.putExtra(Album.KEY_INPUT_ALLOW_CAMERA, mHasCamera);
-        intent.putExtra(Album.KEY_INPUT_LIMIT_COUNT, 1);
-        intent.putExtra(Album.KEY_INPUT_FILTER_VISIBILITY, mFilterVisibility);
-        intent.putExtra(Album.KEY_INPUT_CAMERA_QUALITY, mQuality);
-        intent.putExtra(Album.KEY_INPUT_CAMERA_DURATION, mLimitDuration);
-        intent.putExtra(Album.KEY_INPUT_CAMERA_BYTES, mLimitBytes);
-        mContext.startActivity(intent);
+    override fun start() {
+        sSizeFilter = mSizeFilter
+        sMimeFilter = mMimeTypeFilter
+        sDurationFilter = mDurationFilter
+        AlbumActivity.sResult = mResult
+        AlbumActivity.sCancel = mCancel
+        val intent = Intent(mContext, AlbumActivity::class.java)
+        intent.putExtra(Album.KEY_INPUT_WIDGET, mWidget)
+        intent.putExtra(Album.KEY_INPUT_FUNCTION, Album.FUNCTION_CHOICE_ALBUM)
+        intent.putExtra(Album.KEY_INPUT_CHOICE_MODE, Album.MODE_SINGLE)
+        intent.putExtra(Album.KEY_INPUT_COLUMN_COUNT, mColumnCount)
+        intent.putExtra(Album.KEY_INPUT_ALLOW_CAMERA, mHasCamera)
+        intent.putExtra(Album.KEY_INPUT_LIMIT_COUNT, 1)
+        intent.putExtra(Album.KEY_INPUT_FILTER_VISIBILITY, mFilterVisibility)
+        intent.putExtra(Album.KEY_INPUT_CAMERA_QUALITY, mQuality)
+        intent.putExtra(Album.KEY_INPUT_CAMERA_DURATION, mLimitDuration)
+        intent.putExtra(Album.KEY_INPUT_CAMERA_BYTES, mLimitBytes)
+        mContext.startActivity(intent)
     }
 }

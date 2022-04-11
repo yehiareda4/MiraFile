@@ -13,40 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api;
+package com.yehia.album_media.api
 
-import android.content.Context;
-
-import androidx.annotation.Nullable;
-
-import com.yehia.album_media.Action;
-import com.yehia.album_media.api.widget.Widget;
+import android.content.Context
+import com.yehia.album_media.Action
+import com.yehia.album_media.api.widget.Widget
 
 /**
- * <p>Album basic wrapper.</p>
+ *
+ * Album basic wrapper.
  * Created by yanzhenjie on 17-3-29.
  */
-public abstract class BasicAlbumWrapper<Returner extends BasicAlbumWrapper, Result, Cancel, Checked> {
-
-    final Context mContext;
-    Action<Result> mResult;
-    Action<Cancel> mCancel;
-    Widget mWidget;
-    Checked mChecked;
-
-    BasicAlbumWrapper(Context context) {
-        this.mContext = context;
-        mWidget = Widget.getDefaultWidget(context);
-    }
+abstract class BasicAlbumWrapper<Returner : BasicAlbumWrapper<Returner, *, *, *>?, Result, Cancel, Checked> internal constructor(
+    val mContext: Context
+) {
+    var mResult: Action<Result>? = null
+    var mCancel: Action<Cancel>? = null
+    var mWidget: Widget?
+    var mChecked: Checked? = null
 
     /**
      * Set the action when result.
      *
      * @param result action when producing result.
      */
-    public final Returner onResult(Action<Result> result) {
-        this.mResult = result;
-        return (Returner) this;
+    fun onResult(result: Action<Result>?): Returner {
+        mResult = result
+        return this as Returner
     }
 
     /**
@@ -54,9 +47,9 @@ public abstract class BasicAlbumWrapper<Returner extends BasicAlbumWrapper, Resu
      *
      * @param cancel action when canceled.
      */
-    public final Returner onCancel(Action<Cancel> cancel) {
-        this.mCancel = cancel;
-        return (Returner) this;
+    fun onCancel(cancel: Action<Cancel>?): Returner {
+        mCancel = cancel
+        return this as Returner
     }
 
     /**
@@ -64,13 +57,17 @@ public abstract class BasicAlbumWrapper<Returner extends BasicAlbumWrapper, Resu
      *
      * @param widget the widget.
      */
-    public final Returner widget(@Nullable Widget widget) {
-        this.mWidget = widget;
-        return (Returner) this;
+    fun widget(widget: Widget?): Returner {
+        mWidget = widget
+        return this as Returner
     }
 
     /**
      * Start up.
      */
-    public abstract void start();
+    abstract fun start()
+
+    init {
+        mWidget = Widget.Companion.getDefaultWidget(mContext)
+    }
 }

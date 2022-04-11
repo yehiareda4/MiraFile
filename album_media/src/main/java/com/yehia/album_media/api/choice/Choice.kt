@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api.choice;
+package com.yehia.album_media.api.choice
 
 /**
  * Created by YanZhenjie on 2017/8/16.
  */
-public interface Choice<Multiple, Single> {
-
+interface Choice<Multiple, Single> {
     /**
      * Multiple choice.
      */
-    Multiple multipleChoice();
+    fun multipleChoice(): Multiple
 
     /**
      * Single choice.
      */
-    Single singleChoice();
-
+    fun singleChoice(): Single
 }

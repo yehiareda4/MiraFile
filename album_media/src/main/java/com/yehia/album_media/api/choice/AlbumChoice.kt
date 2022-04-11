@@ -13,31 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yehia.album_media.api.choice;
+package com.yehia.album_media.api.choice
 
-import android.content.Context;
-
-import com.yehia.album_media.api.AlbumMultipleWrapper;
-import com.yehia.album_media.api.AlbumSingleWrapper;
+import android.content.Context
+import com.yehia.album_media.api.AlbumMultipleWrapper
+import com.yehia.album_media.api.AlbumSingleWrapper
 
 /**
  * Created by YanZhenjie on 2017/8/16.
  */
-public final class AlbumChoice implements Choice<AlbumMultipleWrapper, AlbumSingleWrapper> {
-
-    private Context mContext;
-
-    public AlbumChoice(Context context) {
-        mContext = context;
+class AlbumChoice(private val mContext: Context) :
+    Choice<AlbumMultipleWrapper, AlbumSingleWrapper> {
+    override fun multipleChoice(): AlbumMultipleWrapper {
+        return AlbumMultipleWrapper(mContext)
     }
 
-    @Override
-    public AlbumMultipleWrapper multipleChoice() {
-        return new AlbumMultipleWrapper(mContext);
-    }
-
-    @Override
-    public AlbumSingleWrapper singleChoice() {
-        return new AlbumSingleWrapper(mContext);
+    override fun singleChoice(): AlbumSingleWrapper {
+        return AlbumSingleWrapper(mContext)
     }
 }

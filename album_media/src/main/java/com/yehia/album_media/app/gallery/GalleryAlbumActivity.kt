@@ -41,7 +41,7 @@ class GalleryAlbumActivity : BaseActivity(), GalleryPresenter {
         mAlbumFiles = argument.getParcelableArrayList(Album.KEY_INPUT_CHECKED_LIST)
         mCurrentPosition = argument.getInt(Album.KEY_INPUT_CURRENT_POSITION)
         mCheckable = argument.getBoolean(Album.KEY_INPUT_GALLERY_CHECKABLE)
-        mView!!.setTitle(mWidget!!.title)
+        mView!!.setTitle(mWidget!!.title!!)
         mView!!.setupViews(mWidget!!, mCheckable)
         mView!!.bindData(mAlbumFiles)
         if (mCurrentPosition == 0) {

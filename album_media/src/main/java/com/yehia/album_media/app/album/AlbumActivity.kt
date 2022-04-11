@@ -67,7 +67,7 @@ class AlbumActivity : BaseActivity(), AlbumPresenter, MediaReadTask.Callback,
         setContentView(createView())
         mView = AlbumView(this, this)
         mView!!.setupViews(mWidget, mColumnCount, mHasCamera, mChoiceMode)
-        mView!!.setTitle(mWidget!!.title)
+        mView!!.setTitle(mWidget!!.title!!)
         mView!!.setCompleteDisplay(false)
         mView!!.setLoadingDisplay(true)
 
@@ -94,7 +94,7 @@ class AlbumActivity : BaseActivity(), AlbumPresenter, MediaReadTask.Callback,
      * @return layout id.
      */
     private fun createView(): Int {
-        return when (mWidget?.getUiStyle()) {
+        return when (mWidget?.uiStyle) {
             Widget.STYLE_DARK -> {
                 R.layout.album_activity_album_dark
             }
@@ -263,13 +263,12 @@ class AlbumActivity : BaseActivity(), AlbumPresenter, MediaReadTask.Callback,
         Album.camera(this)
             .image()
             .filePath(filePath)
-            .onResult(mCameraAction)
-            .start()
+            ?.onResult(mCameraAction)
+            ?.start()
     }
 
     private fun takeVideo() {
-        val filePath: String
-        filePath = if (mCurrentFolder == 0) {
+        val filePath: String = if (mCurrentFolder == 0) {
             AlbumUtils.randomMP4Path()
         } else {
             val file = File(mAlbumFolders!![mCurrentFolder]!!.albumFiles!![0].path)
@@ -278,11 +277,11 @@ class AlbumActivity : BaseActivity(), AlbumPresenter, MediaReadTask.Callback,
         Album.camera(this)
             .video()
             .filePath(filePath)
-            .quality(mQuality)
-            .limitDuration(mLimitDuration)
-            .limitBytes(mLimitBytes)
-            .onResult(mCameraAction)
-            .start()
+            ?.quality(mQuality)
+            ?.limitDuration(mLimitDuration)
+            ?.limitBytes(mLimitBytes)
+            ?.onResult(mCameraAction)
+            ?.start()
     }
 
     private val mCameraAction: Action<String> = object : Action<String> {
