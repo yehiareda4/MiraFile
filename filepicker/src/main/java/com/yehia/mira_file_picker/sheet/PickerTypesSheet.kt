@@ -2,7 +2,6 @@ package com.yehia.mira_file_picker.sheet
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
@@ -24,15 +23,15 @@ import com.yehia.mira_file_picker.sheet.model.Type
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openAlbum
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openVideoAlbum
 import id.zelory.compressor.Compressor
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
 
+@DelicateCoroutinesApi
 class PickerTypesSheet(
     private val activity: AppCompatActivity,
     private val fragment: Fragment,
@@ -140,18 +139,12 @@ class PickerTypesSheet(
 
         val path = FileUtils.getPath(activity, data)
         if (path != null) {
-//            if (FileUtils.isLocal(path)) {
-//
-////                addFile(File(path))
-//                pickiT.getPath(data, Build.VERSION.SDK_INT)
-//            } else {
             val uri =
                 FileUtils.createCopyAndReturnRealPath(
                     activity,
                     data
                 )
             pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
-//            }
         } else {
             pickiT.getPath(data, Build.VERSION.SDK_INT)
         }
@@ -378,9 +371,7 @@ class PickerTypesSheet(
             if (lastfile != null) {
                 val thumbnail = lastfile!!.thumbPath
                 fileData.Thumbnail = thumbnail!!
-                if (fileData.Thumbnail != null) {
-                    preparePart(File(fileData.Thumbnail), fileData.name)
-                }
+                preparePart(File(fileData.Thumbnail), fileData.name)
                 lastfile = null
             }
         }
@@ -440,9 +431,7 @@ class PickerTypesSheet(
                 wasSuccessful: Boolean,
                 Reason: String
             ) {
-                if (path != null) {
-                    addFile(File(path))
-                }
+                addFile(File(path))
             }
 
             override fun PickiTonMultipleCompleteListener(
@@ -453,10 +442,10 @@ class PickerTypesSheet(
                 paths?.forEachIndexed { index, it ->
                     if (multipleCount != 0) {
                         if (index <= multipleCount) {
-                            addFile(File(it))
+                            addFile(File(it!!))
                         }
                     } else {
-                        addFile(File(it))
+                        addFile(File(it!!))
                     }
                 }
             }
@@ -478,7 +467,7 @@ class PickerTypesSheet(
                                     if (!lastImage.contains(itx)) {
                                         lastImage.add(itx)
                                         lastfile = itx
-                                        addFile(File(itx!!.path))
+                                        addFile(File(itx.path!!))
                                     }
                                 }
                             }
@@ -496,7 +485,7 @@ class PickerTypesSheet(
                                 result.forEach { itx ->
                                     if (!lastImage.contains(itx)) {
                                         lastImage.add(itx)
-                                        addFile(File(itx!!.path))
+                                        addFile(File(itx.path!!))
                                     }
                                 }
                             }
@@ -527,7 +516,7 @@ class PickerTypesSheet(
         )
     }
 
-    private fun preparePart(
+/*    private fun preparePart(
         ImageFile: Bitmap, fileName: String
     ): MultipartBody.Part? {
         return try {
@@ -541,7 +530,7 @@ class PickerTypesSheet(
             fos.flush()
             fos.close()
             val requestBody = RequestBody.create(
-                okhttp3.MediaType.parse("*/*"),
+                okhttp3.MediaType.parse(""),
                 file
             )
 
@@ -550,6 +539,6 @@ class PickerTypesSheet(
             null
         }
     }
-
+*/
 
 }
