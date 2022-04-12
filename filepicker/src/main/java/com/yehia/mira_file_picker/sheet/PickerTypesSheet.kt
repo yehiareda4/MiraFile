@@ -343,7 +343,13 @@ class PickerTypesSheet(
     private fun addFile(file: File) {
         val fileData = FileData(
             file, file.name, FileUtils.getReadableFileSize(file.length().toInt()),
-            file.path, file.extension, type.mediaType, preparePart(file)
+            file.path, file.extension, type.mediaType, preparePart(
+                file, if (file.extension.isEmpty()) {
+                    "${file.name}.${type.extension}"
+                } else {
+                    file.name
+                }
+            )
         )
         if (file.extension.isEmpty()) {
             fileData.path += ".${type.extension}"
@@ -366,14 +372,14 @@ class PickerTypesSheet(
                 if (file.extension.isEmpty()) {
                     fileData.compressPath += ".${type.extension}"
                 }
-                preparePart(fileData.compressFile!!)
+                preparePart(fileData.compressFile!!, fileData.name)
             }
         } else {
             if (lastfile != null) {
                 val thumbnail = lastfile!!.thumbPath
                 fileData.Thumbnail = thumbnail!!
                 if (fileData.Thumbnail != null) {
-                    preparePart(File(fileData.Thumbnail!!))
+                    preparePart(File(fileData.Thumbnail), fileData.name)
                 }
                 lastfile = null
             }
@@ -508,7 +514,7 @@ class PickerTypesSheet(
     }
 
     private fun preparePart(
-        file: File
+        file: File, fileName: String
     ): MultipartBody.Part {
         val requestFile = RequestBody.create(
             okhttp3.MediaType.parse(type.mediaType),
@@ -516,13 +522,13 @@ class PickerTypesSheet(
         )
         return MultipartBody.Part.createFormData(
             partName,
-            "${file.name}.${file.extension}",
+            fileName,
             requestFile
         )
     }
 
     private fun preparePart(
-        ImageFile: Bitmap
+        ImageFile: Bitmap, fileName: String
     ): MultipartBody.Part? {
         return try {
             val file = File(activity.cacheDir, ImageFile.config.name)
@@ -539,7 +545,7 @@ class PickerTypesSheet(
                 file
             )
 
-            return MultipartBody.Part.createFormData(partName, file.name, requestBody)
+            return MultipartBody.Part.createFormData(partName, fileName, requestBody)
         } catch (e: java.lang.Exception) {
             null
         }
