@@ -514,7 +514,11 @@ class PickerTypesSheet(
             okhttp3.MediaType.parse(type.mediaType),
             file
         )
-        return MultipartBody.Part.createFormData(partName, file.name, requestFile)
+        return MultipartBody.Part.createFormData(
+            partName,
+            "${file.name}.${file.extension}",
+            requestFile
+        )
     }
 
     private fun preparePart(
