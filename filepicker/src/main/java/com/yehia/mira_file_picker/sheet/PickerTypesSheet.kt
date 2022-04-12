@@ -8,6 +8,7 @@ import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yehia.album_media.Action
@@ -129,17 +130,31 @@ class PickerTypesSheet(
 //        addFile(File(data.toString()))
 //        val path = FileUtils.getPath(activity, data)
 //        if (path != null) {
-//            val uri = AndroidXI.getInstance().with(activity).duplicate(
-//                FileUtils.createCopyAndReturnRealPath(
-//                    activity,
-//                    data
-//                ).path.toUri()
-//            )
+//            val uri = FileUtils.createCopyAndReturnRealPath(activity, data).path.toUri()
+//            val uriw = FileUtils.createCopyAndReturnRealPath(activity, data).absolutePath
 //
-//            pickiT.getPath(uri!!, Build.VERSION.SDK_INT)
+//            pickiT.getPath(uriw.toUri(), Build.VERSION.SDK_INT)
 //        } else {
-        pickiT.getPath(data, Build.VERSION.SDK_INT)
+//            pickiT.getPath(data, Build.VERSION.SDK_INT)
 //        }
+
+        val path = FileUtils.getPath(activity, data)
+        if (path != null) {
+//            if (FileUtils.isLocal(path)) {
+//
+////                addFile(File(path))
+//                pickiT.getPath(data, Build.VERSION.SDK_INT)
+//            } else {
+            val uri =
+                FileUtils.createCopyAndReturnRealPath(
+                    activity,
+                    data
+                )
+            pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
+//            }
+        } else {
+            pickiT.getPath(data, Build.VERSION.SDK_INT)
+        }
     }
 
     override fun afterCreateView() {
@@ -467,7 +482,8 @@ class PickerTypesSheet(
                 )
 
             } else {
-                activity.openAlbum(multipleCount - sizeList, lastImage,
+                activity.openAlbum(
+                    multipleCount - sizeList, lastImage,
                     object : Action<java.util.ArrayList<AlbumFile>?> {
                         override fun onAction(result: java.util.ArrayList<AlbumFile>?) {
                             if (!result.isNullOrEmpty()) {
