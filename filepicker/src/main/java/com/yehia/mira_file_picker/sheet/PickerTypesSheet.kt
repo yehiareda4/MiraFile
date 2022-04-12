@@ -196,7 +196,7 @@ class PickerTypesSheet(
                     "",
                     R.drawable.ic_any_type,
                     false,
-                    multiple, "application"
+                    multiple, "application/*"
                 )
             }
             MIME_TYPE_AUDIO -> {
@@ -206,7 +206,7 @@ class PickerTypesSheet(
                     "",
                     R.drawable.ic_voice,
                     false,
-                    multiple, "audio"
+                    multiple, "audio/*"
                 )
             }
             MIME_TYPE_TEXT -> {
@@ -217,7 +217,7 @@ class PickerTypesSheet(
                     R.drawable.ic_text,
                     false,
                     multiple,
-                    "text"
+                    "text/*"
                 )
             }
             MIME_TYPE_IMAGE -> {
@@ -227,7 +227,7 @@ class PickerTypesSheet(
                     "",
                     R.drawable.ic_gallary,
                     camera,
-                    multiple, "image"
+                    multiple, "image/*"
                 )
             }
             MIME_TYPE_VIDEO -> {
@@ -237,7 +237,7 @@ class PickerTypesSheet(
                     "mp4",
                     R.drawable.ic_video,
                     camera,
-                    multiple, "video"
+                    multiple, "video/*"
                 )
             }
             MIME_TYPE_PDF -> {
@@ -248,7 +248,7 @@ class PickerTypesSheet(
                     R.drawable.ic_pdf,
                     false,
                     multiple,
-                    "application"
+                    "application/pdf"
                 )
             }
             MIME_TYPE_ZIP -> {
@@ -258,7 +258,7 @@ class PickerTypesSheet(
                     "zip",
                     R.drawable.ic_zip,
                     false,
-                    multiple, "application"
+                    multiple, "application/zip"
                 )
             }
             MIME_TYPE_RAR -> {
@@ -269,7 +269,7 @@ class PickerTypesSheet(
                     R.drawable.ic_rar,
                     false,
                     multiple,
-                    "application"
+                    "application/rar"
                 )
             }
             MIME_TYPE_DOC -> {
@@ -280,7 +280,7 @@ class PickerTypesSheet(
                     R.drawable.ic_doc,
                     false,
                     multiple,
-                    "application"
+                    "application/doc"
                 )
             }
             MIME_TYPE_DOCX -> {
@@ -291,7 +291,7 @@ class PickerTypesSheet(
                     R.drawable.ic_doc,
                     false,
                     multiple,
-                    "application"
+                    "application/docx"
                 )
             }
             MIME_TYPE_PPT -> {
@@ -302,7 +302,7 @@ class PickerTypesSheet(
                     R.drawable.ic_ppt,
                     false,
                     multiple,
-                    "application",
+                    "application/ppt",
                 )
             }
             MIME_TYPE_PPTX -> {
@@ -313,7 +313,7 @@ class PickerTypesSheet(
                     R.drawable.ic_ppt,
                     false,
                     multiple,
-                    "application",
+                    "application/pptx",
                 )
             }
             MIME_TYPE_XLS -> {
@@ -324,7 +324,7 @@ class PickerTypesSheet(
                     R.drawable.ic_xls,
                     false,
                     multiple,
-                    "application",
+                    "application/xls",
                 )
             }
             else -> {
@@ -334,7 +334,7 @@ class PickerTypesSheet(
                     "",
                     R.drawable.ic_any_type,
                     false,
-                    multiple, "application"
+                    multiple, "application/*"
                 )
             }
         }
@@ -511,7 +511,7 @@ class PickerTypesSheet(
         file: File
     ): MultipartBody.Part {
         val requestFile = RequestBody.create(
-            okhttp3.MediaType.parse("*/*"),
+            okhttp3.MediaType.parse(type.mediaType),
             file
         )
         return MultipartBody.Part.createFormData(partName, file.name, requestFile)
