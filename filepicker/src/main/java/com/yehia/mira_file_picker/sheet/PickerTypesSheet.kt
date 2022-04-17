@@ -37,9 +37,10 @@ class PickerTypesSheet(
     private val fragment: Fragment,
     private val types: MutableList<String>,
     private val partName: String,
+    private val thumbnailPartName: String = "",
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
-    private var multipleCount: Int = 0,
+    private var multipleCount: Int = 1,
     val resultFile: (FileData, Boolean) -> Unit
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
@@ -69,7 +70,7 @@ class PickerTypesSheet(
 
     private lateinit var adapter: TypesAdapter
     lateinit var type: Type
-    var previewRequest: ActivityResultLauncher<Intent>
+    private var previewRequest: ActivityResultLauncher<Intent>
 
     private val typesList: MutableList<Type> = ArrayList()
 
@@ -126,17 +127,6 @@ class PickerTypesSheet(
     }
 
     private fun pushPath(data: Uri) {
-//        addFile(File(data.toString()))
-//        val path = FileUtils.getPath(activity, data)
-//        if (path != null) {
-//            val uri = FileUtils.createCopyAndReturnRealPath(activity, data).path.toUri()
-//            val uriw = FileUtils.createCopyAndReturnRealPath(activity, data).absolutePath
-//
-//            pickiT.getPath(uriw.toUri(), Build.VERSION.SDK_INT)
-//        } else {
-//            pickiT.getPath(data, Build.VERSION.SDK_INT)
-//        }
-
         val path = FileUtils.getPath(activity, data)
         if (path != null) {
             val uri =
@@ -371,7 +361,7 @@ class PickerTypesSheet(
             if (lastfile != null) {
                 val thumbnail = lastfile!!.thumbPath
                 fileData.Thumbnail = thumbnail!!
-                preparePart(File(fileData.Thumbnail), fileData.name)
+                preparePartThumbnail(File(fileData.Thumbnail), fileData.name)
                 lastfile = null
             }
         }
@@ -511,6 +501,20 @@ class PickerTypesSheet(
         )
         return MultipartBody.Part.createFormData(
             partName,
+            fileName,
+            requestFile
+        )
+    }
+
+    private fun preparePartThumbnail(
+        file: File, fileName: String
+    ): MultipartBody.Part {
+        val requestFile = RequestBody.create(
+            okhttp3.MediaType.parse(type.mediaType),
+            file
+        )
+        return MultipartBody.Part.createFormData(
+            thumbnailPartName,
             fileName,
             requestFile
         )

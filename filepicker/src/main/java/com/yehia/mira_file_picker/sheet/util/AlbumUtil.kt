@@ -1,6 +1,6 @@
 package com.yehia.mira_file_picker.sheet.util
 
-import android.content.Context
+import android.app.Activity
 import android.graphics.Color
 import androidx.core.content.ContextCompat
 import com.yehia.album_media.Action
@@ -14,7 +14,7 @@ import java.util.*
 
 object AlbumUtil {
 
-    fun Context.openAlbum(
+    fun Activity.openAlbum(
         Counter: Int,
         ImagesFiles: ArrayList<AlbumFile>?,
         action: Action<ArrayList<AlbumFile>?>,
@@ -56,7 +56,7 @@ object AlbumUtil {
             ?.start()
     }
 
-    fun Context.openVideoAlbum(
+    fun Activity.openVideoAlbum(
         Counter: Int,
         ImagesFiles: ArrayList<AlbumFile>?,
         action: Action<ArrayList<AlbumFile>?>,
@@ -98,7 +98,7 @@ object AlbumUtil {
             ?.start()
     }
 
-    fun Context.openAlbum(action: Action<ArrayList<AlbumFile>?>) {
+    fun Activity.openAlbum(action: Action<ArrayList<AlbumFile>?>) {
         Album.initialize(
             AlbumConfig.newBuilder(this)
                 .setAlbumLoader(MediaLoader())

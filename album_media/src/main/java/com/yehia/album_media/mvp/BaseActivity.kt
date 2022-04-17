@@ -39,15 +39,15 @@ open class BaseActivity : AppCompatActivity(), Bye {
      * Request permission.
      */
     protected fun requestPermission(permissions: Array<String?>, code: Int) {
-        var permissions = permissions
         if (Build.VERSION.SDK_INT >= 23) {
             val deniedPermissions = getDeniedPermissions(this, *permissions)
             if (deniedPermissions.isEmpty()) {
                 onPermissionGranted(code)
             } else {
-                permissions = arrayOfNulls(deniedPermissions.size)
+//                permissions = arrayOfNulls(deniedPermissions.size)
 //                deniedPermissions.toArray<String>(permissions)
-                ActivityCompat.requestPermissions(this, permissions, code)
+                val baseActivity = this
+                ActivityCompat.requestPermissions(baseActivity, permissions, code)
             }
         } else {
             onPermissionGranted(code)

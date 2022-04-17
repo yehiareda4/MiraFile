@@ -42,6 +42,7 @@ import java.io.File
  */
 class AlbumActivity : BaseActivity(), AlbumPresenter, MediaReadTask.Callback,
     GalleryActivity.Callback, PathConvertTask.Callback, ThumbnailBuildTask.Callback {
+
     private var mAlbumFolders: List<AlbumFolder?>? = null
     private var mCurrentFolder = 0
     private var mWidget: Widget? = null
