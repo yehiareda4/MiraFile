@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.mira.mira_file"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -50,6 +50,7 @@ dependencies {
 
     implementation "androidx.navigation:navigation-fragment-ktx:2.4.1"
     implementation "androidx.navigation:navigation-ui-ktx:2.4.1"
+    implementation project(path: ':album_media')
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

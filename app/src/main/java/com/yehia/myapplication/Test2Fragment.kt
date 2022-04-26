@@ -8,13 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.yehia.album_media.Action
+import com.yehia.album_media.AlbumFile
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_IMAGE
-import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_PDF
 import com.yehia.mira_file_picker.sheet.model.FileData
+import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openAlbum
 import com.yehia.myapplication.databinding.FragmentTestBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -77,34 +78,46 @@ class Test2Fragment : Fragment(), View.OnClickListener {
 //        types.add(MIME_TYPE_TEXT)
         types.add(MIME_TYPE_IMAGE)
 //        types.add(MIME_ALL_TYPE)
-        types.add(MIME_TYPE_PDF)
+//        types.add(MIME_TYPE_PDF)
 //        types.add(MIME_TYPE_ZIP)
 //        types.add(MIME_TYPE_RAR)
 //        types.add(MIME_TYPE_DOC)
 //        types.add(MIME_TYPE_PPT)
 //        types.add(MIME_TYPE_XLS)
 
-        typesSheet = PickerTypesSheet(
-            requireActivity() as AppCompatActivity,
-            this,
-            types, "file",
-            camera = true,
-            multiple = true,
-            multipleCount = 5,
-        ) { file, maxFile ->
-            selectedFiles?.add(file)
-            adapter!!.notifyDataSetChanged()
-            if (maxFile) {
-                Toast.makeText(requireContext(), "maxFile", Toast.LENGTH_LONG).show()
-            }
-        }
+//        typesSheet = PickerTypesSheet(
+//            requireActivity() as AppCompatActivity,
+//            this,
+//            types, "file",
+//            camera = true,
+//            multiple = true,
+//            multipleCount = 5,
+//        ) { file, maxFile ->
+//            selectedFiles?.add(file)
+//            adapter!!.notifyDataSetChanged()
+//            if (maxFile) {
+//                Toast.makeText(requireContext(), "maxFile", Toast.LENGTH_LONG).show()
+//            }
+//        }
 
         return binding.root
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onClick(v: View?) {
-        typesSheet.show(selectedFiles!!.size)
+        requireActivity().openAlbum(
+            3, ArrayList(),
+            object : Action<java.util.ArrayList<AlbumFile>?> {
+                override fun onAction(result: java.util.ArrayList<AlbumFile>?) {
+                    if (!result.isNullOrEmpty()) {
+                        result.forEach { itx ->
+//                            selectedFiles?.add(itx.path!!)
+//                            adapter!!.notifyDataSetChanged()
+                        }
+                    }
+                }
+            }, true
+        )
     }
 
     fun provideRetrofit(): Retrofit {

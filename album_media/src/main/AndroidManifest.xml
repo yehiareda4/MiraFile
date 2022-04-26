@@ -14,6 +14,7 @@
         <activity
             android:name=".app.album.AlbumActivity"
             android:configChanges="orientation|screenSize"
+            android:exported="true"
             android:theme="@style/Album.Theme.Activity"
             android:windowSoftInputMode="stateAlwaysHidden|stateHidden"
             tools:ignore="Instantiatable" />

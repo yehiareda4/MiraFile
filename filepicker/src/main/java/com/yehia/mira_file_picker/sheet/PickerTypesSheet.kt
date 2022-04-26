@@ -61,7 +61,7 @@ class PickerTypesSheet(
         const val MIME_TYPE_DOCX = "application/docx"
         const val MIME_TYPE_PPT = "application/ppt"
         const val MIME_TYPE_PPTX = "application/pptx"
-        const val MIME_TYPE_XLS = "application/xls"
+        const val MIME_TYPE_XLS = "aresultFilepplication/xls"
         const val MIME_ALL_TYPE = "*/*"
     }
 
