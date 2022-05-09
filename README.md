@@ -12,7 +12,7 @@ MiraFilePicker is an Android Library that lets you choose any kind of file easyl
 # Minimum Sdk Version
     Api Level 19 or Above
 # Max Sdk Version
-    Api Level 30 (Compatible With Scope Storage)
+    Api Level 30 and Above (Compatible With Scope Storage)
 
 # Installation
 
@@ -31,6 +31,17 @@ Add the dependency in your app gradle
       }
       
 # Usage
+
+### Permission And Manifest
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <application
+         ...
+         android:preserveLegacyExternalStorage="true"
+         android:requestLegacyExternalStorage="true"/>
+
 
 ### Start MiraFilePicker form activity and pass the MimeType of the target file
 ### Override the OnCreate
@@ -60,4 +71,4 @@ Add the dependency in your app gradle
     }
  
 ### on Action
-        typesSheet.show()
+        typesSheet.show() or typesSheet.show(sizeList)
