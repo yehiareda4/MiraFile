@@ -115,8 +115,12 @@ class AlbumActivity : BaseActivity(), AlbumPresenter, MediaReadTask.Callback,
     }
 
     override fun onPermissionGranted(code: Int) {
-        val checkedList: ArrayList<AlbumFile> =
+        val checkedList: ArrayList<AlbumFile> = try {
             intent.getParcelableArrayListExtra(Album.KEY_INPUT_CHECKED_LIST)!!
+        } catch (e: Exception) {
+            ArrayList()
+        }
+
         val mediaReader =
             MediaReader(this, sSizeFilter, sMimeFilter, sDurationFilter, mFilterVisibility)
         mMediaReadTask = MediaReadTask(mFunction, checkedList, mediaReader, this)

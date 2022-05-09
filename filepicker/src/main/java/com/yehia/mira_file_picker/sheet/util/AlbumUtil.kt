@@ -11,7 +11,6 @@ import com.yehia.album_media.api.widget.Widget
 import com.yehia.mira_file_picker.R
 import java.util.*
 
-
 object AlbumUtil {
 
     fun Activity.openAlbum(
@@ -105,8 +104,10 @@ object AlbumUtil {
                 .setLocale(Locale.getDefault()).build()
         )
         Album.image(this) // Image and video mix options.
-            .singleChoice() // Multi-Mode, Single-Mode: singleChoice().
+            .multipleChoice() // Multi-Mode, Single-Mode: singleChoice().
             .columnCount(3) // The number of columns in the page list.
+            ?.selectCount(1) // Choose up to a few images.
+            ?.checkedList(ArrayList()) // To reverse the list.
             ?.camera(true) // Whether the camera appears in the Item.
             ?.widget(
                 Widget.newDarkBuilder(this)

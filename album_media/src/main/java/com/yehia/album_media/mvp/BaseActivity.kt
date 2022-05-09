@@ -15,6 +15,8 @@
  */
 package com.yehia.album_media.mvp
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -52,6 +54,24 @@ open class BaseActivity : AppCompatActivity(), Bye {
         } else {
             onPermissionGranted(code)
         }
+    }
+    fun checkPermission(permission: String, context: Context): Boolean {
+        val result: Int = context.checkCallingOrSelfPermission(permission)
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun onPermission(activity: Activity?) {
+        val perms = arrayOf<String>(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+        )
+
+        ActivityCompat.requestPermissions(
+            activity!!,
+            perms,
+            100
+        )
     }
 
     override fun onRequestPermissionsResult(

@@ -15,6 +15,7 @@
  */
 package com.yehia.album_media.app.album.data
 
+import android.app.Activity
 import android.content.Context
 import android.provider.MediaStore
 import androidx.annotation.WorkerThread
@@ -60,7 +61,7 @@ class MediaReader(
                 val longitude = cursor.getFloat(5)
                 val size = cursor.getLong(6)
                 val imageFile = AlbumFile()
-                imageFile.mediaType = AlbumFile.Companion.TYPE_IMAGE
+                imageFile.mediaType = AlbumFile.TYPE_IMAGE
                 imageFile.path = path
                 imageFile.bucketName = bucketName
                 imageFile.mimeType = mimeType
@@ -79,10 +80,17 @@ class MediaReader(
                 allFileFolder.addAlbumFile(imageFile)
                 var albumFolder = albumFolderMap[bucketName]
                 if (albumFolder != null) albumFolder.addAlbumFile(imageFile) else {
-                    albumFolder = AlbumFolder()
-                    albumFolder.name = bucketName
-                    albumFolder.addAlbumFile(imageFile)
-                    albumFolderMap[bucketName] = albumFolder
+                    val activity = mContext as Activity
+                    activity.runOnUiThread {
+                        try {
+                            albumFolder = AlbumFolder()
+                            albumFolder!!.name = bucketName
+                            albumFolder!!.addAlbumFile(imageFile)
+                            albumFolderMap[bucketName] = albumFolder!!
+                        } catch (e: Exception) {
+
+                        }
+                    }
                 }
             }
             cursor.close()
