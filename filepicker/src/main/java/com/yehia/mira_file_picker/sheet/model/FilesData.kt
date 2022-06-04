@@ -10,7 +10,7 @@ data class FileData(
     val size: String,
     var path: String,
     var extension: String,
-    var filePart: MultipartBody.Part,
+    var filePart: MultipartBody.Part?,
     val mediaType: String,
     var Thumbnail: String,
     var ThumbnailPart: MultipartBody.Part?,
@@ -30,6 +30,12 @@ data class FileData(
         filePart: MultipartBody.Part,
     ) : this(
         file, name, size, path, extension, filePart, mediaType, "", null, null,
+        "", "", "", null
+    )
+
+    constructor(
+    ) : this(
+        File(""), "", "", "", "", null, "", "", null, null,
         "", "", "", null
     )
 }

@@ -31,7 +31,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 
-@DelicateCoroutinesApi
 class PickerTypesSheet(
     private val activity: AppCompatActivity,
     private val fragment: Fragment,
@@ -323,6 +322,7 @@ class PickerTypesSheet(
         }
     }
 
+    @DelicateCoroutinesApi
     private fun addFile(file: File) {
         val fileData = FileData(
             file, file.name, FileUtils.getReadableFileSize(file.length().toInt()),
