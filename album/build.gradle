@@ -38,16 +38,7 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.5.0'
     implementation "androidx.core:core-ktx:1.7.0"
-
-    implementation rootProject.ext.dependencies.appCompat
-    implementation rootProject.ext.dependencies.design
-    implementation rootProject.ext.dependencies.recyclerView
-    implementation rootProject.ext.dependencies.cardView
-    api rootProject.ext.dependencies.mediaScanner
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    implementation "com.intuit.sdp:sdp-android:1.0.6"
 }
 repositories {
     mavenCentral()

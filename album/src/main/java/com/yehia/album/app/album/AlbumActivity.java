@@ -44,7 +44,7 @@ import com.yehia.album.impl.OnItemClickListener;
 import com.yehia.album.mvp.BaseActivity;
 import com.yehia.album.util.AlbumUtils;
 import com.yehia.album.widget.LoadingDialog;
-import com.yanzhenjie.mediascanner.MediaScanner;
+import com.yehia.mediascanner.MediaScanner;
 
 import java.io.File;
 import java.util.ArrayList;
