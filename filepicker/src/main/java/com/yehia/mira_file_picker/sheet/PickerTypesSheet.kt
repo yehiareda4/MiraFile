@@ -10,8 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.yehia.album_media.Action
-import com.yehia.album_media.AlbumFile
+import com.yehia.album.Action
+import com.yehia.album.AlbumFile
+
 import com.yehia.mira_file_picker.FileUtils
 import com.yehia.mira_file_picker.MiraFilePickerActivity
 import com.yehia.mira_file_picker.R
@@ -450,15 +451,13 @@ class PickerTypesSheet(
                 activity.openVideoAlbum(
                     multipleCount - sizeList,
                     lastImage,
-                    object : Action<java.util.ArrayList<AlbumFile>?> {
-                        override fun onAction(result: java.util.ArrayList<AlbumFile>?) {
-                            if (!result.isNullOrEmpty()) {
-                                result.forEach { itx ->
-                                    if (!lastImage.contains(itx)) {
-                                        lastImage.add(itx)
-                                        lastfile = itx
-                                        addFile(File(itx.path!!))
-                                    }
+                    Action<java.util.ArrayList<AlbumFile>> { result ->
+                        if (!result.isNullOrEmpty()) {
+                            result.forEach { itx ->
+                                if (!lastImage.contains(itx)) {
+                                    lastImage.add(itx)
+                                    lastfile = itx
+                                    addFile(File(itx.path!!))
                                 }
                             }
                         }
@@ -469,14 +468,12 @@ class PickerTypesSheet(
             } else {
                 activity.openAlbum(
                     multipleCount - sizeList, lastImage,
-                    object : Action<java.util.ArrayList<AlbumFile>?> {
-                        override fun onAction(result: java.util.ArrayList<AlbumFile>?) {
-                            if (!result.isNullOrEmpty()) {
-                                result.forEach { itx ->
-                                    if (!lastImage.contains(itx)) {
-                                        lastImage.add(itx)
-                                        addFile(File(itx.path!!))
-                                    }
+                    Action<java.util.ArrayList<AlbumFile>> { result ->
+                        if (!result.isNullOrEmpty()) {
+                            result.forEach { itx ->
+                                if (!lastImage.contains(itx)) {
+                                    lastImage.add(itx)
+                                    addFile(File(itx.path!!))
                                 }
                             }
                         }

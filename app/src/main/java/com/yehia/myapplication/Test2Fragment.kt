@@ -11,12 +11,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.yehia.album_media.Action
-import com.yehia.album_media.AlbumFile
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_IMAGE
 import com.yehia.mira_file_picker.sheet.model.FileData
-import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openAlbum
 import com.yehia.myapplication.databinding.FragmentTestBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
 import retrofit2.Call
@@ -49,7 +46,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         ) {
 
             provideRetrofit().create(api::class.java)
-                .uploadFileAsync(it.filePart)
+                .uploadFileAsync(it.filePart!!)
                 .enqueue(object : Callback<Any> {
                     override fun onResponse(call: Call<Any>, response: Response<Any>) {
                         Log.d(TAG, "onResponse: $response")

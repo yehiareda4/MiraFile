@@ -3,6 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="album/src/main/res/layout/album_activity_album_dark.xml" value="0.2833333333333333" />
+        <entry key="album/src/main/res/layout/album_activity_album_light.xml" value="0.2833333333333333" />
+        <entry key="album/src/main/res/layout/album_activity_gallery.xml" value="0.2564814814814815" />
+        <entry key="album/src/main/res/layout/album_activity_null.xml" value="0.2564814814814815" />
+        <entry key="album/src/main/res/layout/album_content_album.xml" value="0.2833333333333333" />
+        <entry key="album/src/main/res/layout/album_dialog_floder.xml" value="0.2833333333333333" />
+        <entry key="album/src/main/res/layout/album_item_content_button.xml" value="0.13385416666666666" />
+        <entry key="album/src/main/res/layout/album_item_content_video.xml" value="0.2564814814814815" />
+        <entry key="album/src/main/res/layout/album_toolbar_light.xml" value="0.2833333333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.26614583333333336" />
         <entry key="app/src/main/res/layout/activity_main2.xml" value="0.121875" />
         <entry key="app/src/main/res/layout/fragment_test.xml" value="0.26614583333333336" />
