@@ -17,13 +17,13 @@
     <string name="album_all_images_videos">كل الصور / الفيديو</string>
 
     <string name="album_ok">نعم</string>
-    <string name="album_confirm">يتأكد</string>
-    <string name="album_cancel">يلغي</string>
+    <string name="album_confirm">تأكيد</string>
+    <string name="album_cancel">الغاء</string>
 
     <string name="album_check_image_little">الرجاء تحديد عنصر صورة.</string>
     <string name="album_check_video_little">الرجاء تحديد عنصر الفيديو.</string>
     <string name="album_check_album_little">الرجاء تحديد عنصر وسائط.</string>
-    <string name="album_menu_finish">ينهي</string>
+    <string name="album_menu_finish">انهاء</string>
     <string name="album_check">المحدد</string>
 
     <string name="album_title_permission_failed">تم رفض الإذن</string>

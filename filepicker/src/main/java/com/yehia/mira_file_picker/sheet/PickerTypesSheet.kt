@@ -10,9 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.yehia.album.Action
 import com.yehia.album.AlbumFile
-
 import com.yehia.mira_file_picker.FileUtils
 import com.yehia.mira_file_picker.MiraFilePickerActivity
 import com.yehia.mira_file_picker.R
@@ -41,6 +39,9 @@ class PickerTypesSheet(
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
     private var multipleCount: Int = 1,
+    private val colorPrim: Int = R.color.gray,
+    private val colorAcc: Int = R.color.green,
+    private val colorTxt: Int = R.color.black,
     val resultFile: (FileData, Boolean) -> Unit
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
@@ -451,34 +452,32 @@ class PickerTypesSheet(
                 activity.openVideoAlbum(
                     multipleCount - sizeList,
                     lastImage,
-                    Action<java.util.ArrayList<AlbumFile>> { result ->
-                        if (!result.isNullOrEmpty()) {
-                            result.forEach { itx ->
-                                if (!lastImage.contains(itx)) {
-                                    lastImage.add(itx)
-                                    lastfile = itx
-                                    addFile(File(itx.path!!))
-                                }
+                    type.camera, colorPrim, colorAcc, colorTxt
+                ) { result ->
+                    if (!result.isNullOrEmpty()) {
+                        result.forEach { itx ->
+                            if (!lastImage.contains(itx)) {
+                                lastImage.add(itx)
+                                lastfile = itx
+                                addFile(File(itx.path!!))
                             }
                         }
-                    },
-                    type.camera
-                )
+                    }
+                }
 
             } else {
                 activity.openAlbum(
-                    multipleCount - sizeList, lastImage,
-                    Action<java.util.ArrayList<AlbumFile>> { result ->
-                        if (!result.isNullOrEmpty()) {
-                            result.forEach { itx ->
-                                if (!lastImage.contains(itx)) {
-                                    lastImage.add(itx)
-                                    addFile(File(itx.path!!))
-                                }
+                    multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt,
+                ) { result ->
+                    if (!result.isNullOrEmpty()) {
+                        result.forEach { itx ->
+                            if (!lastImage.contains(itx)) {
+                                lastImage.add(itx)
+                                addFile(File(itx.path!!))
                             }
                         }
-                    }, type.camera
-                )
+                    }
+                }
             }
         } else {
             val intent = Intent(activity, MiraFilePickerActivity::class.java)

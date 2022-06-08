@@ -45,4 +45,5 @@
             android:textSize="@dimen/album_sp_16" />
 
     </LinearLayout>
+
 </merge>

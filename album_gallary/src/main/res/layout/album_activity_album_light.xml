@@ -14,4 +14,5 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/album_content_album" />
+
 </RelativeLayout>
