@@ -10,7 +10,7 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-    <application>
+    <application android:supportsRtl="true">
         <activity
             android:name="com.yehia.album.app.album.AlbumActivity"
             android:configChanges="orientation|screenSize"
@@ -69,6 +69,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/album_camera_provider" />
         </provider>
+
     </application>
 
 </manifest>
