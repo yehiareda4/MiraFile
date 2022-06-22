@@ -12,22 +12,22 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yehia.album.AlbumFile
 import com.yehia.mira_file_picker.FileUtils
-import com.yehia.mira_file_picker.MiraFilePickerActivity
 import com.yehia.mira_file_picker.R
 import com.yehia.mira_file_picker.databinding.SheetTypesBinding
 import com.yehia.mira_file_picker.pickit.PickiT
 import com.yehia.mira_file_picker.pickit.PickiTCallbacks
 import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.mira_file_picker.sheet.model.Type
-import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openAlbum
-import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openVideoAlbum
+import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_IMAGE
+import com.yehia.mira_file_picker.sheet.util.createType
+import com.yehia.mira_file_picker.sheet.util.openSingleType
+import com.yehia.mira_file_picker.sheet.util.preparePart
+import com.yehia.mira_file_picker.sheet.util.preparePartThumbnail
 import id.zelory.compressor.Compressor
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import java.io.File
 
 class PickerTypesSheet(
@@ -39,9 +39,9 @@ class PickerTypesSheet(
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
     private var multipleCount: Int = 1,
-    private val colorPrim: Int = R.color.gray,
-    private val colorAcc: Int = R.color.green,
-    private val colorTxt: Int = R.color.black,
+    private val colorPrim: Int = R.color.gray_al_mai,
+    private val colorAcc: Int = R.color.green_al_mai,
+    private val colorTxt: Int = R.color.black_al_mai,
     val resultFile: (FileData, Boolean) -> Unit
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
@@ -49,22 +49,6 @@ class PickerTypesSheet(
     private var lastfile: AlbumFile? = null
     private var dismissed: Boolean = false
     private var sizeList: Int = 0
-
-    companion object {
-        const val MIME_TYPE_AUDIO = "audio/*"
-        const val MIME_TYPE_TEXT = "text/*"
-        const val MIME_TYPE_IMAGE = "image/*"
-        const val MIME_TYPE_VIDEO = "video/*"
-        const val MIME_TYPE_PDF = "application/pdf"
-        const val MIME_TYPE_ZIP = "application/zip"
-        const val MIME_TYPE_RAR = "application/rar"
-        const val MIME_TYPE_DOC = "application/doc"
-        const val MIME_TYPE_DOCX = "application/docx"
-        const val MIME_TYPE_PPT = "application/ppt"
-        const val MIME_TYPE_PPTX = "application/pptx"
-        const val MIME_TYPE_XLS = "aresultFilepplication/xls"
-        const val MIME_ALL_TYPE = "*/*"
-    }
 
     private var maxFile: Boolean = false
     private lateinit var pickiT: PickiT
@@ -81,7 +65,7 @@ class PickerTypesSheet(
                 if (it.resultCode == Activity.RESULT_OK) {
 
                     if (it.data?.data != null) {
-                        startLic()
+                        requireActivity().startPickTCallbacks()
                         if (multipleCount != 0) {
                             if (sizeList < multipleCount) {
                                 sizeList += 1
@@ -101,14 +85,14 @@ class PickerTypesSheet(
                             if (multipleCount != 0) {
                                 if (sizeList < multipleCount) {
                                     sizeList += 1
-                                    startLic()
+                                    requireActivity().startPickTCallbacks()
                                     maxFile = false
                                     pushPath(uri)
                                 } else {
                                     maxFile = true
                                 }
                             } else {
-                                startLic()
+                                requireActivity().startPickTCallbacks()
                                 pushPath(uri)
                             }
                         }
@@ -146,14 +130,28 @@ class PickerTypesSheet(
 
         if (types.size > 1) {
             types.forEach {
-                val type = createType(it)
+                val type = fragment.createType(camera, multiple, it)
 
                 typesList.add(type)
             }
             adapter = TypesAdapter(typesList) {
                 type = it
 
-                openSingleType(type)
+                requireActivity().openSingleType(
+                    type = type,
+                    multipleCount = multipleCount,
+                    sizeList = sizeList,
+                    lastImage = lastImage,
+                    colorPrim = colorPrim,
+                    colorAcc = colorAcc,
+                    colorTxt = colorTxt,
+                    previewRequest = previewRequest,
+                ) { resultFile ->
+                    if (resultFile != null) {
+                        lastfile = resultFile
+                        addFile(File(resultFile.path!!))
+                    }
+                }
             }
             val span = if (typesList.size > 3) {
                 4
@@ -165,188 +163,48 @@ class PickerTypesSheet(
             binding.rvTypes.layoutManager = gridLayoutManager
             binding.rvTypes.adapter = adapter
         } else {
-            type = createType(types[0])
+            type = fragment.createType(camera, multiple, types[0])
 
-            openSingleType(type)
-        }
-    }
-
-    private fun createType(it: String): Type {
-        return when (it) {
-            MIME_ALL_TYPE -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.any_type),
-                    "",
-                    R.drawable.ic_any_type,
-                    false,
-                    multiple, "application/*"
-                )
-            }
-            MIME_TYPE_AUDIO -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.voice),
-                    "",
-                    R.drawable.ic_voice,
-                    false,
-                    multiple, "audio/*"
-                )
-            }
-            MIME_TYPE_TEXT -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.text),
-                    "",
-                    R.drawable.ic_text,
-                    false,
-                    multiple,
-                    "text/*"
-                )
-            }
-            MIME_TYPE_IMAGE -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.images),
-                    "",
-                    R.drawable.ic_gallary,
-                    camera,
-                    multiple, "image/*"
-                )
-            }
-            MIME_TYPE_VIDEO -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.video),
-                    "mp4",
-                    R.drawable.ic_video,
-                    camera,
-                    multiple, "video/*"
-                )
-            }
-            MIME_TYPE_PDF -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.pdf),
-                    "pdf",
-                    R.drawable.ic_pdf,
-                    false,
-                    multiple,
-                    "application/pdf"
-                )
-            }
-            MIME_TYPE_ZIP -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.compress),
-                    "zip",
-                    R.drawable.ic_zip,
-                    false,
-                    multiple, "application/zip"
-                )
-            }
-            MIME_TYPE_RAR -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.compress),
-                    "rar",
-                    R.drawable.ic_rar,
-                    false,
-                    multiple,
-                    "application/rar"
-                )
-            }
-            MIME_TYPE_DOC -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.word),
-                    "doc",
-                    R.drawable.ic_doc,
-                    false,
-                    multiple,
-                    "application/doc"
-                )
-            }
-            MIME_TYPE_DOCX -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.word),
-                    "docx",
-                    R.drawable.ic_doc,
-                    false,
-                    multiple,
-                    "application/docx"
-                )
-            }
-            MIME_TYPE_PPT -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.powerPoint),
-                    "ppt",
-                    R.drawable.ic_ppt,
-                    false,
-                    multiple,
-                    "application/ppt",
-                )
-            }
-            MIME_TYPE_PPTX -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.powerPoint),
-                    "pptx",
-                    R.drawable.ic_ppt,
-                    false,
-                    multiple,
-                    "application/pptx",
-                )
-            }
-            MIME_TYPE_XLS -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.excel),
-                    "xls",
-                    R.drawable.ic_xls,
-                    false,
-                    multiple,
-                    "application/xls",
-                )
-            }
-            else -> {
-                Type(
-                    it,
-                    fragment.getString(R.string.any_type),
-                    "",
-                    R.drawable.ic_any_type,
-                    false,
-                    multiple, "application/*"
-                )
-            }
-        }
-    }
-
-    @DelicateCoroutinesApi
-    private fun addFile(file: File) {
-        val fileData = FileData(
-            file, file.name, FileUtils.getReadableFileSize(file.length().toInt()),
-            file.path, file.extension, type.mediaType, preparePart(
-                file, if (file.extension.isEmpty()) {
-                    "${file.name}.${type.extension}"
-                } else {
-                    file.name
+            requireActivity().openSingleType(
+                type = type,
+                multipleCount = multipleCount,
+                sizeList = sizeList,
+                lastImage = lastImage,
+                colorPrim = colorPrim,
+                colorAcc = colorAcc,
+                colorTxt = colorTxt,
+                previewRequest = previewRequest,
+            ) { resultFile ->
+                if (resultFile != null) {
+                    lastfile = resultFile
+                    addFile(File(resultFile.path!!))
                 }
+            }
+        }
+    }
+
+    private fun addFile(file: File) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val fileData = FileData(
+                file, file.name, FileUtils.getReadableFileSize(file.length().toInt()),
+                file.path, file.extension, type.mediaType, preparePart(
+                    type, file, if (file.extension.isEmpty()) {
+                        "${file.name}.${type.extension}"
+                    } else {
+                        file.name
+                    }, partName
+                )
             )
-        )
-        if (file.extension.isEmpty()) {
-            fileData.path += ".${type.extension}"
-        }
-        if (file.extension.isEmpty()) {
-            fileData.name += ".${type.extension}"
-        }
-        if (fileData.extension.isEmpty()) {
-            fileData.extension = type.extension
-        }
-        if (type.key == MIME_TYPE_IMAGE) {
-            GlobalScope.launch {
+            if (file.extension.isEmpty()) {
+                fileData.path += ".${type.extension}"
+            }
+            if (file.extension.isEmpty()) {
+                fileData.name += ".${type.extension}"
+            }
+            if (fileData.extension.isEmpty()) {
+                fileData.extension = type.extension
+            }
+            if (type.key == MIME_TYPE_IMAGE) {
                 val compressedFile =
                     Compressor.compress(activity, file, Dispatchers.Main)
                 fileData.compressFile = compressedFile
@@ -357,41 +215,59 @@ class PickerTypesSheet(
                 if (file.extension.isEmpty()) {
                     fileData.compressPath += ".${type.extension}"
                 }
-                preparePart(fileData.compressFile!!, fileData.name)
-            }
-        } else {
-            if (lastfile != null) {
-                val thumbnail = lastfile!!.thumbPath
-                fileData.Thumbnail = thumbnail!!
-                preparePartThumbnail(File(fileData.Thumbnail), fileData.name)
-                lastfile = null
-            }
-        }
-        dialog?.dismiss()
+                preparePart(type, fileData.compressFile!!, fileData.name, partName)
 
-        resultFile(fileData, maxFile)
+            } else {
+                if (lastfile != null) {
+                    val thumbnail = lastfile!!.thumbPath
+                    fileData.Thumbnail = thumbnail!!
+                    preparePartThumbnail(
+                        type,
+                        File(fileData.Thumbnail),
+                        fileData.name,
+                        thumbnailPartName
+                    )
+                    lastfile = null
+                }
+            }
+            dialog?.dismiss()
+
+            resultFile(fileData, maxFile)
+        }
     }
 
-    fun show(sizeList: Int = 0): Boolean {
+    fun show(sizeList: Int = 0, type: Type? = null): Boolean {
         dismissed = false
         this.sizeList = sizeList
 
         if (sizeList > multipleCount && multiple) {
             return false
         }
-        if (this.isAdded) {
-            if (types.size == 1) {
-                type = createType(types[0])
+        if (type != null) {
+            this.type = type
+        } else {
+            this.type = fragment.createType(camera, multiple, types[0])
+        }
 
-                openSingleType(type)
-            } else {
-                this.dialog!!.show()
+        if (types.size == 1 || type != null) {
+            requireActivity().openSingleType(
+                type = this.type,
+                multipleCount = multipleCount,
+                sizeList = sizeList,
+                lastImage = lastImage,
+                colorPrim = colorPrim,
+                colorAcc = colorAcc,
+                colorTxt = colorTxt,
+                previewRequest = previewRequest,
+            ) { resultFile ->
+                if (resultFile != null) {
+                    lastfile = resultFile
+                    addFile(File(resultFile.path!!))
+                }
             }
         } else {
-            if (types.size == 1) {
-                type = createType(types[0])
-
-                openSingleType(type)
+            if (this.isAdded) {
+                this.dialog!!.show()
             } else {
                 this.show(activity.supportFragmentManager, "")
             }
@@ -402,11 +278,11 @@ class PickerTypesSheet(
     override fun onStart() {
         super.onStart()
 
-        startLic()
+        requireActivity().startPickTCallbacks()
     }
 
-    private fun startLic() {
-        pickiT = PickiT(activity, object : PickiTCallbacks {
+    private fun Activity.startPickTCallbacks() {
+        pickiT = PickiT(this, object : PickiTCallbacks {
             override fun PickiTonUriReturned() {
             }
 
@@ -427,7 +303,7 @@ class PickerTypesSheet(
             }
 
             override fun PickiTonMultipleCompleteListener(
-                paths: java.util.ArrayList<String?>?,
+                paths: ArrayList<String?>?,
                 wasSuccessful: Boolean,
                 Reason: String
             ) {
@@ -442,103 +318,7 @@ class PickerTypesSheet(
                 }
             }
 
-        }, activity)
+        }, this)
     }
-
-    private fun openSingleType(type: Type) {
-        if (type.key == MIME_TYPE_IMAGE || type.key == MIME_TYPE_VIDEO) {
-
-            if (type.key == MIME_TYPE_VIDEO) {
-                activity.openVideoAlbum(
-                    multipleCount - sizeList,
-                    lastImage,
-                    type.camera, colorPrim, colorAcc, colorTxt
-                ) { result ->
-                    if (!result.isNullOrEmpty()) {
-                        result.forEach { itx ->
-                            if (!lastImage.contains(itx)) {
-                                lastImage.add(itx)
-                                lastfile = itx
-                                addFile(File(itx.path!!))
-                            }
-                        }
-                    }
-                }
-
-            } else {
-                activity.openAlbum(
-                    multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt,
-                ) { result ->
-                    if (!result.isNullOrEmpty()) {
-                        result.forEach { itx ->
-                            if (!lastImage.contains(itx)) {
-                                lastImage.add(itx)
-                                addFile(File(itx.path!!))
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            val intent = Intent(activity, MiraFilePickerActivity::class.java)
-            intent.putExtra("multiple", type.multiple)
-            intent.putExtra("type", type.key)
-            intent.putExtra("camera", type.camera)
-            previewRequest.launch(intent)
-        }
-    }
-
-    private fun preparePart(
-        file: File, fileName: String
-    ): MultipartBody.Part {
-        val requestFile = RequestBody.create(
-            okhttp3.MediaType.parse(type.mediaType),
-            file
-        )
-        return MultipartBody.Part.createFormData(
-            partName,
-            fileName,
-            requestFile
-        )
-    }
-
-    private fun preparePartThumbnail(
-        file: File, fileName: String
-    ): MultipartBody.Part {
-        val requestFile = RequestBody.create(
-            okhttp3.MediaType.parse(type.mediaType),
-            file
-        )
-        return MultipartBody.Part.createFormData(
-            thumbnailPartName,
-            fileName,
-            requestFile
-        )
-    }
-
-/*    private fun preparePart(
-        ImageFile: Bitmap, fileName: String
-    ): MultipartBody.Part? {
-        return try {
-            val file = File(activity.cacheDir, ImageFile.config.name)
-            file.createNewFile()
-            val bos = ByteArrayOutputStream()
-            ImageFile.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos)
-            val bitmapData: ByteArray = bos.toByteArray()
-            val fos = FileOutputStream(file)
-            fos.write(bitmapData)
-            fos.flush()
-            fos.close()
-            val requestBody = RequestBody.create(
-                okhttp3.MediaType.parse(""),
-                file
-            )
-
-            return MultipartBody.Part.createFormData(partName, fileName, requestBody)
-        } catch (e: java.lang.Exception) {
-            null
-        }
-    }
-*/
 
 }

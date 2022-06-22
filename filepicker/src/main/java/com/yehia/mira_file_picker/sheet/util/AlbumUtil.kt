@@ -12,13 +12,62 @@ import java.util.*
 
 object AlbumUtil {
 
-    fun Activity.openAlbum(
+    fun Activity.openGalleryAlbum(
         Counter: Int,
         ImagesFiles: ArrayList<AlbumFile>,
         camera: Boolean = false,
-        colorPrim: Int = R.color.gray,
-        colorAcc: Int = R.color.gray,
-        colorTxt: Int = R.color.black,
+        colorPrim: Int = R.color.gray_al_mai,
+        colorAcc: Int = R.color.gray_al_mai,
+        colorTxt: Int = R.color.black_al_mai,
+        action: Action<ArrayList<AlbumFile>>,
+    ) {
+        Album.initialize(
+            AlbumConfig.newBuilder(this)
+                .setAlbumLoader(MediaLoader())
+                .setLocale(Locale(Locale.getDefault().language)).build()
+        )
+        Album.album(this) // Image and video mix options.
+            .multipleChoice() // Multi-Mode, Single-Mode: singleChoice().
+            .columnCount(3) // The number of columns in the page list.
+            .selectCount(Counter) // Choose up to a few images.
+            .camera(camera) // Whether the camera appears in the Item.
+            .checkedList(ImagesFiles) // To reverse the list.
+            .widget(
+                Widget.newDarkBuilder(this)
+                    .title("")
+                    .statusBarColor(ContextCompat.getColor(this, colorPrim))
+                    .toolBarColor(ContextCompat.getColor(this, colorPrim))
+                    .navigationBarColor(ContextCompat.getColor(this, colorTxt))
+                    .buttonStyle( // Used to configure the style of button when the image/video is not found.
+                        Widget.ButtonStyle.newLightBuilder(this) // With Widget's Builder model.
+                            .setButtonSelector(
+                                ContextCompat.getColor(this, colorPrim),
+                                ContextCompat.getColor(this, colorAcc)
+                            ) // Button selector.
+                            .build()
+                    )
+                    .mediaItemCheckSelector(
+                        ContextCompat.getColor(this, colorAcc),
+                        ContextCompat.getColor(this, colorPrim)
+                    ) // Image or video selection box.
+                    .bucketItemCheckSelector(
+                        ContextCompat.getColor(this, colorAcc),
+                        ContextCompat.getColor(this, colorPrim)
+                    ) // Select the folder selection box.
+                    .build()
+            )
+            .onResult(action)
+            .onCancel { }
+            .start()
+    }
+
+    fun Activity.openImageAlbum(
+        Counter: Int,
+        ImagesFiles: ArrayList<AlbumFile>,
+        camera: Boolean = false,
+        colorPrim: Int = R.color.gray_al_mai,
+        colorAcc: Int = R.color.gray_al_mai,
+        colorTxt: Int = R.color.black_al_mai,
         action: Action<ArrayList<AlbumFile>>,
     ) {
         Album.initialize(
@@ -65,9 +114,9 @@ object AlbumUtil {
         Counter: Int,
         ImagesFiles: ArrayList<AlbumFile>,
         camera: Boolean = false,
-        colorPrim: Int = R.color.gray,
-        colorAcc: Int = R.color.gray,
-        colorTxt: Int = R.color.black,
+        colorPrim: Int = R.color.gray_al_mai,
+        colorAcc: Int = R.color.gray_al_mai,
+        colorTxt: Int = R.color.black_al_mai,
         action: Action<ArrayList<AlbumFile>>,
     ) {
         Album.initialize(
@@ -110,10 +159,10 @@ object AlbumUtil {
             .start()
     }
 
-    fun Activity.openAlbum(
-        colorPrim: Int = R.color.gray,
-        colorAcc: Int = R.color.gray,
-        colorTxt: Int = R.color.black,
+    fun Activity.openImageAlbum(
+        colorPrim: Int = R.color.gray_al_mai,
+        colorAcc: Int = R.color.gray_al_mai,
+        colorTxt: Int = R.color.black_al_mai,
         action: Action<ArrayList<AlbumFile>>,
     ) {
         Album.initialize(
@@ -157,9 +206,9 @@ object AlbumUtil {
     }
 
     fun Activity.openSingleAlbum(
-        colorPrim: Int = R.color.gray,
-        colorAcc: Int = R.color.gray,
-        colorTxt: Int = R.color.black,
+        colorPrim: Int = R.color.gray_al_mai,
+        colorAcc: Int = R.color.gray_al_mai,
+        colorTxt: Int = R.color.black_al_mai,
         action: Action<ArrayList<AlbumFile>>,
     ) {
         Album.initialize(
