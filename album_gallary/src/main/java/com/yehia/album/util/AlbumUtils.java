@@ -27,15 +27,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import androidx.annotation.ColorInt;
-import androidx.annotation.IntRange;
-import androidx.annotation.NonNull;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.webkit.MimeTypeMap;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.yehia.album.provider.CameraFileProvider;
 import com.yehia.album.widget.divider.Api20ItemDivider;
@@ -167,7 +168,6 @@ public class AlbumUtils {
      * Generate a random jpg file path.
      *
      * @return file path.
-     *
      * @deprecated use {@link #randomJPGPath(Context)} instead.
      */
     @NonNull
@@ -181,12 +181,11 @@ public class AlbumUtils {
      * Generate a random jpg file path.
      *
      * @param context context.
-     *
      * @return file path.
      */
     @NonNull
     public static String randomJPGPath(Context context) {
-        if(!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             return randomJPGPath(context.getCacheDir());
         }
         return randomJPGPath();
@@ -207,7 +206,6 @@ public class AlbumUtils {
      * Generate a random mp4 file path.
      *
      * @return file path.
-     *
      * @deprecated use {@link #randomMP4Path(Context)} instead.
      */
     @NonNull
@@ -221,12 +219,11 @@ public class AlbumUtils {
      * Generate a random mp4 file path.
      *
      * @param context context.
-     *
      * @return file path.
      */
     @NonNull
     public static String randomMP4Path(Context context) {
-        if(!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             return randomMP4Path(context.getCacheDir());
         }
         return randomMP4Path();
@@ -303,7 +300,10 @@ public class AlbumUtils {
      * @param color    color.
      */
     public static void setDrawableTint(@NonNull Drawable drawable, @ColorInt int color) {
-        DrawableCompat.setTint(DrawableCompat.wrap(drawable.mutate()), color);
+        try {
+            DrawableCompat.setTint(DrawableCompat.wrap(drawable.mutate()), color);
+        } catch (Exception e) {
+        }
     }
 
     /**
