@@ -65,7 +65,7 @@ class PickerTypesSheet(
                 if (it.resultCode == Activity.RESULT_OK) {
 
                     if (it.data?.data != null) {
-                        requireActivity().startPickTCallbacks()
+                        activity.startPickTCallbacks()
                         if (multipleCount != 0) {
                             if (sizeList < multipleCount) {
                                 sizeList += 1
@@ -85,14 +85,14 @@ class PickerTypesSheet(
                             if (multipleCount != 0) {
                                 if (sizeList < multipleCount) {
                                     sizeList += 1
-                                    requireActivity().startPickTCallbacks()
+                                    activity.startPickTCallbacks()
                                     maxFile = false
                                     pushPath(uri)
                                 } else {
                                     maxFile = true
                                 }
                             } else {
-                                requireActivity().startPickTCallbacks()
+                                activity.startPickTCallbacks()
                                 pushPath(uri)
                             }
                         }
@@ -137,7 +137,7 @@ class PickerTypesSheet(
             adapter = TypesAdapter(typesList) {
                 type = it
 
-                requireActivity().openSingleType(
+                activity.openSingleType(
                     type = type,
                     multipleCount = multipleCount,
                     sizeList = sizeList,
@@ -165,7 +165,7 @@ class PickerTypesSheet(
         } else {
             type = fragment.createType(camera, multiple, types[0])
 
-            requireActivity().openSingleType(
+            activity.openSingleType(
                 type = type,
                 multipleCount = multipleCount,
                 sizeList = sizeList,
@@ -250,7 +250,7 @@ class PickerTypesSheet(
         }
 
         if (types.size == 1 || type != null) {
-            requireActivity().openSingleType(
+            activity.openSingleType(
                 type = this.type,
                 multipleCount = multipleCount,
                 sizeList = sizeList,
@@ -278,7 +278,7 @@ class PickerTypesSheet(
     override fun onStart() {
         super.onStart()
 
-        requireActivity().startPickTCallbacks()
+        activity.startPickTCallbacks()
     }
 
     private fun Activity.startPickTCallbacks() {

@@ -12,8 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
-import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_IMAGE
+//import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_IMAGE
 import com.yehia.mira_file_picker.sheet.model.FileData
+import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_IMAGE
 import com.yehia.myapplication.databinding.FragmentTestBinding
 import kotlinx.coroutines.DelicateCoroutinesApi
 import retrofit2.Call
