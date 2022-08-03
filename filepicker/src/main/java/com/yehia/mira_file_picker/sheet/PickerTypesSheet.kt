@@ -25,7 +25,6 @@ import com.yehia.mira_file_picker.sheet.util.preparePart
 import com.yehia.mira_file_picker.sheet.util.preparePartThumbnail
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -320,5 +319,4 @@ class PickerTypesSheet(
 
         }, this)
     }
-
 }
