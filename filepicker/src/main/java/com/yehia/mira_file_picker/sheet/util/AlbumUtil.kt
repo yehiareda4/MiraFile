@@ -10,6 +10,7 @@ import com.yehia.album.api.widget.Widget
 import com.yehia.mira_file_picker.R
 import java.util.*
 
+
 object AlbumUtil {
 
     fun Activity.openGalleryAlbum(
@@ -247,6 +248,26 @@ object AlbumUtil {
             .onResult(action)
             .onCancel { }
             .start()
+    }
+
+    fun Activity.openCamera(
+        action: Action<String>,
+    ) {
+        Album.initialize(
+            AlbumConfig.newBuilder(this)
+                .setAlbumLoader(MediaLoader())
+                .setLocale(Locale.getDefault()).build()
+        )
+
+        Album.camera(this)
+            .video() // Record Video.
+            .quality(1) // Video quality, [0, 1].
+            .limitDuration(Long.MAX_VALUE) // The longest duration of the video is in milliseconds.
+            .limitBytes(Long.MAX_VALUE) // Maximum size of the video, in bytes.
+            .onResult(action)
+            .onCancel { }
+            .start()
+
     }
 
 }

@@ -11,6 +11,9 @@ import com.yehia.mira_file_picker.sheet.model.Type
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openGalleryAlbum
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openImageAlbum
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openVideoAlbum
+import com.yehia.mira_file_picker.sheet.util.Keys.MIME_ALL_TYPE
+import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_IMAGE
+import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_VIDEO
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -170,10 +173,13 @@ fun Activity.openSingleType(
 ) {
     when (type.key) {
         Keys.MIME_TYPE_IMAGE -> {
+            if (multipleCount == 1) {
+                lastImage.clear()
+            }
             this.openImageAlbum(
                 multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt,
             ) { result ->
-                if (!result.isNullOrEmpty()) {
+                if (result.isNotEmpty()) {
                     result.forEach { itx ->
                         if (!lastImage.contains(itx)) {
                             lastImage.add(itx)
@@ -227,7 +233,16 @@ fun preparePart(
     type: Type, file: File, fileName: String, partName: String
 ): MultipartBody.Part {
     val requestFile = RequestBody.create(
-        okhttp3.MediaType.parse(type.mediaType),
+        okhttp3.MediaType.parse(
+            when (type.mediaType) {
+                MIME_ALL_TYPE -> when (file.extension) {
+                    "png", "jpg", "jpeg", "jfif", "pjpeg", "pjp" -> MIME_TYPE_IMAGE
+                    "MP4", "MOV", "WMV", "AVI", "AVCHD", "FLV", "F4V", "SWF", "MKV", "WEBM" -> MIME_TYPE_VIDEO
+                    else -> "application/${file.extension}"
+                }
+                else -> type.mediaType
+            }
+        ),
         file
     )
     return MultipartBody.Part.createFormData(

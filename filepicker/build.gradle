@@ -24,8 +24,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
@@ -55,11 +55,11 @@ dependencies {
     implementation "de.hdodenhof:circleimageview:3.1.0"
     implementation "com.intuit.sdp:sdp-android:1.0.6"
 
-    implementation 'id.zelory:compressor:3.0.1'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
+
+//    implementation 'id.zelory:compressor:3.0.1'
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation project(path: ':album_gallary')
-//    implementation project(path: ':album_media')
 
     implementation 'com.github.bumptech.glide:glide:4.13.1'
 

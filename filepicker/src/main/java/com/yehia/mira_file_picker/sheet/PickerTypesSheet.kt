@@ -6,12 +6,12 @@ import android.net.Uri
 import android.os.Build
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yehia.album.AlbumFile
 import com.yehia.mira_file_picker.FileUtils
+import com.yehia.mira_file_picker.FileUtils.getFile
 import com.yehia.mira_file_picker.R
 import com.yehia.mira_file_picker.databinding.SheetTypesBinding
 import com.yehia.mira_file_picker.pickit.PickiT
@@ -23,17 +23,12 @@ import com.yehia.mira_file_picker.sheet.util.createType
 import com.yehia.mira_file_picker.sheet.util.openSingleType
 import com.yehia.mira_file_picker.sheet.util.preparePart
 import com.yehia.mira_file_picker.sheet.util.preparePartThumbnail
-import id.zelory.compressor.Compressor
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.File
 
 class PickerTypesSheet(
-    private val activity: AppCompatActivity,
     private val fragment: Fragment,
     private val types: MutableList<String>,
-    private val partName: String,
+    private val partName: String = "image",
     private val thumbnailPartName: String = "",
     private val camera: Boolean = false,
     private val multiple: Boolean = false,
@@ -44,6 +39,7 @@ class PickerTypesSheet(
     val resultFile: (FileData, Boolean) -> Unit
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
+    private var pathScopeEx: String = ""
     private var lastImage: ArrayList<AlbumFile> = ArrayList()
     private var lastfile: AlbumFile? = null
     private var dismissed: Boolean = false
@@ -64,7 +60,7 @@ class PickerTypesSheet(
                 if (it.resultCode == Activity.RESULT_OK) {
 
                     if (it.data?.data != null) {
-                        activity.startPickTCallbacks()
+                        (fragment.requireActivity()).startPickTCallbacks()
                         if (multipleCount != 0) {
                             if (sizeList < multipleCount) {
                                 sizeList += 1
@@ -84,14 +80,14 @@ class PickerTypesSheet(
                             if (multipleCount != 0) {
                                 if (sizeList < multipleCount) {
                                     sizeList += 1
-                                    activity.startPickTCallbacks()
+                                    (fragment.requireActivity()).startPickTCallbacks()
                                     maxFile = false
                                     pushPath(uri)
                                 } else {
                                     maxFile = true
                                 }
                             } else {
-                                activity.startPickTCallbacks()
+                                (fragment.requireActivity()).startPickTCallbacks()
                                 pushPath(uri)
                             }
                         }
@@ -112,10 +108,11 @@ class PickerTypesSheet(
 
     private fun pushPath(data: Uri) {
         val path = FileUtils.getPath(activity, data)
+        pathScopeEx = getFile(context, data).extension
         if (path != null) {
             val uri =
                 FileUtils.createCopyAndReturnRealPath(
-                    activity,
+                    (fragment.requireActivity()),
                     data
                 )
             pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
@@ -136,7 +133,7 @@ class PickerTypesSheet(
             adapter = TypesAdapter(typesList) {
                 type = it
 
-                activity.openSingleType(
+                (fragment.requireActivity()).openSingleType(
                     type = type,
                     multipleCount = multipleCount,
                     sizeList = sizeList,
@@ -164,7 +161,7 @@ class PickerTypesSheet(
         } else {
             type = fragment.createType(camera, multiple, types[0])
 
-            activity.openSingleType(
+            (fragment.requireActivity()).openSingleType(
                 type = type,
                 multipleCount = multipleCount,
                 sizeList = sizeList,
@@ -183,56 +180,42 @@ class PickerTypesSheet(
     }
 
     private fun addFile(file: File) {
-        CoroutineScope(Dispatchers.Main).launch {
-            val fileData = FileData(
-                file, file.name, FileUtils.getReadableFileSize(file.length().toInt()),
-                file.path, file.extension, type.mediaType, preparePart(
-                    type, file, if (file.extension.isEmpty()) {
-                        "${file.name}.${type.extension}"
-                    } else {
-                        file.name
-                    }, partName
-                )
+        val fileData = FileData(
+            file, file.name, FileUtils.getReadableFileSize(file.length().toInt()),
+            file.path, file.extension, type.mediaType, preparePart(
+                type, file, if (file.extension.isEmpty()) {
+                    "${file.name}.${type.extension.ifEmpty { pathScopeEx }}"
+                } else {
+                    file.name
+                }, partName
             )
-            if (file.extension.isEmpty()) {
-                fileData.path += ".${type.extension}"
-            }
-            if (file.extension.isEmpty()) {
-                fileData.name += ".${type.extension}"
-            }
-            if (fileData.extension.isEmpty()) {
-                fileData.extension = type.extension
-            }
-            if (type.key == MIME_TYPE_IMAGE) {
-                val compressedFile =
-                    Compressor.compress(activity, file, Dispatchers.Main)
-                fileData.compressFile = compressedFile
-                fileData.compressName = compressedFile.name
-                fileData.compressSize =
-                    FileUtils.getReadableFileSize(compressedFile.length().toInt())
-                fileData.compressPath = compressedFile.path
-                if (file.extension.isEmpty()) {
-                    fileData.compressPath += ".${type.extension}"
-                }
-                preparePart(type, fileData.compressFile!!, fileData.name, partName)
-
-            } else {
-                if (lastfile != null) {
-                    val thumbnail = lastfile!!.thumbPath
-                    fileData.Thumbnail = thumbnail!!
-                    preparePartThumbnail(
-                        type,
-                        File(fileData.Thumbnail),
-                        fileData.name,
-                        thumbnailPartName
-                    )
-                    lastfile = null
-                }
-            }
-            dialog?.dismiss()
-
-            resultFile(fileData, maxFile)
+        )
+        if (file.extension.isEmpty()) {
+            fileData.path += ".${type.extension.ifEmpty { pathScopeEx }}"
         }
+        if (file.extension.isEmpty()) {
+            fileData.name += ".${type.extension.ifEmpty { pathScopeEx }}"
+        }
+        if (fileData.extension.isEmpty()) {
+            fileData.extension = type.extension.ifEmpty { pathScopeEx }
+        }
+        if (type.key != MIME_TYPE_IMAGE) {
+            if (lastfile != null) {
+                val thumbnail = lastfile!!.thumbPath
+                fileData.Thumbnail = thumbnail!!
+                preparePartThumbnail(
+                    type,
+                    File(fileData.Thumbnail),
+                    fileData.name,
+                    thumbnailPartName
+                )
+                lastfile = null
+            }
+        }
+        pathScopeEx = ""
+        dialog?.dismiss()
+
+        resultFile(fileData, maxFile)
     }
 
     fun show(sizeList: Int = 0, type: Type? = null): Boolean {
@@ -249,7 +232,7 @@ class PickerTypesSheet(
         }
 
         if (types.size == 1 || type != null) {
-            activity.openSingleType(
+            (fragment.requireActivity()).openSingleType(
                 type = this.type,
                 multipleCount = multipleCount,
                 sizeList = sizeList,
@@ -268,7 +251,7 @@ class PickerTypesSheet(
             if (this.isAdded) {
                 this.dialog!!.show()
             } else {
-                this.show(activity.supportFragmentManager, "")
+                this.show((fragment.requireActivity()).supportFragmentManager, "")
             }
         }
         return true
@@ -277,7 +260,7 @@ class PickerTypesSheet(
     override fun onStart() {
         super.onStart()
 
-        activity.startPickTCallbacks()
+        (fragment.requireActivity()).startPickTCallbacks()
     }
 
     private fun Activity.startPickTCallbacks() {

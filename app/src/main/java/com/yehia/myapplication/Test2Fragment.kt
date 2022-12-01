@@ -8,15 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
-//import com.yehia.mira_file_picker.sheet.PickerTypesSheet.Companion.MIME_TYPE_IMAGE
 import com.yehia.mira_file_picker.sheet.model.FileData
-import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_IMAGE
+import com.yehia.mira_file_picker.sheet.util.Keys
 import com.yehia.myapplication.databinding.FragmentTestBinding
-import kotlinx.coroutines.DelicateCoroutinesApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -74,24 +71,23 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         binding.tvChooseFile.setOnClickListener(this)
 
         val types: MutableList<String> = ArrayList()
-//        types.add(MIME_TYPE_AUDIO)
-//        types.add(MIME_TYPE_TEXT)
-        types.add(MIME_TYPE_IMAGE)
-//        types.add(MIME_ALL_TYPE)
-//        types.add(MIME_TYPE_PDF)
-//        types.add(MIME_TYPE_ZIP)
-//        types.add(MIME_TYPE_RAR)
-//        types.add(MIME_TYPE_DOC)
-//        types.add(MIME_TYPE_PPT)
-//        types.add(MIME_TYPE_XLS)
+        types.add(Keys.MIME_TYPE_AUDIO)
+        types.add(Keys.MIME_TYPE_TEXT)
+        types.add(Keys.MIME_TYPE_IMAGE)
+        types.add(Keys.MIME_ALL_TYPE)
+        types.add(Keys.MIME_TYPE_PDF)
+        types.add(Keys.MIME_TYPE_ZIP)
+        types.add(Keys.MIME_TYPE_RAR)
+        types.add(Keys.MIME_TYPE_DOC)
+        types.add(Keys.MIME_TYPE_PPT)
+        types.add(Keys.MIME_TYPE_XLS)
 
         typesSheet = PickerTypesSheet(
-            requireActivity() as AppCompatActivity,
             this,
             types, "file",
             camera = true,
             multiple = true,
-            multipleCount = 5,
+            multipleCount = 1,
         ) { file, maxFile ->
             selectedFiles?.add(file)
             adapter!!.notifyDataSetChanged()
@@ -103,7 +99,6 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         return binding.root
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("NotifyDataSetChanged")
     override fun onClick(v: View?) {
         typesSheet.show()
