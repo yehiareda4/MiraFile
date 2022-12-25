@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.aait.miranewfilepiker.R;
 import com.yehia.mira_file_picker.sheet.model.FileData;
 
 import java.util.List;
@@ -16,8 +17,8 @@ import java.util.List;
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
 
     private final OnClick onClick;
-    private List<FileData> data;
-    private Activity context;
+    private final List<FileData> data;
+    private final Activity context;
 
     public ItemAdapter(List<FileData> data, Activity context, OnClick onClick) {
         this.data = data;
@@ -38,22 +39,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull ItemAdapter.MyViewHolder holder, int position) {
         holder.textView.setText(data.get(position).getPath());
 
-        holder.textView.setOnClickListener(view -> {
-//            Intent intent = new Intent(Intent.ACTION_VIEW);
-//            intent.setDataAndType(Uri.parse(data.get(position)), "application/pdf");
-//
-//            try {
-//                context.startActivity(intent);
-//            } catch (ActivityNotFoundException e) {
-//                //if user doesn't have pdf reader instructing to download a pdf reader
-//                Log.d("TAG", "onBindViewHolder: $e");
-//            }
-//
-////            Intent i = new Intent(Intent.ACTION_VIEW);
-////            i.setData(Uri.parse(data.get(position).substring(0, 1)));
-////            context.startActivity(i);
-            onClick.onClick(data.get(position));
-        });
+        holder.textView.setOnClickListener(view -> onClick.onClick(data.get(position)));
     }
 
     @Override
@@ -61,8 +47,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
         return data.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView textView;
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        private final TextView textView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

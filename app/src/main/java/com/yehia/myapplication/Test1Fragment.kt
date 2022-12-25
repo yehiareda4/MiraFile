@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.yehia.myapplication.databinding.FragmentTest2Binding
+import com.aait.miranewfilepiker.R
+import com.aait.miranewfilepiker.databinding.FragmentTest2Binding
 
 class Test1Fragment : Fragment(), View.OnClickListener {
 
@@ -26,21 +27,11 @@ class Test1Fragment : Fragment(), View.OnClickListener {
         )
         binding.ivChooseFile.setOnClickListener(this)
 
-
         return binding.root
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onClick(v: View?) {
-
-//        if (!::test2Fragment.isInitialized) {
-//            test2Fragment = Test2Fragment()
-//        }
-//        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//        transaction.replace(R.id.frame, test2Fragment)
-//        transaction.addToBackStack(null)
-//        transaction.commit()
-
         findNavController().navigate(R.id.action_test1Fragment_to_test2Fragment)
     }
 }

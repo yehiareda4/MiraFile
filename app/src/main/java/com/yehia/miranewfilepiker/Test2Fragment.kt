@@ -102,18 +102,6 @@ class Test2Fragment : Fragment(), View.OnClickListener {
     @SuppressLint("NotifyDataSetChanged")
     override fun onClick(v: View?) {
         typesSheet.show()
-//        requireActivity().openAlbum(
-//            object : Action<java.util.ArrayList<AlbumFile>?> {
-//                override fun onAction(result: java.util.ArrayList<AlbumFile>?) {
-//                    if (!result.isNullOrEmpty()) {
-//                        result.forEach { itx ->
-////                            selectedFiles?.add(itx.path!!)
-////                            adapter!!.notifyDataSetChanged()
-//                        }
-//                    }
-//                }
-//            }
-//        )
     }
 
     fun provideRetrofit(): Retrofit {

@@ -2,7 +2,8 @@ package com.yehia.myapplication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.yehia.myapplication.databinding.ActivityMainBinding
+import com.aait.miranewfilepiker.R
+import com.aait.miranewfilepiker.databinding.ActivityMainBinding
 
 class MainActivityK : AppCompatActivity() {
 

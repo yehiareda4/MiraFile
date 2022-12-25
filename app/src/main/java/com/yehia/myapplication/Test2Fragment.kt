@@ -10,10 +10,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.aait.miranewfilepiker.databinding.FragmentTestBinding
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
 import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.mira_file_picker.sheet.util.Keys
-import com.yehia.myapplication.databinding.FragmentTestBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +27,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
     private var selectedFiles: MutableList<FileData>? = null
     private var adapter: ItemAdapter? = null
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -102,21 +103,9 @@ class Test2Fragment : Fragment(), View.OnClickListener {
     @SuppressLint("NotifyDataSetChanged")
     override fun onClick(v: View?) {
         typesSheet.show()
-//        requireActivity().openAlbum(
-//            object : Action<java.util.ArrayList<AlbumFile>?> {
-//                override fun onAction(result: java.util.ArrayList<AlbumFile>?) {
-//                    if (!result.isNullOrEmpty()) {
-//                        result.forEach { itx ->
-////                            selectedFiles?.add(itx.path!!)
-////                            adapter!!.notifyDataSetChanged()
-//                        }
-//                    }
-//                }
-//            }
-//        )
     }
 
-    fun provideRetrofit(): Retrofit {
+    private fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://abr-almodon.4hoste.com/api/")

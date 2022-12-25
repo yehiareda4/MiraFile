@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
@@ -220,7 +221,7 @@ class PickerTypesSheet(
 
     fun show(sizeList: Int = 0, type: Type? = null, cleanImages: Boolean = false): Boolean {
         dismissed = false
-        if (cleanImages) {
+        if (cleanImages || multipleCount == 1) {
             lastImage.clear()
         }
         this.sizeList = sizeList
@@ -304,5 +305,10 @@ class PickerTypesSheet(
             }
 
         }, this)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.bottomSheetFileDialogStyle)
     }
 }
