@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/test1Fragment"
-        android:name="com.yehia.myapplication.Test1Fragment"
+        android:name="com.yehia.miranewfilepiker.Test1Fragment"
         android:label="Test1Fragment">
         <action
             android:id="@+id/action_test1Fragment_to_test2Fragment"
@@ -14,6 +14,6 @@
     </fragment>
     <fragment
         android:id="@+id/test2Fragment"
-        android:name="com.yehia.myapplication.Test2Fragment"
+        android:name="com.yehia.miranewfilepiker.Test2Fragment"
         android:label="Test2Fragment" />
 </navigation>

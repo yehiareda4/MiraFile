@@ -35,12 +35,12 @@ class PickerTypesSheet(
     private var multipleCount: Int = 1,
     private val colorPrim: Int = R.color.gray_al_mai,
     private val colorAcc: Int = R.color.green_al_mai,
-    private val colorTxt: Int = R.color.black_al_mai,
+    private val colorTxt: Int = com.yehia.album.R.color.black_al_mai,
     val resultFile: (FileData, Boolean) -> Unit
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
     private var pathScopeEx: String = ""
-    private var lastImage: ArrayList<AlbumFile> = ArrayList()
+    var lastImage: ArrayList<AlbumFile> = ArrayList()
     private var lastfile: AlbumFile? = null
     private var dismissed: Boolean = false
     private var sizeList: Int = 0
@@ -218,8 +218,11 @@ class PickerTypesSheet(
         resultFile(fileData, maxFile)
     }
 
-    fun show(sizeList: Int = 0, type: Type? = null): Boolean {
+    fun show(sizeList: Int = 0, type: Type? = null, cleanImages: Boolean = false): Boolean {
         dismissed = false
+        if (cleanImages) {
+            lastImage.clear()
+        }
         this.sizeList = sizeList
 
         if (sizeList > multipleCount && multiple) {

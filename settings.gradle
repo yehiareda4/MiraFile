@@ -1,3 +1,18 @@
-include ':app', ':filepicker'
-rootProject.name = "Mira File Piker"
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "miraNewFilePiker"
+include ':app'
+include ':filepicker'
 include ':album_gallary'

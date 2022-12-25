@@ -167,7 +167,7 @@ fun Activity.openSingleType(
     lastImage: ArrayList<AlbumFile> = ArrayList(),
     colorPrim: Int = R.color.gray_al_mai,
     colorAcc: Int = R.color.gray_al_mai,
-    colorTxt: Int = R.color.black_al_mai,
+    colorTxt: Int = com.yehia.album.R.color.black_al_mai,
     previewRequest: ActivityResultLauncher<Intent>? = null,
     resultGallery: (AlbumFile?) -> Unit = {}
 ) {
