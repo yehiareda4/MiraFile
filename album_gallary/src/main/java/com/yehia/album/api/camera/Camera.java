@@ -16,7 +16,7 @@
 package com.yehia.album.api.camera;
 
 /**
- * Created by YanZhenjie on 2017/8/18.
+ * Created by yehia reda on 2017/8/18.
  */
 public interface Camera<Image, Video> {
 

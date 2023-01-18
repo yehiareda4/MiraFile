@@ -33,7 +33,7 @@ import com.yehia.album.util.SystemBar;
 import java.io.File;
 
 /**
- * Created by YanZhenjie on 2017/8/16.
+ * Created by yehia reda on 2017/8/16.
  */
 public class CameraActivity extends BaseActivity {
 

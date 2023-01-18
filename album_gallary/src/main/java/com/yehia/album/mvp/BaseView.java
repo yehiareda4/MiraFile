@@ -45,7 +45,7 @@ import com.yehia.album.R;
 
 /**
  * <p>View of MVP.</p>
- * Created by YanZhenjie on 2017/7/17.
+ * Created by yehia reda on 2017/7/17.
  */
 public abstract class BaseView<Presenter extends BasePresenter> {
 

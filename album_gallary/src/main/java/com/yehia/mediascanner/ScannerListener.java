@@ -19,7 +19,7 @@ import android.net.Uri;
 
 /**
  * <p>Scanner Listener.</p>
- * Created by YanZhenjie on 17-3-27.
+ * Created by yehia reda on 17-3-27.
  *
  * @deprecated not use.
  */

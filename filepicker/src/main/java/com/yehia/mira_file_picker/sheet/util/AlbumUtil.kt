@@ -6,6 +6,7 @@ import com.yehia.album.Action
 import com.yehia.album.Album
 import com.yehia.album.AlbumConfig
 import com.yehia.album.AlbumFile
+import com.yehia.album.Filter
 import com.yehia.album.api.widget.Widget
 import com.yehia.mira_file_picker.R
 import java.util.*

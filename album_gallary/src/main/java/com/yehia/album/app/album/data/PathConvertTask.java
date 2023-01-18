@@ -20,7 +20,7 @@ import android.os.AsyncTask;
 import com.yehia.album.AlbumFile;
 
 /**
- * Created by YanZhenjie on 2017/10/18.
+ * Created by yehia reda on 2017/10/18.
  */
 public class PathConvertTask extends AsyncTask<String, Void, AlbumFile> {
 

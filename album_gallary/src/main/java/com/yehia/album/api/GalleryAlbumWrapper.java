@@ -24,7 +24,7 @@ import com.yehia.album.app.gallery.GalleryAlbumActivity;
 
 /**
  * <p>Gallery wrapper.</p>
- * Created by yanzhenjie on 17-3-29.
+ * Created by yehia reda on 17-3-29.
  */
 public class GalleryAlbumWrapper extends BasicGalleryWrapper<GalleryAlbumWrapper, AlbumFile, String, AlbumFile> {
 

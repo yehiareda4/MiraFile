@@ -26,7 +26,7 @@ import com.yehia.album.R;
 import com.yehia.album.api.widget.Widget;
 
 /**
- * Created by YanZhenjie on 2018/4/10.
+ * Created by yehia reda on 2018/4/10.
  */
 public class LoadingDialog extends Dialog {
 

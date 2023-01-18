@@ -28,7 +28,7 @@ import com.yehia.album.app.Contract;
 import com.yehia.album.mvp.BaseActivity;
 
 /**
- * Created by YanZhenjie on 2017/3/28.
+ * Created by yehia reda on 2017/3/28.
  */
 public class NullActivity extends BaseActivity implements Contract.NullPresenter {
 

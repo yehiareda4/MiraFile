@@ -31,7 +31,7 @@ import com.yehia.album.util.AlbumUtils;
 import java.util.ArrayList;
 
 /**
- * Created by YanZhenjie on 2017/8/16.
+ * Created by yehia reda on 2017/8/16.
  */
 public class GalleryAlbumActivity extends BaseActivity implements Contract.GalleryPresenter {
 

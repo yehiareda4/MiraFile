@@ -26,7 +26,7 @@ import com.yehia.album.app.album.AlbumActivity;
 import java.util.ArrayList;
 
 /**
- * Created by YanZhenjie on 2017/8/16.
+ * Created by yehia reda on 2017/8/16.
  */
 public final class VideoSingleWrapper extends BasicChoiceVideoWrapper<VideoSingleWrapper, ArrayList<AlbumFile>, String, AlbumFile> {
 

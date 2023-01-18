@@ -20,7 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 /**
- * Created by YanZhenjie on 2018/4/20.
+ * Created by yehia reda on 2018/4/20.
  */
 class Drawer {
 

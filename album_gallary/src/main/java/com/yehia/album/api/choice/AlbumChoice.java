@@ -21,7 +21,7 @@ import com.yehia.album.api.AlbumMultipleWrapper;
 import com.yehia.album.api.AlbumSingleWrapper;
 
 /**
- * Created by YanZhenjie on 2017/8/16.
+ * Created by yehia reda on 2017/8/16.
  */
 public final class AlbumChoice implements Choice<AlbumMultipleWrapper, AlbumSingleWrapper> {
 

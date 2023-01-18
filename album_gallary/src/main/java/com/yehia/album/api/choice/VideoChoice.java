@@ -21,7 +21,7 @@ import com.yehia.album.api.VideoMultipleWrapper;
 import com.yehia.album.api.VideoSingleWrapper;
 
 /**
- * Created by YanZhenjie on 2017/8/16.
+ * Created by yehia reda on 2017/8/16.
  */
 public final class VideoChoice implements Choice<VideoMultipleWrapper, VideoSingleWrapper> {
 

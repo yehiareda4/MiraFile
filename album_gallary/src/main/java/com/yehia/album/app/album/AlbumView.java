@@ -43,7 +43,7 @@ import com.yehia.album.widget.ColorProgressBar;
 import com.yehia.album.widget.divider.Api21ItemDivider;
 
 /**
- * Created by YanZhenjie on 2018/4/7.
+ * Created by yehia reda on 2018/4/7.
  */
 class AlbumView extends Contract.AlbumView implements View.OnClickListener {
 

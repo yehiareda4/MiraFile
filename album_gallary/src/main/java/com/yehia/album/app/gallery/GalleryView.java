@@ -38,7 +38,7 @@ import com.yehia.album.util.SystemBar;
 import java.util.List;
 
 /**
- * Created by YanZhenjie on 2018/4/9.
+ * Created by yehia reda on 2018/4/9.
  */
 public class GalleryView<Data> extends Contract.GalleryView<Data> implements View.OnClickListener {
 

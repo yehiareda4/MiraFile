@@ -32,7 +32,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.yehia.album.R;
 
 /**
- * Created by YanZhenjie on 2017/12/8.
+ * Created by yehia reda on 2017/12/8.
  */
 class ActivitySource extends Source<Activity> {
 

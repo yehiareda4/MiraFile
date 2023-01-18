@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by YanZhenjie on 2018/4/6.
+ * Created by yehia reda on 2018/4/6.
  */
 public class BaseActivity extends AppCompatActivity implements Bye {
 

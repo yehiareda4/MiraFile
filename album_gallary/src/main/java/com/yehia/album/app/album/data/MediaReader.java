@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by YanZhenjie on 2017/8/15.
+ * Created by yehia reda on 2017/8/15.
  */
 public class MediaReader {
 

@@ -23,7 +23,7 @@ import com.yehia.album.app.gallery.GalleryActivity;
 
 /**
  * <p>Gallery wrapper.</p>
- * Created by yanzhenjie on 17-3-29.
+ * Created by yehia reda on 17-3-29.
  */
 public class GalleryWrapper extends BasicGalleryWrapper<GalleryWrapper, String, String, String> {
 

@@ -21,7 +21,7 @@ import androidx.annotation.Nullable;
 import com.yehia.album.Action;
 
 /**
- * Created by YanZhenjie on 2017/8/18.
+ * Created by yehia reda on 2017/8/18.
  */
 public abstract class BasicCameraWrapper<Returner extends BasicCameraWrapper> {
 

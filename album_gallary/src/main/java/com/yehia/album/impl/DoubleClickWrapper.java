@@ -18,7 +18,7 @@ package com.yehia.album.impl;
 import android.view.View;
 
 /**
- * Created by YanZhenjie on 2018/4/20.
+ * Created by yehia reda on 2018/4/20.
  */
 public class DoubleClickWrapper implements View.OnClickListener {
 

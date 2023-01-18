@@ -18,7 +18,7 @@ package com.yehia.album.impl;
 import android.widget.CompoundButton;
 
 /**
- * Created by YanZhenjie on 2018/4/11.
+ * Created by yehia reda on 2018/4/11.
  */
 public interface OnCheckedClickListener {
 

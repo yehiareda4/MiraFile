@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 /**
  * <p>Album wrapper.</p>
- * Created by yanzhenjie on 17-3-29.
+ * Created by yehia reda on 17-3-29.
  */
 public class AlbumMultipleWrapper extends BasicChoiceAlbumWrapper<AlbumMultipleWrapper, ArrayList<AlbumFile>, String, ArrayList<AlbumFile>> {
 

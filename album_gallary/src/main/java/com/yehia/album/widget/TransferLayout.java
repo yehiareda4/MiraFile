@@ -22,7 +22,7 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 /**
- * Created by YanZhenjie on 2018/4/11.
+ * Created by yehia reda on 2018/4/11.
  */
 public class TransferLayout extends FrameLayout {
 

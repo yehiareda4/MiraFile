@@ -25,7 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Created by YanZhenjie on 2018/4/7.
+ * Created by yehia reda on 2018/4/7.
  */
 public class BaseFragment extends Fragment implements Bye {
     @Nullable

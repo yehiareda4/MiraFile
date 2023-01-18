@@ -21,7 +21,7 @@ import com.yehia.album.api.ImageCameraWrapper;
 import com.yehia.album.api.VideoCameraWrapper;
 
 /**
- * Created by YanZhenjie on 2017/8/18.
+ * Created by yehia reda on 2017/8/18.
  */
 public class AlbumCamera implements Camera<ImageCameraWrapper, VideoCameraWrapper> {
 

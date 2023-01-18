@@ -23,7 +23,7 @@ import androidx.cardview.widget.CardView;
 import android.util.AttributeSet;
 
 /**
- * Created by YanZhenjie on 2018/4/18.
+ * Created by yehia reda on 2018/4/18.
  */
 public class SquareCardView extends CardView {
 

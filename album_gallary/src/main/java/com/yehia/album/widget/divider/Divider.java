@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * <p>Divider of {@code RecyclerView}, you can get the width and height of the line.</p>
- * Created by YanZhenjie on 2017/8/16.
+ * Created by yehia reda on 2017/8/16.
  */
 public abstract class Divider extends RecyclerView.ItemDecoration {
 

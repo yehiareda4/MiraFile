@@ -19,7 +19,7 @@ import android.content.Context;
 import androidx.annotation.IntRange;
 
 /**
- * Created by YanZhenjie on 2017/11/8.
+ * Created by yehia reda on 2017/11/8.
  */
 public abstract class BasicChoiceVideoWrapper<Returner extends BasicChoiceVideoWrapper, Result, Cancel, Checked> extends BasicChoiceWrapper<Returner, Result, Cancel, Checked> {
 

@@ -21,7 +21,7 @@ import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 
 /**
- * Created by YanZhenjie on 2018/4/19.
+ * Created by yehia reda on 2018/4/19.
  */
 public class SquareImageView extends androidx.appcompat.widget.AppCompatImageView {
 

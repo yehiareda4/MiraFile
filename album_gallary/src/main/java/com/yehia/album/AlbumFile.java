@@ -23,7 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Created by YanZhenjie on 2017/8/15.
+ * Created by yehia reda on 2017/8/15.
  */
 public class AlbumFile implements Parcelable, Comparable<AlbumFile> {
 

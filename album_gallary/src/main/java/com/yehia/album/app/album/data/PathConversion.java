@@ -27,7 +27,7 @@ import com.yehia.album.util.AlbumUtils;
 import java.io.File;
 
 /**
- * Created by YanZhenjie on 2017/10/18.
+ * Created by yehia reda on 2017/10/18.
  */
 public class PathConversion {
 

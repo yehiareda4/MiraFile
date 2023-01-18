@@ -23,7 +23,7 @@ import com.yehia.album.api.widget.Widget;
 
 /**
  * <p>Album basic wrapper.</p>
- * Created by yanzhenjie on 17-3-29.
+ * Created by yehia reda on 17-3-29.
  */
 public abstract class BasicAlbumWrapper<Returner extends BasicAlbumWrapper, Result, Cancel, Checked> {
 

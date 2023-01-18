@@ -16,7 +16,7 @@
 package com.yehia.album.mvp;
 
 /**
- * Created by YanZhenjie on 2017/12/27.
+ * Created by yehia reda on 2017/12/27.
  */
 public interface Bye {
 

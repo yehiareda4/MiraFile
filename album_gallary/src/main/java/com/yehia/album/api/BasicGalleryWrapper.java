@@ -23,7 +23,7 @@ import com.yehia.album.ItemAction;
 import java.util.ArrayList;
 
 /**
- * Created by YanZhenjie on 2017/8/19.
+ * Created by yehia reda on 2017/8/19.
  */
 public abstract class BasicGalleryWrapper<Returner extends BasicGalleryWrapper, Result, Cancel, Checked> extends BasicAlbumWrapper<Returner, ArrayList<Result>, Cancel, ArrayList<Checked>> {
 

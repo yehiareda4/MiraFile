@@ -23,7 +23,7 @@ import android.view.View;
 
 /**
  * <p>The implementation of divider adds dividers around the list.</p>
- * Created by YanZhenjie on 2017/8/14.
+ * Created by yehia reda on 2017/8/14.
  */
 public class Api21ItemDivider extends Divider {
 

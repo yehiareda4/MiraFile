@@ -31,7 +31,7 @@ import com.yehia.album.util.AlbumUtils;
 import com.yehia.album.util.SystemBar;
 
 /**
- * Created by YanZhenjie on 2018/4/7.
+ * Created by yehia reda on 2018/4/7.
  */
 class NullView extends Contract.NullView implements View.OnClickListener {
 

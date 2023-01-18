@@ -29,7 +29,7 @@ import com.yehia.album.mvp.BaseView;
 import java.util.List;
 
 /**
- * Created by YanZhenjie on 2018/4/7.
+ * Created by yehia reda on 2018/4/7.
  */
 public final class Contract {
 

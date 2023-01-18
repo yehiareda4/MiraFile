@@ -16,7 +16,7 @@
 package com.yehia.album.api.choice;
 
 /**
- * Created by YanZhenjie on 2017/8/16.
+ * Created by yehia reda on 2017/8/16.
  */
 public interface Choice<Multiple, Single> {
 
