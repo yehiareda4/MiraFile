@@ -20,7 +20,7 @@ object AlbumUtil {
         camera: Boolean = false,
         colorPrim: Int = R.color.gray_al_mai,
         colorAcc: Int = R.color.gray_al_mai,
-        colorTxt: Int = R.color.black_al_mai,
+        colorTxt: Int = com.yehia.album.R.color.black_al_mai,
         action: Action<ArrayList<AlbumFile>>,
     ) {
         Album.initialize(
@@ -69,7 +69,7 @@ object AlbumUtil {
         camera: Boolean = false,
         colorPrim: Int = R.color.gray_al_mai,
         colorAcc: Int = R.color.gray_al_mai,
-        colorTxt: Int = R.color.black_al_mai,
+        colorTxt: Int = com.yehia.album.R.color.black_al_mai,
         action: Action<ArrayList<AlbumFile>>,
     ) {
         Album.initialize(
@@ -118,7 +118,7 @@ object AlbumUtil {
         camera: Boolean = false,
         colorPrim: Int = R.color.gray_al_mai,
         colorAcc: Int = R.color.gray_al_mai,
-        colorTxt: Int = R.color.black_al_mai,
+        colorTxt: Int = com.yehia.album.R.color.black_al_mai,
         action: Action<ArrayList<AlbumFile>>,
     ) {
         Album.initialize(
@@ -164,7 +164,7 @@ object AlbumUtil {
     fun Activity.openImageAlbum(
         colorPrim: Int = R.color.gray_al_mai,
         colorAcc: Int = R.color.gray_al_mai,
-        colorTxt: Int = R.color.black_al_mai,
+        colorTxt: Int = com.yehia.album.R.color.black_al_mai,
         action: Action<ArrayList<AlbumFile>>,
     ) {
         Album.initialize(
@@ -210,7 +210,7 @@ object AlbumUtil {
     fun Activity.openSingleAlbum(
         colorPrim: Int = R.color.gray_al_mai,
         colorAcc: Int = R.color.gray_al_mai,
-        colorTxt: Int = R.color.black_al_mai,
+        colorTxt: Int = com.yehia.album.R.color.black_al_mai,
         action: Action<ArrayList<AlbumFile>>,
     ) {
         Album.initialize(

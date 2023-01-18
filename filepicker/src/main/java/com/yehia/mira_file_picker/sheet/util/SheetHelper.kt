@@ -10,6 +10,7 @@ import com.yehia.mira_file_picker.R
 import com.yehia.mira_file_picker.sheet.model.Type
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openGalleryAlbum
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openImageAlbum
+import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openSingleAlbum
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openVideoAlbum
 import com.yehia.mira_file_picker.sheet.util.Keys.MIME_ALL_TYPE
 import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_IMAGE
@@ -47,7 +48,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 multiple = multiple,
             )
         }
-        Keys.MIME_TYPE_IMAGE -> {
+        MIME_TYPE_IMAGE -> {
             Type(
                 type,
                 this.getString(R.string.images),
@@ -57,7 +58,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 multiple
             )
         }
-        Keys.MIME_TYPE_VIDEO -> {
+        MIME_TYPE_VIDEO -> {
             Type(
                 type,
                 this.getString(R.string.video),
@@ -167,29 +168,43 @@ fun Activity.openSingleType(
     lastImage: ArrayList<AlbumFile> = ArrayList(),
     colorPrim: Int = R.color.gray_al_mai,
     colorAcc: Int = R.color.gray_al_mai,
-    colorTxt: Int = R.color.black_al_mai,
+    colorTxt: Int = com.yehia.album.R.color.black_al_mai,
     previewRequest: ActivityResultLauncher<Intent>? = null,
     resultGallery: (AlbumFile?) -> Unit = {}
 ) {
     when (type.key) {
-        Keys.MIME_TYPE_IMAGE -> {
+        MIME_TYPE_IMAGE -> {
             if (multipleCount == 1) {
                 lastImage.clear()
-            }
-            this.openImageAlbum(
-                multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt,
-            ) { result ->
-                if (result.isNotEmpty()) {
-                    result.forEach { itx ->
-                        if (!lastImage.contains(itx)) {
-                            lastImage.add(itx)
-                            resultGallery(itx)
+
+                this.openSingleAlbum(
+                    colorPrim, colorAcc, colorTxt,
+                ) { result ->
+                    if (result.isNotEmpty()) {
+                        result.forEach { itx ->
+                            if (!lastImage.contains(itx)) {
+                                lastImage.add(itx)
+                                resultGallery(itx)
+                            }
+                        }
+                    }
+                }
+            } else {
+                this.openImageAlbum(
+                    multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt,
+                ) { result ->
+                    if (result.isNotEmpty()) {
+                        result.forEach { itx ->
+                            if (!lastImage.contains(itx)) {
+                                lastImage.add(itx)
+                                resultGallery(itx)
+                            }
                         }
                     }
                 }
             }
         }
-        Keys.MIME_TYPE_VIDEO -> {
+        MIME_TYPE_VIDEO -> {
             this.openVideoAlbum(
                 multipleCount - sizeList,
                 lastImage,

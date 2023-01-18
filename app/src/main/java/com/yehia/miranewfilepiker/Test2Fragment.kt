@@ -1,4 +1,4 @@
-package com.yehia.myapplication
+package com.yehia.miranewfilepiker
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
@@ -27,7 +27,6 @@ class Test2Fragment : Fragment(), View.OnClickListener {
     private var selectedFiles: MutableList<FileData>? = null
     private var adapter: ItemAdapter? = null
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -105,7 +104,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         typesSheet.show()
     }
 
-    private fun provideRetrofit(): Retrofit {
+    fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://abr-almodon.4hoste.com/api/")
