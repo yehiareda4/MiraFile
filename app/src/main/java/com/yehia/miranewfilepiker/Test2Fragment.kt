@@ -71,23 +71,23 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         binding.tvChooseFile.setOnClickListener(this)
 
         val types: MutableList<String> = ArrayList()
-        types.add(Keys.MIME_TYPE_AUDIO)
-        types.add(Keys.MIME_TYPE_TEXT)
-        types.add(Keys.MIME_TYPE_IMAGE)
-        types.add(Keys.MIME_ALL_TYPE)
-        types.add(Keys.MIME_TYPE_PDF)
-        types.add(Keys.MIME_TYPE_ZIP)
-        types.add(Keys.MIME_TYPE_RAR)
-        types.add(Keys.MIME_TYPE_DOC)
-        types.add(Keys.MIME_TYPE_PPT)
-        types.add(Keys.MIME_TYPE_XLS)
+        types.add(Keys.MIME_TYPE_VIDEO)
+//        types.add(Keys.MIME_TYPE_TEXT)
+//        types.add(Keys.MIME_TYPE_IMAGE)
+//        types.add(Keys.MIME_ALL_TYPE)
+//        types.add(Keys.MIME_TYPE_PDF)
+//        types.add(Keys.MIME_TYPE_ZIP)
+//        types.add(Keys.MIME_TYPE_RAR)
+//        types.add(Keys.MIME_TYPE_DOC)
+//        types.add(Keys.MIME_TYPE_PPT)
+//        types.add(Keys.MIME_TYPE_XLS)
 
         typesSheet = PickerTypesSheet(
             this,
             types, "file",
             camera = true,
             multiple = true,
-            multipleCount = 1,
+            multipleCount = 1, thumbnailPartName = "dsigfdifdks"
         ) { file, maxFile ->
             selectedFiles?.add(file)
             adapter!!.notifyDataSetChanged()

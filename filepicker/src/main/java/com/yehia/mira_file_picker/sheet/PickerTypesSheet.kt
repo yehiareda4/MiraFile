@@ -19,7 +19,7 @@ import com.yehia.mira_file_picker.pickit.PickiT
 import com.yehia.mira_file_picker.pickit.PickiTCallbacks
 import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.mira_file_picker.sheet.model.Type
-import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_IMAGE
+import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_VIDEO
 import com.yehia.mira_file_picker.sheet.util.createType
 import com.yehia.mira_file_picker.sheet.util.openSingleType
 import com.yehia.mira_file_picker.sheet.util.preparePart
@@ -184,7 +184,7 @@ class PickerTypesSheet(
         val fileData = FileData(
             file, file.name, FileUtils.getReadableFileSize(file.length().toInt()),
             file.path, file.extension, type.mediaType, preparePart(
-                type, file, if (file.extension.isEmpty()) {
+                file, if (file.extension.isEmpty()) {
                     "${file.name}.${type.extension.ifEmpty { pathScopeEx }}"
                 } else {
                     file.name
@@ -200,14 +200,14 @@ class PickerTypesSheet(
         if (fileData.extension.isEmpty()) {
             fileData.extension = type.extension.ifEmpty { pathScopeEx }
         }
-        if (type.key != MIME_TYPE_IMAGE) {
+        if (type.key == MIME_TYPE_VIDEO) {
             if (lastfile != null) {
-                val thumbnail = lastfile!!.thumbPath
-                fileData.Thumbnail = thumbnail!!
-                preparePartThumbnail(
-                    type,
-                    File(fileData.Thumbnail),
-                    fileData.name,
+                val thumbnail = lastfile!!.thumbPath.replace(".album", ".png")
+                fileData.Thumbnail = thumbnail
+                val thumbnailFile = File(fileData.Thumbnail)
+                fileData.ThumbnailPart = preparePartThumbnail(
+                    thumbnailFile,
+                    thumbnailFile.name,
                     thumbnailPartName
                 )
                 lastfile = null
@@ -221,9 +221,6 @@ class PickerTypesSheet(
 
     fun show(sizeList: Int = 0, type: Type? = null, cleanImages: Boolean = false): Boolean {
         dismissed = false
-        if (cleanImages || multipleCount == 1) {
-            lastImage.clear()
-        }
         this.sizeList = sizeList
 
         if (sizeList > multipleCount && multiple) {
@@ -240,7 +237,7 @@ class PickerTypesSheet(
                 type = this.type,
                 multipleCount = multipleCount,
                 sizeList = sizeList,
-                lastImage = lastImage,
+                lastImage = if (cleanImages || multipleCount == 1) java.util.ArrayList() else lastImage,
                 colorPrim = colorPrim,
                 colorAcc = colorAcc,
                 colorTxt = colorTxt,

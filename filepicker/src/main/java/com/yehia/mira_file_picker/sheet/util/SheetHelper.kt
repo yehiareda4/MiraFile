@@ -244,7 +244,7 @@ fun Activity.openSingleType(
 }
 
 fun preparePart(
-    type: Type, file: File, fileName: String, partName: String
+    file: File, fileName: String, partName: String
 ): MultipartBody.Part {
     val requestFile = RequestBody.create(
         okhttp3.MediaType.parse(
@@ -260,7 +260,7 @@ fun preparePart(
 }
 
 fun preparePartThumbnail(
-    type: Type, file: File, fileName: String, thumbnailPartName: String
+    file: File, fileName: String, thumbnailPartName: String
 ): MultipartBody.Part {
     val requestFile = RequestBody.create(
         okhttp3.MediaType.parse("image/png"),
