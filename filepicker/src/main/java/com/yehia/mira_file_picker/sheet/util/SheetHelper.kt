@@ -277,7 +277,7 @@ fun preparePartThumbnail(
     file: File, fileName: String, thumbnailPartName: String
 ): MultipartBody.Part {
     val requestFile = RequestBody.create(
-        okhttp3.MediaType.parse("image/png"),
+        okhttp3.MediaType.parse("image/${file.extension}"),
         file
     )
     return MultipartBody.Part.createFormData(

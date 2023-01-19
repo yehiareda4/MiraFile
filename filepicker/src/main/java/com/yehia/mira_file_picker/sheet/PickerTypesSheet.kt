@@ -202,7 +202,7 @@ class PickerTypesSheet(
         }
         if (type.key == MIME_TYPE_VIDEO) {
             if (lastfile != null) {
-                val thumbnail = lastfile!!.thumbPath.replace(".album", ".png")
+                val thumbnail = lastfile!!.thumbPath
                 fileData.Thumbnail = thumbnail
                 val thumbnailFile = File(fileData.Thumbnail)
                 fileData.ThumbnailPart = preparePartThumbnail(
