@@ -5,6 +5,7 @@ data class Type(
     val name: String,
     val image: Int,
     val mediaType: String,
+    val mediaType2: String,
     val camera: Boolean = false,
     val multiple: Boolean = false,
     var extension: String = "",

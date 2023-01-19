@@ -26,6 +26,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.any_type),
                 R.drawable.ic_any_type,
                 "application/*",
+                "application/",
                 multiple = multiple,
             )
         }
@@ -35,6 +36,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.voice),
                 R.drawable.ic_voice,
                 "audio/*",
+                "audio/",
                 multiple = multiple,
             )
         }
@@ -44,6 +46,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.text),
                 R.drawable.ic_text,
                 "text/*",
+                "text/",
                 multiple = multiple,
             )
         }
@@ -52,7 +55,8 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 type,
                 this.getString(R.string.images),
                 R.drawable.ic_gallary,
-                "image/png",
+                "image/*",
+                "image/",
                 camera,
                 multiple
             )
@@ -62,7 +66,8 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 type,
                 this.getString(R.string.video),
                 R.drawable.ic_video,
-                "video/mp4",
+                "video/*",
+                "video/",
                 camera,
                 multiple,
                 "mp4",
@@ -74,6 +79,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.pdf),
                 R.drawable.ic_pdf,
                 "application/pdf",
+                "application/",
                 multiple = multiple,
                 extension = "pdf"
             )
@@ -84,6 +90,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.compress),
                 R.drawable.ic_zip,
                 "application/zip",
+                "application/",
                 multiple = multiple,
                 extension = "zip",
             )
@@ -94,6 +101,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.compress),
                 R.drawable.ic_rar,
                 "application/rar",
+                "application/",
                 multiple = multiple,
                 extension = "rar",
             )
@@ -104,6 +112,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.word),
                 R.drawable.ic_doc,
                 "application/doc",
+                "application/",
                 multiple = multiple,
                 extension = "doc",
             )
@@ -114,6 +123,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.word),
                 R.drawable.ic_doc,
                 "application/docx",
+                "application/",
                 multiple = multiple,
                 extension = "docx",
             )
@@ -124,6 +134,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.powerPoint),
                 R.drawable.ic_ppt,
                 "application/ppt",
+                "application/",
                 multiple = multiple,
                 extension = "ppt",
             )
@@ -134,6 +145,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.powerPoint),
                 R.drawable.ic_ppt,
                 "application/pptx",
+                "application/",
                 multiple = multiple,
                 extension = "pptx",
             )
@@ -144,6 +156,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.excel),
                 R.drawable.ic_xls,
                 "application/xls",
+                "application/",
                 multiple = multiple,
                 extension = "xls",
             )
@@ -154,6 +167,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 this.getString(R.string.any_type),
                 R.drawable.ic_any_type,
                 "application/*",
+                "application/",
                 multiple = multiple,
             )
         }
@@ -244,11 +258,11 @@ fun Activity.openSingleType(
 }
 
 fun preparePart(
-    file: File, fileName: String, partName: String
+    type: Type, file: File, fileName: String, partName: String
 ): MultipartBody.Part {
     val requestFile = RequestBody.create(
         okhttp3.MediaType.parse(
-            file.extension
+            "${type.mediaType2}${file.extension}"
         ),
         file
     )

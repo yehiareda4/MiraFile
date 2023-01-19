@@ -184,7 +184,7 @@ class PickerTypesSheet(
         val fileData = FileData(
             file, file.name, FileUtils.getReadableFileSize(file.length().toInt()),
             file.path, file.extension, type.mediaType, preparePart(
-                file, if (file.extension.isEmpty()) {
+                type, file, if (file.extension.isEmpty()) {
                     "${file.name}.${type.extension.ifEmpty { pathScopeEx }}"
                 } else {
                     file.name
