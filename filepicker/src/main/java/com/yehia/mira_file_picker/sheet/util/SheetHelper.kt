@@ -12,7 +12,6 @@ import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openGalleryAlbum
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openImageAlbum
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openSingleAlbum
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openVideoAlbum
-import com.yehia.mira_file_picker.sheet.util.Keys.MIME_ALL_TYPE
 import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_IMAGE
 import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_VIDEO
 import okhttp3.MultipartBody
@@ -53,7 +52,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 type,
                 this.getString(R.string.images),
                 R.drawable.ic_gallary,
-                "image/*",
+                "image/png",
                 camera,
                 multiple
             )
@@ -63,7 +62,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 type,
                 this.getString(R.string.video),
                 R.drawable.ic_video,
-                "video/*",
+                "video/mp4",
                 camera,
                 multiple,
                 "mp4",
@@ -249,14 +248,7 @@ fun preparePart(
 ): MultipartBody.Part {
     val requestFile = RequestBody.create(
         okhttp3.MediaType.parse(
-            when (type.mediaType) {
-                MIME_ALL_TYPE -> when (file.extension) {
-                    "png", "jpg", "jpeg", "jfif", "pjpeg", "pjp" -> MIME_TYPE_IMAGE
-                    "MP4", "MOV", "WMV", "AVI", "AVCHD", "FLV", "F4V", "SWF", "MKV", "WEBM" -> MIME_TYPE_VIDEO
-                    else -> "application/${file.extension}"
-                }
-                else -> type.mediaType
-            }
+            file.extension
         ),
         file
     )
@@ -271,7 +263,7 @@ fun preparePartThumbnail(
     type: Type, file: File, fileName: String, thumbnailPartName: String
 ): MultipartBody.Part {
     val requestFile = RequestBody.create(
-        okhttp3.MediaType.parse(type.mediaType),
+        okhttp3.MediaType.parse(file.extension),
         file
     )
     return MultipartBody.Part.createFormData(
