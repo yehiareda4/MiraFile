@@ -119,7 +119,7 @@ public class ThumbnailBuilder {
     }
 
     private File randomPath(String filePath) {
-        String outFilePath = AlbumUtils.getMD5ForString(filePath) + ".album";
+        String outFilePath = AlbumUtils.getMD5ForString(filePath) + ".png";
         return new File(mCacheDir, outFilePath);
     }
 

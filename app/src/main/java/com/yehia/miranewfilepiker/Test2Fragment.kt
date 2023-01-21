@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.aait.miranewfilepiker.databinding.FragmentTestBinding
@@ -89,6 +90,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
             multiple = true,
             multipleCount = 1, thumbnailPartName = "dsigfdifdks"
         ) { file, maxFile ->
+            binding.ivChooseFile.setImageURI(file.Thumbnail.toUri())
             selectedFiles?.add(file)
             adapter!!.notifyDataSetChanged()
             if (maxFile) {

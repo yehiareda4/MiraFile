@@ -37,7 +37,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.MyViewHolder holder, int position) {
-        holder.textView.setText(data.get(position).getPath());
+        holder.textView.setText(data.get(position).getPath() + "\n" + data.get(position).getThumbnail());
 
         holder.textView.setOnClickListener(view -> {
 //            Intent intent = new Intent(Intent.ACTION_VIEW);
