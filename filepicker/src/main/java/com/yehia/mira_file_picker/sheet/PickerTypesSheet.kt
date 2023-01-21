@@ -210,6 +210,8 @@ class PickerTypesSheet(
                     thumbnailFile.name,
                     thumbnailPartName
                 )
+
+                fileData.duration = (lastfile?.duration ?: 0).toString()
                 lastfile = null
             }
         }
