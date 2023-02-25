@@ -29,8 +29,8 @@ import java.io.File
 class PickerTypesSheet(
     private val fragment: Fragment,
     private val types: MutableList<String>,
-    private val partName: String = "image",
-    private val thumbnailPartName: String = "",
+    var partName: String = "image",
+    var thumbnailPartName: String = "",
     private val camera: Boolean = false,
     val multiple: Boolean = false,
     var multipleCount: Int = 1,
