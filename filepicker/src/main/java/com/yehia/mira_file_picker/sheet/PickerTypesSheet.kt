@@ -108,7 +108,7 @@ class PickerTypesSheet(
     }
 
     private fun pushPath(data: Uri) {
-        val path = FileUtils.getPath(activity, data)
+        val path = FileUtils.getPath(fragment.requireActivity(), data)
         pathScopeEx = getFile(context, data).extension
         if (path != null) {
             val uri =
@@ -156,7 +156,7 @@ class PickerTypesSheet(
                 typesList.size
             }
 
-            val gridLayoutManager = GridLayoutManager(activity, span)
+            val gridLayoutManager = GridLayoutManager(fragment.requireActivity(), span)
             binding.rvTypes.layoutManager = gridLayoutManager
             binding.rvTypes.adapter = adapter
         } else {
