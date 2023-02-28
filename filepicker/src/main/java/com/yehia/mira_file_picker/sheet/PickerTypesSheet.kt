@@ -109,8 +109,8 @@ class PickerTypesSheet(
 
     private fun pushPath(data: Uri) {
         val path = FileUtils.getPath(fragment.requireActivity(), data)
-        pathScopeEx = getFile(fragment.requireContext(), data).extension
         if (path != null) {
+            pathScopeEx = getFile(fragment.requireContext(), data).extension
             val uri =
                 FileUtils.createCopyAndReturnRealPath(
                     (fragment.requireActivity()),
