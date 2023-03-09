@@ -2,6 +2,7 @@ package com.yehia.miranewfilepiker
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -79,9 +80,9 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         types.add(Keys.MIME_TYPE_PDF)
 //        types.add(Keys.MIME_TYPE_ZIP)
 //        types.add(Keys.MIME_TYPE_RAR)
-//        types.add(Keys.MIME_TYPE_DOC)
-//        types.add(Keys.MIME_TYPE_PPT)
-//        types.add(Keys.MIME_TYPE_XLS)
+        types.add(Keys.MIME_TYPE_DOC)
+        types.add(Keys.MIME_TYPE_PPT)
+        types.add(Keys.MIME_TYPE_XLS)
 
         typesSheet = PickerTypesSheet(
             this,
@@ -111,5 +112,16 @@ class Test2Fragment : Fragment(), View.OnClickListener {
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://abr-almodon.4hoste.com/api/")
             .build()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        childFragmentManager
+
     }
 }

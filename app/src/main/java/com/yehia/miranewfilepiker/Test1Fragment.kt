@@ -25,7 +25,9 @@ class Test1Fragment : Fragment(), View.OnClickListener {
             container,
             false
         )
-        binding.ivChooseFile.setOnClickListener(this)
+        binding.ivChooseFile.setOnClickListener {
+            findNavController().navigate(R.id.action_test1Fragment_to_test2Fragment)
+        }
 
 
         return binding.root
@@ -42,6 +44,6 @@ class Test1Fragment : Fragment(), View.OnClickListener {
 //        transaction.addToBackStack(null)
 //        transaction.commit()
 
-        findNavController().navigate(R.id.action_test1Fragment_to_test2Fragment)
+
     }
 }
