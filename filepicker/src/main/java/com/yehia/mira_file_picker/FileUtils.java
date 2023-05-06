@@ -1,5 +1,7 @@
 package com.yehia.mira_file_picker;
 
+import static com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_IMAGE;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
@@ -38,13 +40,13 @@ public class FileUtils {
      */
     static final String TAG = "FileUtils";
     private static final boolean DEBUG = true; // Set to true to enable logging
-
-    public static final String MIME_TYPE_AUDIO = "audio/*";
-    public static final String MIME_TYPE_TEXT = "text/*";
-    public static final String MIME_TYPE_IMAGE = "image/*";
-    public static final String MIME_TYPE_VIDEO = "video/*";
-    public static final String MIME_TYPE_APP = "application/*";
-    public static final String MIME_TYPE_ANY = "*/*";
+//
+//    public static final String MIME_TYPE_AUDIO = "audio/*";
+//    public static final String MIME_TYPE_TEXT = "text/*";
+//    public static final String MIME_TYPE_IMAGE = "image/*";
+//    public static final String MIME_TYPE_VIDEO = "video/*";
+//    public static final String MIME_TYPE_APP = "application/*";
+//    public static final String MIME_TYPE_ANY = "*/*";
 
     public static final String HIDDEN_PREFIX = ".";
 
@@ -627,7 +629,7 @@ public class FileUtils {
                                 id,
                                 MediaStore.Video.Thumbnails.MINI_KIND,
                                 null);
-                    } else if (mimeType.contains(FileUtils.MIME_TYPE_IMAGE)) {
+                    } else if (mimeType.contains(MIME_TYPE_IMAGE)) {
                         bm = MediaStore.Images.Thumbnails.getThumbnail(
                                 resolver,
                                 id,

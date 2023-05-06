@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application android:supportsRtl="true">
+
         <activity
             android:name="com.yehia.album.app.album.AlbumActivity"
             android:configChanges="orientation|screenSize"

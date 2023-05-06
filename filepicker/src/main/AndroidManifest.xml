@@ -9,7 +9,6 @@
         tools:ignore="ScopedStorage" />
 
     <application
-        android:allowBackup="true"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true">
 

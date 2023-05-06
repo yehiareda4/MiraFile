@@ -19,11 +19,12 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.PermissionChecker;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.yehia.album.Album;
 import com.yehia.album.util.AlbumUtils;
@@ -68,6 +69,7 @@ public class BaseActivity extends AppCompatActivity implements Bye {
 
     @Override
     public final void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (isGrantedResult(grantResults)) onPermissionGranted(requestCode);
         else onPermissionDenied(requestCode);
     }
