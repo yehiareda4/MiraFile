@@ -17,16 +17,17 @@ package com.yehia.album.mvp;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.StringRes;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.view.SupportMenuInflater;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
+import androidx.appcompat.view.SupportMenuInflater;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.yehia.album.R;
 
@@ -109,32 +110,27 @@ class ViewSource extends Source<View> {
     @Override
     void setHomeAsUpIndicator(Drawable icon) {
         this.mActionBarIcon = icon;
-        if (mActionBar != null)
-            mActionBar.setNavigationIcon(icon);
+        if (mActionBar != null) mActionBar.setNavigationIcon(icon);
     }
 
     @Override
     final void setTitle(CharSequence title) {
-        if (mActionBar != null)
-            mActionBar.setTitle(title);
+        if (mActionBar != null) mActionBar.setTitle(title);
     }
 
     @Override
     final void setTitle(@StringRes int title) {
-        if (mActionBar != null)
-            mActionBar.setTitle(title);
+        if (mActionBar != null) mActionBar.setTitle(title);
     }
 
     @Override
     final void setSubTitle(CharSequence title) {
-        if (mActionBar != null)
-            mActionBar.setSubtitle(title);
+        if (mActionBar != null) mActionBar.setSubtitle(title);
     }
 
     @Override
     final void setSubTitle(@StringRes int title) {
-        if (mActionBar != null)
-            mActionBar.setSubtitle(title);
+        if (mActionBar != null) mActionBar.setSubtitle(title);
     }
 
     @Override

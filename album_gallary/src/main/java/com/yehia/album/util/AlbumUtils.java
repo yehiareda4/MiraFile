@@ -81,8 +81,7 @@ public class AlbumUtils {
     public static boolean sdCardIsAvailable() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             return Environment.getExternalStorageDirectory().canWrite();
-        } else
-            return false;
+        } else return false;
     }
 
     /**
@@ -131,10 +130,7 @@ public class AlbumUtils {
      * @param duration    specify the maximum allowed recording duration in seconds.
      * @param limitBytes  specify the maximum allowed size.
      */
-    public static void takeVideo(@NonNull Activity activity, int requestCode, File outPath,
-                                 @IntRange(from = 0, to = 1) int quality,
-                                 @IntRange(from = 1) long duration,
-                                 @IntRange(from = 1) long limitBytes) {
+    public static void takeVideo(@NonNull Activity activity, int requestCode, File outPath, @IntRange(from = 0, to = 1) int quality, @IntRange(from = 1) long duration, @IntRange(from = 1) long limitBytes) {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         Uri uri = getUri(activity, outPath);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);

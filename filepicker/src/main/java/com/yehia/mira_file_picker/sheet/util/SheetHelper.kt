@@ -219,11 +219,9 @@ fun Activity.openSingleType(
         }
         MIME_TYPE_VIDEO -> {
             this.openVideoAlbum(
-                multipleCount - sizeList,
-                lastImage,
-                type.camera, colorPrim, colorAcc, colorTxt
+                multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt
             ) { result ->
-                if (!result.isNullOrEmpty()) {
+                if (result.isNotEmpty()) {
                     result.forEach { itx ->
                         if (!lastImage.contains(itx)) {
                             lastImage.add(itx)
@@ -237,7 +235,7 @@ fun Activity.openSingleType(
             this.openGalleryAlbum(
                 multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt,
             ) { result ->
-                if (!result.isNullOrEmpty()) {
+                if (result.isNotEmpty()) {
                     result.forEach { itx ->
                         if (!lastImage.contains(itx)) {
                             lastImage.add(itx)
@@ -263,13 +261,10 @@ fun preparePart(
     val requestFile = RequestBody.create(
         okhttp3.MediaType.parse(
             "${type.mediaType2}${file.extension}"
-        ),
-        file
+        ), file
     )
     return MultipartBody.Part.createFormData(
-        partName,
-        fileName,
-        requestFile
+        partName, fileName, requestFile
     )
 }
 
@@ -277,12 +272,9 @@ fun preparePartThumbnail(
     file: File, fileName: String, thumbnailPartName: String
 ): MultipartBody.Part {
     val requestFile = RequestBody.create(
-        okhttp3.MediaType.parse("image/${file.extension}"),
-        file
+        okhttp3.MediaType.parse("image/${file.extension}"), file
     )
     return MultipartBody.Part.createFormData(
-        thumbnailPartName,
-        fileName,
-        requestFile
+        thumbnailPartName, fileName, requestFile
     )
 }

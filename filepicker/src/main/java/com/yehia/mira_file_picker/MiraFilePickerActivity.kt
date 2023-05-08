@@ -64,8 +64,7 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
             openCamera()
         } else {
             EasyPermissions.requestPermissions(
-                this, getString(R.string.camera_permission),
-                RC_CAMERA, *cameraPermission
+                this, getString(R.string.camera_permission), RC_CAMERA, *cameraPermission
             )
         }
     }
@@ -75,8 +74,7 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
         if (!EasyPermissions.hasPermissions(this, *perms)) {
             //permission not granted so far
             EasyPermissions.requestPermissions(
-                this, getString(R.string.read_write_permissions),
-                RC_READ_WRITE, *perms
+                this, getString(R.string.read_write_permissions), RC_READ_WRITE, *perms
             )
 
         } else {
@@ -85,9 +83,7 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
@@ -109,18 +105,20 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
 //                return
 //            }
 //        }
-
-        val chooserIntent = FileUtils.createGetContentIntent(type, multiple)
-        startActivityForResult.launch(chooserIntent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+//            startActivityForResult.launch(intent)
+        } else {
+        }
+            val chooserIntent = FileUtils.createGetContentIntent(type, multiple)
+            startActivityForResult.launch(chooserIntent)
     }
 
     @RequiresApi(30)
     fun checkStoragePermissionApi30(activity: AppCompatActivity): Boolean {
         val appOps = activity.getSystemService(AppOpsManager::class.java)
         val mode = appOps.unsafeCheckOpNoThrow(
-            MANAGE_EXTERNAL_STORAGE_PERMISSION,
-            activity.applicationInfo.uid,
-            activity.packageName
+            MANAGE_EXTERNAL_STORAGE_PERMISSION, activity.applicationInfo.uid, activity.packageName
         )
         if (mode != AppOpsManager.MODE_ALLOWED) {
             viewAlertDialog()

@@ -160,7 +160,9 @@ public class PickiT implements CallBackTask {
                         }
                     }
                     //Else an error occurred, get/set the reason for the error
-                    pickiTCallbacks.PickiTonCompleteListener(returnedPath, false, false, false, Utils.errorReason());
+                    if (returnedPath != null) {
+                        pickiTCallbacks.PickiTonCompleteListener(returnedPath, false, false, false, Utils.errorReason());
+                    }
                 }
                 // Path is not null
                 else {

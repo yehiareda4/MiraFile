@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
@@ -39,8 +39,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
-//    implementation "org.jetbrains.kotlin:kotlin-reflect:1.1.0"
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
@@ -51,8 +49,6 @@ dependencies {
 
     //easy permission
     implementation 'pub.devrel:easypermissions:3.0.0'
-
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.20"
 
     implementation "de.hdodenhof:circleimageview:3.1.0"
     implementation "com.intuit.sdp:sdp-android:1.0.6"

@@ -59,7 +59,6 @@ class PickerTypesSheet(
         previewRequest =
             fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode == Activity.RESULT_OK) {
-
                     if (it.data?.data != null) {
                         (fragment.requireActivity()).startPickTCallbacks()
                         if (multipleCount != 0) {
