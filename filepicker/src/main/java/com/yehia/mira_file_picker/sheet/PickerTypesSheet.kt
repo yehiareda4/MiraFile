@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yehia.album.AlbumFile
 import com.yehia.mira_file_picker.FileUtils
@@ -19,11 +20,9 @@ import com.yehia.mira_file_picker.pickit.PickiT
 import com.yehia.mira_file_picker.pickit.PickiTCallbacks
 import com.yehia.mira_file_picker.sheet.model.FileData
 import com.yehia.mira_file_picker.sheet.model.Type
+import com.yehia.mira_file_picker.sheet.util.*
+import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_IMAGE
 import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_VIDEO
-import com.yehia.mira_file_picker.sheet.util.createType
-import com.yehia.mira_file_picker.sheet.util.openSingleType
-import com.yehia.mira_file_picker.sheet.util.preparePart
-import com.yehia.mira_file_picker.sheet.util.preparePartThumbnail
 import java.io.File
 
 class PickerTypesSheet(
@@ -110,11 +109,9 @@ class PickerTypesSheet(
         val path = FileUtils.getPath(fragment.requireActivity(), data)
         if (path != null) {
             pathScopeEx = getFile(fragment.requireContext(), data).extension
-            val uri =
-                FileUtils.createCopyAndReturnRealPath(
-                    (fragment.requireActivity()),
-                    data
-                )
+            val uri = FileUtils.createCopyAndReturnRealPath(
+                (fragment.requireActivity()), data
+            )
             pickiT.getPath(uri!!.toUri(), Build.VERSION.SDK_INT)
         } else {
             pickiT.getPath(data, Build.VERSION.SDK_INT)
@@ -180,44 +177,60 @@ class PickerTypesSheet(
     }
 
     private fun addFile(file: File) {
-        val fileData = FileData(
-            file, file.name, FileUtils.getReadableFileSize(file.length().toInt()),
-            file.path, file.extension, type.mediaType, preparePart(
-                type, file, if (file.extension.isEmpty()) {
-                    "${file.name}.${type.extension.ifEmpty { pathScopeEx }}"
-                } else {
-                    file.name
-                }, partName
-            )
-        )
-        if (file.extension.isEmpty()) {
-            fileData.path += ".${type.extension.ifEmpty { pathScopeEx }}"
-        }
-        if (file.extension.isEmpty()) {
-            fileData.name += ".${type.extension.ifEmpty { pathScopeEx }}"
-        }
-        if (fileData.extension.isEmpty()) {
-            fileData.extension = type.extension.ifEmpty { pathScopeEx }
-        }
-        if (type.key == MIME_TYPE_VIDEO) {
-            if (lastfile != null) {
-                val thumbnail = lastfile!!.thumbPath
-                fileData.Thumbnail = thumbnail
-                val thumbnailFile = File(fileData.Thumbnail)
-                fileData.ThumbnailPart = preparePartThumbnail(
-                    thumbnailFile,
-                    thumbnailFile.name,
-                    thumbnailPartName
+        fragment.lifecycleScope.launchWhenCreated {
+            val fileData = FileData(
+                file,
+                file.name,
+                FileUtils.getReadableFileSize(file.length().toInt()),
+                file.path,
+                file.extension,
+                type.mediaType,
+                preparePart(
+                    type, file, if (file.extension.isEmpty()) {
+                        "${file.name}.${type.extension.ifEmpty { pathScopeEx }}"
+                    } else {
+                        file.name
+                    }, partName
                 )
-
-                fileData.duration = (lastfile?.duration ?: 0).toString()
-                lastfile = null
+            )
+            if (file.extension.isEmpty()) {
+                fileData.path += ".${type.extension.ifEmpty { pathScopeEx }}"
             }
-        }
-        pathScopeEx = ""
-        dialog?.dismiss()
+            if (file.extension.isEmpty()) {
+                fileData.name += ".${type.extension.ifEmpty { pathScopeEx }}"
+            }
+            if (fileData.extension.isEmpty()) {
+                fileData.extension = type.extension.ifEmpty { pathScopeEx }
+            }
+            if (type.key == MIME_TYPE_VIDEO) {
+                if (lastfile != null) {
+                    val thumbnail = lastfile!!.thumbPath
+                    fileData.Thumbnail = thumbnail
+                    val thumbnailFile = File(fileData.Thumbnail)
+                    fileData.ThumbnailPart = preparePartThumbnail(
+                        thumbnailFile, thumbnailFile.name, thumbnailPartName
+                    )
 
-        resultFile(fileData, maxFile)
+                    fileData.duration = (lastfile?.duration ?: 0).toString()
+                    lastfile = null
+                }
+            }
+            if (type.key == MIME_TYPE_IMAGE) {
+                fileData.compressImage = fileData.file.compressImage(fragment.requireContext())
+                fileData.compressImageSize = FileUtils.getReadableFileSize(File(fileData.compressImage).length().toInt())
+                fileData.compressImagePart = preparePart(
+                    type, File(fileData.compressImage), if (file.extension.isEmpty()) {
+                        "${file.name}.${type.extension.ifEmpty { pathScopeEx }}"
+                    } else {
+                        file.name
+                    }, partName
+                )
+            }
+            pathScopeEx = ""
+            dialog?.dismiss()
+
+            resultFile(fileData, maxFile)
+        }
     }
 
     fun show(sizeList: Int = 0, type: Type? = null, cleanImages: Boolean = false): Boolean {
@@ -287,9 +300,7 @@ class PickerTypesSheet(
             }
 
             override fun PickiTonMultipleCompleteListener(
-                paths: ArrayList<String?>?,
-                wasSuccessful: Boolean,
-                Reason: String
+                paths: ArrayList<String?>?, wasSuccessful: Boolean, Reason: String
             ) {
                 paths?.forEachIndexed { index, it ->
                     if (multipleCount != 0) {

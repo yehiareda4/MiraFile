@@ -14,6 +14,9 @@ data class FileData(
     val mediaType: String,
     var Thumbnail: String,
     var ThumbnailPart: MultipartBody.Part?,
+    var compressImage: String,
+    var compressImageSize: String,
+    var compressImagePart: MultipartBody.Part?,
     var duration: String,
 ) : Serializable {
     constructor(
@@ -25,11 +28,11 @@ data class FileData(
         mediaType: String,
         filePart: MultipartBody.Part,
     ) : this(
-        file, name, size, path, extension, filePart, mediaType, "", null, ""
+        file, name, size, path, extension, filePart, mediaType, "", null, "", "", null, ""
     )
 
     constructor(
     ) : this(
-        File(""), "", "", "", "", null, "", "", null, ""
+        File(""), "", "", "", "", null, "", "", null, "", "", null, ""
     )
 }

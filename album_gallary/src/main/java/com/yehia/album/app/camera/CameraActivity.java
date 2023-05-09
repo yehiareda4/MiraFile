@@ -18,10 +18,12 @@ package com.yehia.album.app.camera;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import android.text.TextUtils;
 
 import com.yehia.album.Action;
 import com.yehia.album.Album;
@@ -84,7 +86,11 @@ public class CameraActivity extends BaseActivity {
                 case Album.FUNCTION_CAMERA_IMAGE: {
                     if (TextUtils.isEmpty(mCameraFilePath))
                         mCameraFilePath = AlbumUtils.randomJPGPath(this);
-                    requestPermission(PERMISSION_TAKE_PICTURE, CODE_PERMISSION_IMAGE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        requestPermission(PERMISSION_TAKE_PICTURE_30, CODE_PERMISSION_IMAGE);
+                    } else {
+                        requestPermission(PERMISSION_TAKE_PICTURE, CODE_PERMISSION_IMAGE);
+                    }
                     break;
                 }
                 case Album.FUNCTION_CAMERA_VIDEO: {

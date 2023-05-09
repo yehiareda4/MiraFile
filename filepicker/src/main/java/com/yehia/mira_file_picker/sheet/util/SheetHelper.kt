@@ -1,6 +1,7 @@
 package com.yehia.mira_file_picker.sheet.util
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
@@ -14,6 +15,9 @@ import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openSingleAlbum
 import com.yehia.mira_file_picker.sheet.util.AlbumUtil.openVideoAlbum
 import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_IMAGE
 import com.yehia.mira_file_picker.sheet.util.Keys.MIME_TYPE_VIDEO
+import kotlinx.coroutines.Dispatchers
+import me.shouheng.compress.Compress
+import me.shouheng.compress.concrete
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
@@ -277,4 +281,21 @@ fun preparePartThumbnail(
     return MultipartBody.Part.createFormData(
         thumbnailPartName, fileName, requestFile
     )
+}
+
+suspend fun File.compressImage(context: Context): String {
+    val newResult = Compress.with(context, this).setQuality(95).concrete {
+        withMaxWidth(1536f)
+        withMaxHeight(1536f)
+        withIgnoreIfSmaller(false)
+    }.get(Dispatchers.Main)
+
+    return if (newResult.path.subSequence(
+            newResult.path.length - 2, newResult.path.length - 1
+        ) == "."
+    ) {
+        "${newResult.path}png"
+    } else {
+        newResult.path
+    }
 }

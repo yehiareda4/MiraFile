@@ -21,6 +21,7 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
     private val perms = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.MANAGE_MEDIA,
 //        Manifest.permission.MANAGE_EXTERNAL_STORAGE
     )
     private val cameraPermission = arrayOf(
@@ -71,14 +72,18 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
 
     //    const val MANAGE_EXTERNAL_STORAGE_PERMISSION = "android:manage_external_storage"
     private fun checkPermissions() {
-        if (!EasyPermissions.hasPermissions(this, *perms)) {
-            //permission not granted so far
-            EasyPermissions.requestPermissions(
-                this, getString(R.string.read_write_permissions), RC_READ_WRITE, *perms
-            )
-
-        } else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             chooseFile()
+        } else {
+            if (!EasyPermissions.hasPermissions(this, *perms)) {
+                //permission not granted so far
+                EasyPermissions.requestPermissions(
+                    this, getString(R.string.read_write_permissions), RC_READ_WRITE, *perms
+                )
+
+            } else {
+                chooseFile()
+            }
         }
     }
 
@@ -105,13 +110,13 @@ class MiraFilePickerActivity : AppCompatActivity(), EasyPermissions.PermissionCa
 //                return
 //            }
 //        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 //            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
 //            startActivityForResult.launch(intent)
-        } else {
-        }
+//        } else {
             val chooserIntent = FileUtils.createGetContentIntent(type, multiple)
             startActivityForResult.launch(chooserIntent)
+//        }
     }
 
     @RequiresApi(30)

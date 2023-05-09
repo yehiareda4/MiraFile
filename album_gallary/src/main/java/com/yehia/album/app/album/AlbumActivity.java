@@ -18,14 +18,16 @@ package com.yehia.album.app.album;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.PopupMenu;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
 
 import com.yehia.album.Action;
 import com.yehia.album.Album;
@@ -108,7 +110,11 @@ public class AlbumActivity extends BaseActivity implements
         mView.setCompleteDisplay(false);
         mView.setLoadingDisplay(true);
 
+        if (Build.VERSION.SDK_INT >= 30) {
+            requestPermission(PERMISSION_STORAGE_30, CODE_PERMISSION_STORAGE);
+        }else {
         requestPermission(PERMISSION_STORAGE, CODE_PERMISSION_STORAGE);
+        }
     }
 
     private void initializeArgument() {
