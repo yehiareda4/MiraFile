@@ -110,7 +110,7 @@ public class AlbumActivity extends BaseActivity implements
         mView.setCompleteDisplay(false);
         mView.setLoadingDisplay(true);
 
-        if (Build.VERSION.SDK_INT >= 30) {
+        if (Build.VERSION.SDK_INT >= 33) {
             requestPermission(PERMISSION_STORAGE_30, CODE_PERMISSION_STORAGE);
         }else {
         requestPermission(PERMISSION_STORAGE, CODE_PERMISSION_STORAGE);

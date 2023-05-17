@@ -96,7 +96,7 @@ public class AndroidXI {
 
             PendingIntent pendingIntent = null;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
                 ArrayList<Uri> collection = new ArrayList<>();
                 collection.add(uri);
@@ -131,7 +131,7 @@ public class AndroidXI {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, rename);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             context.getContentResolver().update(uri, contentValues, null);
         }
     }
