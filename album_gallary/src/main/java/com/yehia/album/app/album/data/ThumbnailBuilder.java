@@ -21,10 +21,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.media.MediaMetadataRetriever;
-import androidx.annotation.Nullable;
-import androidx.annotation.WorkerThread;
 import android.text.TextUtils;
 import android.webkit.URLUtil;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import com.yehia.album.util.AlbumUtils;
 
@@ -110,6 +111,37 @@ public class ThumbnailBuilder {
                 retriever.setDataSource(videoPath);
             }
             Bitmap bitmap = retriever.getFrameAtTime();
+            thumbnailFile.createNewFile();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, THUMBNAIL_QUALITY, new FileOutputStream(thumbnailFile));
+            return thumbnailFile.getAbsolutePath();
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    /**
+     * Create a thumbnail for the video.
+     *
+     * @param videoPath video path.
+     * @param timeFrame video selected frame.
+     * @return thumbnail path.
+     */
+    @WorkerThread
+    @Nullable
+    public String createThumbnailForVideo(String videoPath, Long timeFrame) {
+        if (TextUtils.isEmpty(videoPath)) return null;
+
+        File thumbnailFile = randomPath(videoPath);
+        if (thumbnailFile.exists()) return thumbnailFile.getAbsolutePath();
+
+        try {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            if (URLUtil.isNetworkUrl(videoPath)) {
+                retriever.setDataSource(videoPath, new HashMap<String, String>());
+            } else {
+                retriever.setDataSource(videoPath);
+            }
+            Bitmap bitmap = retriever.getFrameAtTime(timeFrame * 1000);
             thumbnailFile.createNewFile();
             bitmap.compress(Bitmap.CompressFormat.JPEG, THUMBNAIL_QUALITY, new FileOutputStream(thumbnailFile));
             return thumbnailFile.getAbsolutePath();
