@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.aait.miranewfilepiker.R
 import com.aait.miranewfilepiker.databinding.FragmentTestBinding
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
 import com.yehia.mira_file_picker.sheet.model.FileData
@@ -67,6 +69,10 @@ class Test2Fragment : Fragment(), View.OnClickListener {
                 DividerItemDecoration.VERTICAL
             )
         )
+        binding.ivChooseFile2.setOnClickListener {
+            findNavController().navigate(R.id.action_test2Fragment_to_test3Fragment)
+        }
+
         binding.rvFiles.adapter = adapter
         binding.ivChooseFile.setOnClickListener(this)
         binding.tvChooseFile.setOnClickListener(this)
@@ -83,19 +89,23 @@ class Test2Fragment : Fragment(), View.OnClickListener {
 //        types.add(Keys.MIME_TYPE_PPT)
 //        types.add(Keys.MIME_TYPE_XLS)
 
-        typesSheet = PickerTypesSheet(
-            this,
-            types, "file",
-            camera = true,
-            multiple = true,
-            multipleCount = 1,
-            thumbnailPartName = "dhjjc",
-        ) { file, maxFile ->
-            selectedFiles?.add(file)
-            adapter!!.notifyDataSetChanged()
-            if (maxFile) {
-                Toast.makeText(requireContext(), "maxFile", Toast.LENGTH_LONG).show()
+        try{
+            typesSheet = PickerTypesSheet(
+                this,
+                types, "file",
+                camera = true,
+                multiple = true,
+                multipleCount = 1,
+                thumbnailPartName = "dhjjc",
+            ) { file, maxFile ->
+                selectedFiles?.add(file)
+                adapter!!.notifyDataSetChanged()
+                if (maxFile) {
+                    Toast.makeText(requireContext(), "maxFile", Toast.LENGTH_LONG).show()
+                }
             }
+        }catch (_:Exception){
+
         }
 
         return binding.root

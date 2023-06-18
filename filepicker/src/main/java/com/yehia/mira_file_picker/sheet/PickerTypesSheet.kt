@@ -276,7 +276,7 @@ class PickerTypesSheet(
             if (this.isAdded) {
                 this.dialog!!.show()
             } else {
-                this.show((fragment).childFragmentManager, "")
+                this.show((fragment).parentFragmentManager, "")
             }
         }
         return true

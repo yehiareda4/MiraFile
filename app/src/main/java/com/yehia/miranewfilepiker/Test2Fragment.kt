@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.aait.miranewfilepiker.R
 import com.aait.miranewfilepiker.databinding.FragmentTestBinding
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
 import com.yehia.mira_file_picker.sheet.model.FileData
@@ -39,7 +41,9 @@ class Test2Fragment : Fragment(), View.OnClickListener {
             container,
             false
         )
-
+        binding.ivChooseFile2.setOnClickListener {
+            findNavController().navigate(R.id.action_test2Fragment_to_test3Fragment)
+        }
         selectedFiles = ArrayList()
         adapter = ItemAdapter(
             selectedFiles, requireActivity()
