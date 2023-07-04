@@ -187,7 +187,7 @@ fun Activity.openSingleType(
     colorAcc: Int = R.color.gray_al_mai,
     colorTxt: Int = com.yehia.album.R.color.black_al_mai,
     previewRequest: ActivityResultLauncher<Intent>? = null,
-    resultGallery: (AlbumFile?) -> Unit = {}
+    resultGallery: (AlbumFile?, max: Int) -> Unit = { _, _ -> }
 ) {
     when (type.key) {
         MIME_TYPE_IMAGE -> {
@@ -201,7 +201,7 @@ fun Activity.openSingleType(
                         result.forEach { itx ->
                             if (!lastImage.contains(itx)) {
                                 lastImage.add(itx)
-                                resultGallery(itx)
+                                resultGallery(itx, 1)
                             }
                         }
                     }
@@ -211,11 +211,10 @@ fun Activity.openSingleType(
                     multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt,
                 ) { result ->
                     if (result.isNotEmpty()) {
+                        lastImage.clear()
+                        lastImage.addAll(result)
                         result.forEach { itx ->
-                            if (!lastImage.contains(itx)) {
-                                lastImage.add(itx)
-                                resultGallery(itx)
-                            }
+                            resultGallery(itx, result.size)
                         }
                     }
                 }
@@ -229,7 +228,7 @@ fun Activity.openSingleType(
                     result.forEach { itx ->
                         if (!lastImage.contains(itx)) {
                             lastImage.add(itx)
-                            resultGallery(itx)
+                            resultGallery(itx, 1)
                         }
                     }
                 }
@@ -240,11 +239,10 @@ fun Activity.openSingleType(
                 multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt,
             ) { result ->
                 if (result.isNotEmpty()) {
+                    lastImage.clear()
+                    lastImage.addAll(result)
                     result.forEach { itx ->
-                        if (!lastImage.contains(itx)) {
-                            lastImage.add(itx)
-                            resultGallery(itx)
-                        }
+                        resultGallery(itx, result.size)
                     }
                 }
             }

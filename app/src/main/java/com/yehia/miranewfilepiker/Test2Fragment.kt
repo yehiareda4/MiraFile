@@ -17,6 +17,7 @@ import com.aait.miranewfilepiker.R
 import com.aait.miranewfilepiker.databinding.FragmentTestBinding
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
 import com.yehia.mira_file_picker.sheet.model.FileData
+import com.yehia.mira_file_picker.sheet.util.CallBack
 import com.yehia.mira_file_picker.sheet.util.Keys
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,18 +29,14 @@ class Test2Fragment : Fragment(), View.OnClickListener {
 
     private lateinit var typesSheet: PickerTypesSheet
     private lateinit var binding: FragmentTestBinding
-    private var selectedFiles: MutableList<FileData>? = null
+    private var selectedFiles: MutableList<FileData> = ArrayList()
     private var adapter: ItemAdapter? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentTestBinding.inflate(
-            layoutInflater,
-            container,
-            false
+            layoutInflater, container, false
         )
         binding.ivChooseFile2.setOnClickListener {
             findNavController().navigate(R.id.action_test2Fragment_to_test3Fragment)
@@ -49,8 +46,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
             selectedFiles, requireActivity()
         ) {
 
-            provideRetrofit().create(api::class.java)
-                .uploadFileAsync(it.filePart!!)
+            provideRetrofit().create(api::class.java).uploadFileAsync(it.filePart!!)
                 .enqueue(object : Callback<Any> {
                     override fun onResponse(call: Call<Any>, response: Response<Any>) {
                         Log.d(TAG, "onResponse: $response")
@@ -68,8 +64,7 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         }
         binding.rvFiles.addItemDecoration(
             DividerItemDecoration(
-                requireContext(),
-                DividerItemDecoration.VERTICAL
+                requireContext(), DividerItemDecoration.VERTICAL
             )
         )
         binding.rvFiles.adapter = adapter
@@ -88,20 +83,27 @@ class Test2Fragment : Fragment(), View.OnClickListener {
         types.add(Keys.MIME_TYPE_PPT)
         types.add(Keys.MIME_TYPE_XLS)
 
-        typesSheet = PickerTypesSheet(
-            this,
-            types, "file",
+        typesSheet = PickerTypesSheet(this,
+            types,
+            "file",
             camera = true,
             multiple = true,
-            multipleCount = 1, thumbnailPartName = "dsigfdifdks"
-        ) { file, maxFile ->
-            binding.ivChooseFile.setImageURI(file.Thumbnail.toUri())
-            selectedFiles?.add(file)
-            adapter!!.notifyDataSetChanged()
-            if (maxFile) {
-                Toast.makeText(requireContext(), "maxFile", Toast.LENGTH_LONG).show()
-            }
-        }
+            multipleCount = 10,
+            thumbnailPartName = "dsigfdifdks",
+            callBack = object : CallBack {
+                override fun singleFiles(fileData: FileData) {
+                    binding.ivChooseFile.setImageURI(fileData.Thumbnail.toUri())
+                    selectedFiles?.add(fileData)
+                    adapter!!.notifyDataSetChanged()
+                }
+
+                override fun multiFiles(files: MutableList<FileData>) {
+                    selectedFiles?.clear()
+                    binding.ivChooseFile.setImageURI(files[0].Thumbnail.toUri())
+                    selectedFiles?.addAll(files)
+                    adapter!!.notifyDataSetChanged()
+                }
+            })
 
         return binding.root
     }
@@ -112,20 +114,16 @@ class Test2Fragment : Fragment(), View.OnClickListener {
     }
 
     fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://abr-almodon.4hoste.com/api/")
-            .build()
+        return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://abr-almodon.4hoste.com/api/").build()
     }
 
     override fun onStop() {
         super.onStop()
-
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         childFragmentManager
-
     }
 }

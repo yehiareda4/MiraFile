@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -15,6 +16,7 @@ import com.aait.miranewfilepiker.R
 import com.aait.miranewfilepiker.databinding.FragmentTestBinding
 import com.yehia.mira_file_picker.sheet.PickerTypesSheet
 import com.yehia.mira_file_picker.sheet.model.FileData
+import com.yehia.mira_file_picker.sheet.util.CallBack
 import com.yehia.mira_file_picker.sheet.util.Keys
 import retrofit2.Call
 import retrofit2.Callback
@@ -95,15 +97,22 @@ class Test2Fragment : Fragment(), View.OnClickListener {
                 types, "file",
                 camera = true,
                 multiple = true,
-                multipleCount = 1,
+                multipleCount = 10,
                 thumbnailPartName = "dhjjc",
-            ) { file, maxFile ->
-                selectedFiles?.add(file)
-                adapter!!.notifyDataSetChanged()
-                if (maxFile) {
-                    Toast.makeText(requireContext(), "maxFile", Toast.LENGTH_LONG).show()
-                }
-            }
+                callBack = object : CallBack {
+                    override fun singleFiles(fileData: FileData) {
+                        binding.ivChooseFile.setImageURI(fileData.Thumbnail.toUri())
+                        selectedFiles?.add(fileData)
+                        adapter!!.notifyDataSetChanged()
+                    }
+
+                    override fun multiFiles(files: MutableList<FileData>) {
+
+                        binding.ivChooseFile.setImageURI(files[0].Thumbnail.toUri())
+                        selectedFiles?.addAll(files)
+                        adapter!!.notifyDataSetChanged()
+                    }
+                })
         }catch (_:Exception){
 
         }

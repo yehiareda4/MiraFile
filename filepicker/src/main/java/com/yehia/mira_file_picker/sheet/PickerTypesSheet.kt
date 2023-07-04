@@ -3,8 +3,6 @@ package com.yehia.mira_file_picker.sheet
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,11 +12,6 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.yehia.album.AlbumFile
 import com.yehia.mira_file_picker.FileUtils
 import com.yehia.mira_file_picker.FileUtils.getFile
@@ -44,7 +37,10 @@ class PickerTypesSheet(
     private val colorPrim: Int = R.color.gray_al_mai,
     private val colorAcc: Int = R.color.green_al_mai,
     private val colorTxt: Int = com.yehia.album.R.color.black_al_mai,
-    val resultFile: (FileData, Boolean) -> Unit
+    private val callBack: CallBack = object : CallBack {},
+    val resultFile: (FileData, Boolean) -> Unit = { _, _ ->
+
+    },
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
     private var pathScopeEx: String = ""
@@ -52,6 +48,7 @@ class PickerTypesSheet(
     private var lastfile: AlbumFile? = null
     private var dismissed: Boolean = false
     private var sizeList: Int = 0
+    private var max: Int = 0
 
     private var maxFile: Boolean = false
     private lateinit var pickiT: PickiT
@@ -61,6 +58,8 @@ class PickerTypesSheet(
     private var previewRequest: ActivityResultLauncher<Intent>
 
     private val typesList: MutableList<Type> = ArrayList()
+
+    private var files: MutableList<FileData> = ArrayList()
 
     init {
         previewRequest =
@@ -85,6 +84,8 @@ class PickerTypesSheet(
                             val uri: Uri = it.data?.clipData?.getItemAt(i)?.uri!!
 
                             if (multipleCount != 0) {
+                                max =
+                                    if (it.data?.clipData?.itemCount!! > multipleCount) multipleCount else it.data?.clipData?.itemCount!!
                                 if (sizeList < multipleCount) {
                                     sizeList += 1
                                     (fragment.requireActivity()).startPickTCallbacks()
@@ -147,7 +148,8 @@ class PickerTypesSheet(
                     colorAcc = colorAcc,
                     colorTxt = colorTxt,
                     previewRequest = previewRequest,
-                ) { resultFile ->
+                ) { resultFile, max ->
+                    this.max = max
                     if (resultFile != null) {
                         lastfile = resultFile
                         addFile(File(resultFile.path!!))
@@ -175,7 +177,8 @@ class PickerTypesSheet(
                 colorAcc = colorAcc,
                 colorTxt = colorTxt,
                 previewRequest = previewRequest,
-            ) { resultFile ->
+            ) { resultFile, max ->
+                this.max = max
                 if (resultFile != null) {
                     lastfile = resultFile
                     addFile(File(resultFile.path!!))
@@ -240,11 +243,20 @@ class PickerTypesSheet(
             dialog?.dismiss()
 
             resultFile(fileData, maxFile)
+            if (multiple) {
+                files.add(fileData)
+                if (max == files.size) {
+                    callBack.multiFiles(files)
+                }
+            } else {
+                callBack.singleFiles(fileData)
+            }
         }
     }
 
     fun show(sizeList: Int = 0, type: Type? = null, cleanImages: Boolean = false): Boolean {
         dismissed = false
+        files = ArrayList()
         this.sizeList = sizeList
 
         if (sizeList > multipleCount && multiple) {
@@ -266,7 +278,8 @@ class PickerTypesSheet(
                 colorAcc = colorAcc,
                 colorTxt = colorTxt,
                 previewRequest = previewRequest,
-            ) { resultFile ->
+            ) { resultFile, max ->
+                this.max = max
                 if (resultFile != null) {
                     lastfile = resultFile
                     addFile(File(resultFile.path!!))
@@ -284,8 +297,10 @@ class PickerTypesSheet(
 
     override fun onStart() {
         super.onStart()
-
-        (fragment.requireActivity()).startPickTCallbacks()
+        try {
+            (fragment.requireActivity()).startPickTCallbacks()
+        } catch (_: Exception) {
+        }
     }
 
     private fun Activity.startPickTCallbacks() {
