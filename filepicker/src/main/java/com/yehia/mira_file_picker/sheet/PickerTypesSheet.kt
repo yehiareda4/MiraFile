@@ -32,7 +32,7 @@ class PickerTypesSheet(
     var partName: String = "image",
     var thumbnailPartName: String = "",
     private val camera: Boolean = false,
-    val multiple: Boolean = false,
+    var multiple: Boolean = false,
     var multipleCount: Int = 1,
     private val colorPrim: Int = R.color.gray_al_mai,
     private val colorAcc: Int = R.color.green_al_mai,
