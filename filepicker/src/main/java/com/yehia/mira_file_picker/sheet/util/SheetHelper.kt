@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
+import com.github.drjacky.imagepicker.ImagePicker.Companion.with
 import com.yehia.album.AlbumFile
 import com.yehia.mira_file_picker.MiraFilePickerActivity
 import com.yehia.mira_file_picker.R
@@ -22,7 +23,8 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 
-fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type {
+
+fun Context.createType(camera: Boolean, multiple: Boolean, type: String): Type {
     return when (type) {
         Keys.MIME_ALL_TYPE -> {
             Type(
@@ -34,6 +36,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 multiple = multiple,
             )
         }
+
         Keys.MIME_TYPE_AUDIO -> {
             Type(
                 type,
@@ -44,6 +47,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 multiple = multiple,
             )
         }
+
         Keys.MIME_TYPE_TEXT -> {
             Type(
                 type,
@@ -54,6 +58,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 multiple = multiple,
             )
         }
+
         MIME_TYPE_IMAGE -> {
             Type(
                 type,
@@ -65,6 +70,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 multiple
             )
         }
+
         MIME_TYPE_VIDEO -> {
             Type(
                 type,
@@ -77,6 +83,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 "mp4",
             )
         }
+
         Keys.MIME_TYPE_PDF -> {
             Type(
                 type,
@@ -88,6 +95,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 extension = "pdf"
             )
         }
+
         Keys.MIME_TYPE_ZIP -> {
             Type(
                 type,
@@ -99,6 +107,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 extension = "zip",
             )
         }
+
         Keys.MIME_TYPE_RAR -> {
             Type(
                 type,
@@ -110,6 +119,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 extension = "rar",
             )
         }
+
         Keys.MIME_TYPE_DOC -> {
             Type(
                 type,
@@ -121,6 +131,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 extension = "doc",
             )
         }
+
         Keys.MIME_TYPE_DOCX -> {
             Type(
                 type,
@@ -132,6 +143,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 extension = "docx",
             )
         }
+
         Keys.MIME_TYPE_PPT -> {
             Type(
                 type,
@@ -143,6 +155,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 extension = "ppt",
             )
         }
+
         Keys.MIME_TYPE_PPTX -> {
             Type(
                 type,
@@ -154,6 +167,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 extension = "pptx",
             )
         }
+
         Keys.MIME_TYPE_XLS -> {
             Type(
                 type,
@@ -165,6 +179,7 @@ fun Fragment.createType(camera: Boolean, multiple: Boolean, type: String): Type 
                 extension = "xls",
             )
         }
+
         else -> {
             Type(
                 type,
@@ -220,6 +235,7 @@ fun Activity.openSingleType(
                 }
             }
         }
+
         MIME_TYPE_VIDEO -> {
             this.openVideoAlbum(
                 multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt
@@ -234,6 +250,7 @@ fun Activity.openSingleType(
                 }
             }
         }
+
         Keys.MIME_TYPE_GALLERY -> {
             this.openGalleryAlbum(
                 multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt,
@@ -247,6 +264,78 @@ fun Activity.openSingleType(
                 }
             }
         }
+
+        else -> {
+            val intent = Intent(this, MiraFilePickerActivity::class.java)
+            intent.putExtra("multiple", type.multiple)
+            intent.putExtra("type", type.key)
+            intent.putExtra("camera", type.camera)
+            previewRequest!!.launch(intent)
+        }
+    }
+}
+
+fun Activity.openSingleType2(
+    type: Type,
+    multipleCount: Int = 1,
+    sizeList: Int = 0,
+    crop: Boolean = false,
+    cropOval: Boolean = false,
+    lastImage: ArrayList<AlbumFile> = ArrayList(),
+    colorPrim: Int = R.color.gray_al_mai,
+    colorAcc: Int = R.color.gray_al_mai,
+    colorTxt: Int = com.yehia.album.R.color.black_al_mai,
+    previewRequest: ActivityResultLauncher<Intent>? = null,
+    launcher: ActivityResultLauncher<Intent>,
+    resultGallery: (AlbumFile?, max: Int) -> Unit = { _, _ -> }
+) {
+    when (type.key) {
+        MIME_TYPE_IMAGE -> {
+            val picker = with(activity = this)
+
+            if (crop) {
+                picker.crop()
+                if (cropOval) picker.cropOval()
+                picker.maxResultSize(512, 512, true)
+            }
+
+            if (multipleCount > 1) picker.setMultipleAllowed(true)
+
+
+            picker
+                .bothCameraGallery()
+                .createIntentFromDialog { launcher.launch(it) }
+        }
+
+        MIME_TYPE_VIDEO -> {
+            this.openVideoAlbum(
+                multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt
+            ) { result ->
+                if (result.isNotEmpty()) {
+                    result.forEach { itx ->
+                        if (!lastImage.contains(itx)) {
+                            lastImage.add(itx)
+                            resultGallery(itx, 1)
+                        }
+                    }
+                }
+            }
+        }
+
+        Keys.MIME_TYPE_GALLERY -> {
+            this.openGalleryAlbum(
+                multipleCount - sizeList, lastImage, type.camera, colorPrim, colorAcc, colorTxt,
+            ) { result ->
+                if (result.isNotEmpty()) {
+                    lastImage.clear()
+                    lastImage.addAll(result)
+                    result.forEach { itx ->
+                        resultGallery(itx, result.size)
+                    }
+                }
+            }
+        }
+
         else -> {
             val intent = Intent(this, MiraFilePickerActivity::class.java)
             intent.putExtra("multiple", type.multiple)

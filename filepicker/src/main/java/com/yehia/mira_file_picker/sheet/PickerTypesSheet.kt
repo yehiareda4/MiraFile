@@ -34,13 +34,15 @@ class PickerTypesSheet(
     private val camera: Boolean = false,
     var multiple: Boolean = false,
     var multipleCount: Int = 1,
+    var crop: Boolean = true,
+    var cropOval: Boolean = true,
     private val colorPrim: Int = R.color.gray_al_mai,
     private val colorAcc: Int = R.color.green_al_mai,
     private val colorTxt: Int = com.yehia.album.R.color.black_al_mai,
     private val callBack: CallBack = object : CallBack {},
     val resultFile: (FileData, Boolean) -> Unit = { _, _ ->
 
-    },
+    }
 ) : BaseBottomSheetFragment<SheetTypesBinding>(SheetTypesBinding::inflate) {
 
     private var pathScopeEx: String = ""
@@ -138,23 +140,7 @@ class PickerTypesSheet(
             }
             adapter = TypesAdapter(typesList) {
                 type = it
-
-                (fragment.requireActivity()).openSingleType(
-                    type = type,
-                    multipleCount = multipleCount,
-                    sizeList = sizeList,
-                    lastImage = lastImage,
-                    colorPrim = colorPrim,
-                    colorAcc = colorAcc,
-                    colorTxt = colorTxt,
-                    previewRequest = previewRequest,
-                ) { resultFile, max ->
-                    this.max = max
-                    if (resultFile != null) {
-                        lastfile = resultFile
-                        addFile(File(resultFile.path!!))
-                    }
-                }
+                startSingleType()
             }
             val span = if (typesList.size > 3) {
                 4
@@ -167,23 +153,7 @@ class PickerTypesSheet(
             binding.rvTypes.adapter = adapter
         } else {
             type = fragment.createType(camera, multiple, types[0])
-
-            (fragment.requireActivity()).openSingleType(
-                type = type,
-                multipleCount = multipleCount,
-                sizeList = sizeList,
-                lastImage = lastImage,
-                colorPrim = colorPrim,
-                colorAcc = colorAcc,
-                colorTxt = colorTxt,
-                previewRequest = previewRequest,
-            ) { resultFile, max ->
-                this.max = max
-                if (resultFile != null) {
-                    lastfile = resultFile
-                    addFile(File(resultFile.path!!))
-                }
-            }
+            startSingleType()
         }
     }
 
@@ -269,22 +239,7 @@ class PickerTypesSheet(
         }
 
         if (types.size == 1 || type != null) {
-            (fragment.requireActivity()).openSingleType(
-                type = this.type,
-                multipleCount = multipleCount,
-                sizeList = sizeList,
-                lastImage = if (cleanImages || multipleCount == 1) java.util.ArrayList() else lastImage,
-                colorPrim = colorPrim,
-                colorAcc = colorAcc,
-                colorTxt = colorTxt,
-                previewRequest = previewRequest,
-            ) { resultFile, max ->
-                this.max = max
-                if (resultFile != null) {
-                    lastfile = resultFile
-                    addFile(File(resultFile.path!!))
-                }
-            }
+            startSingleType(cleanImages)
         } else {
             if (this.isAdded) {
                 this.dialog!!.show()
@@ -293,6 +248,28 @@ class PickerTypesSheet(
             }
         }
         return true
+    }
+
+    private fun startSingleType(cleanImages: Boolean = false) {
+        (fragment.requireActivity()).openSingleType2(
+            type = this.type,
+            multipleCount = multipleCount,
+            sizeList = sizeList,
+            crop = crop,
+            cropOval = cropOval,
+            lastImage = if (cleanImages || multipleCount == 1) java.util.ArrayList() else lastImage,
+            colorPrim = colorPrim,
+            colorAcc = colorAcc,
+            colorTxt = colorTxt,
+            previewRequest = previewRequest,
+            previewRequest
+        ) { resultFile, max ->
+            this.max = max
+            if (resultFile != null) {
+                lastfile = resultFile
+                addFile(File(resultFile.path!!))
+            }
+        }
     }
 
     override fun onStart() {

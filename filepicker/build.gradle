@@ -54,6 +54,7 @@ dependencies {
     implementation "com.intuit.sdp:sdp-android:1.0.6"
 
     implementation project(path: ':album_gallary')
+    implementation project(path: ':imagepicker')
 
     implementation 'com.github.bumptech.glide:glide:4.13.1'
 

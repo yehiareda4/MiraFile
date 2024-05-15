@@ -7,4 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white_al_mai">#FFFFFFFF</color>
+    <color name="ucrop_color_active_controls_color">@color/purple_200</color>
+    <color name="ucrop_color_widget_active">@color/purple_200</color>
+    <color name="ucrop_color_widget_text">@color/purple_200</color>
+
+    <color name="ucrop_color_inactive_controls_color">#787878</color>
+    <color name="ucrop_color_widget_rotate_mid_line">@color/purple_500</color>
+    <color name="ucrop_color_active_aspect_ratio">@color/purple_500</color>
+    <color name="ucrop_color_widget_background">@color/white</color>
+    <color name="ucrop_color_toolbar">@color/purple_500</color>
+    <color name="ucrop_color_toolbar_widget">@color/white</color>
+    <color name="ucrop_color_statusbar">@color/purple_500</color>
+
 </resources>

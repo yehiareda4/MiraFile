@@ -87,6 +87,9 @@ class Test2Fragment : Fragment(), View.OnClickListener {
             types,
             "file",
             camera = true,
+            colorPrim = R.color.purple_200,
+            colorAcc = R.color.purple_700,
+            colorTxt = R.color.black,
             thumbnailPartName = "dsigfdifdks",
             callBack = object : CallBack {
                 override fun singleFiles(fileData: FileData) {
