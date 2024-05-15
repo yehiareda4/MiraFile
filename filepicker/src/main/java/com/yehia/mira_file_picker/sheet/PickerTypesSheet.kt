@@ -134,7 +134,7 @@ class PickerTypesSheet(
 
         if (types.size > 1) {
             types.forEach {
-                val type = fragment.createType(camera, multiple, it)
+                val type = fragment.requireContext().createType(camera, multiple, it)
 
                 typesList.add(type)
             }
@@ -152,7 +152,7 @@ class PickerTypesSheet(
             binding.rvTypes.layoutManager = gridLayoutManager
             binding.rvTypes.adapter = adapter
         } else {
-            type = fragment.createType(camera, multiple, types[0])
+            type = fragment.requireContext().createType(camera, multiple, types[0])
             startSingleType()
         }
     }
@@ -235,7 +235,7 @@ class PickerTypesSheet(
         if (type != null) {
             this.type = type
         } else {
-            this.type = fragment.createType(camera, multiple, types[0])
+            this.type = fragment.requireContext().createType(camera, multiple, types[0])
         }
 
         if (types.size == 1 || type != null) {
